@@ -1,0 +1,22 @@
+{
+  "name": "atibainhavisits",
+  "version": "1.0.0",
+  "description": "## Description This project is a web application that utilizes HTML, CSS, and JavaScript to create an interactive user experience. The project is structured to separate concerns, with distinct files for styles, scripts, and the main HTML document.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node js/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5"
+  }
+}

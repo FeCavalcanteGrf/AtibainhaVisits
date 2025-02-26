@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atibainha Visits</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="img/LogoTipo.png" type="image/png">
+</head>
+<body>
+
+<header>
+    <div class="navbar">
+        <div class="logo">
+            <img src="img/LogoTipo.png" alt="Logo">
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agendamentos.html">Agendamentos</a></li>
+            <li><a href="usuarios.html">Usuarios</a></li>
+        </ul>
+        <div class="menu-toggle" id="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <!-- Mapa Calendário -->
+        <div class="calendar-container glassmorphism">
+            <div id="calendar" class="calendar">
+                <!-- O calendário será gerado via JS -->
+                 <!-- Botões de Navegação para o Mês -->
+            </div>
+            <div class="navegacao-mes">
+                <button id="prev-month" class="btn-nav">Mês Anterior</button>
+                <button id="next-month" class="btn-nav">Próximo Mês</button>
+            </div>
+        </div>
+
+        <!-- Formulário de Cadastro de Visita -->
+        <div class="form-container">
+            <h3>Cadastrar Nova Visita</h3>
+            <form id="register-visit-form" onsubmit="return cadastrarVisita(event)">
+                <label for="novo-nome">Nome:</label>
+                <input type="text" id="novo-nome" required>
+                
+                <label for="novo-empresa">Empresa:</label>
+                <input type="text" id="novo-empresa" required>
+                
+                <label for="novo-data">Data:</label>
+                <input type="date" id="novo-data" required>
+                
+                <label for="novo-hora">Hora:</label>
+                <input type="time" id="novo-hora" required>
+                
+                <label for="novo-locais">Locais em Foco:</label>
+                <input type="text" id="novo-locais" required>
+                
+                <button type="submit" class="btn-save">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Popup para Exibir Visita Agendada -->
+<div id="visit-popup" class="popup">
+    <div class="popup-content">
+        <button class="close-btn" onclick="closePopup()">X</button>
+        <h2>Detalhes da Visita</h2>
+        <div id="visit-details">
+            <label for="nome">Nome:</label>
+            <p id="nome"></p>
+            <label for="empresa">Empresa:</label>
+            <p id="empresa"></p>
+            <label for="data">Data:</label>
+            <p id="data"></p>
+            <label for="hora">Hora:</label>
+            <p id="hora"></p>
+            <label for="locais">Locais em Foco:</label>
+            <p id="locais"></p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

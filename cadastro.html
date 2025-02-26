@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+    <link rel="icon" href="img/LogoTipo.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/cadastro.css">
+    <title>Criar conta</title>
+    <script src="js/script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="navbar">
+        <div class="logo">
+            <img src="img/LogoTipo.png" alt="Logo">
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="login.html">Home</a></li>
+            <li><a href="cadastro.html">Cadastre-se</a></li>
+        </ul>
+        <div class="menu-toggle" id="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+  </header>
+  <main class="main-content" style="padding: 20px;">
+    <form class="form-cadastro" action="#" method="post" style="max-width: 500px; margin: auto;">
+        <h1>Crie Sua Conta</h1>
+      <div class="inputs">
+        <Label for="Nome">Nome Completo</Label>
+        <input type="text" id="nome" placeholder="Digite seu nome completo" required>
+      </div>
+
+      <div class="inputs">
+        <label for="email">E-mail</label>
+        <input type="text" id="email" placeholder="Digite seu e-mail aqui" required>
+      </div>
+
+      <div class="inputs">
+        <label for="senha">Crie uma senha</label>
+        <input type="password" id="senha" placeholder="Digite sua senha" required>
+      </div>
+
+      <div class="inputs">
+        <label for="confirmaSenha">Confirme sua senha</label>
+        <input type="password" id="confirmarSenha" placeholder="Confirme sua senha" required>
+      </div>
+
+      <div class="inputs">
+        <label for="telefone">Insira seu Telefone</label>
+        <input type="tel" id="telefone" placeholder="Digite seu telefone" required>
+      </div>
+
+      <button type="submit" class="btn-criarconta">Criar conta</button>
+      <p class="link-de-login">Já tem uma conta? <a href="login.html">Faça login</a></p>
+    </form>
+      
+</main>
+
+<footer class="footerVisita">
+  <label >© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
+</footer>
+
+</body>
+</html>

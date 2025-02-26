@@ -1,0 +1,250 @@
+/* Reset de estilos padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Lora", sans-serif;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white; /* Cor da fonte trocada para branco */
+}
+
+/* Container principal */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1%;
+    padding-top: 5%;
+    align-items: center;
+    justify-content: center;
+    font-size: large;
+}
+
+/* Barra de navegação */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(51, 51, 51, 0.8); /* Fundo mais transparente */
+    padding: 10px 20px; /* Adicionado padding */
+}
+
+.navbar .logo img {
+    max-height: 50px;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+/* Estilos responsivos para a barra de navegação */
+@media (max-width: 768px) {
+    .navbar ul {
+        display: none;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-links.active {
+        display: flex;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .nav-links li {
+        margin: 15px 0;
+    }
+
+    .nav-links li a {
+        font-size: 20px;
+    }
+}
+
+/* Animação de fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Formulário de cadastro */
+.form-cadastro {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.form-cadastro h1 {
+  text-align: center;
+  margin-bottom: 1.5em;
+  color: white; /* Cor do texto trocada para branco */
+}
+
+.inputs {
+    margin-bottom: 1.2rem;
+}
+
+.inputs label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: white; /* Cor da fonte trocada para branco */
+}
+
+.inputs input {
+    width: 100%;
+    padding: 0.8em;
+    border: solid 2px #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s transform 0.3s;
+    outline: none;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: black;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.inputs input::placeholder {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.inputs input:focus {
+    border-color: #007bff;
+    transform: scale(1.02);
+}
+
+/* Botão de criar conta */
+.btn-criarconta {
+    width: 100%;
+    padding: 0.8em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-criarconta:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+}
+
+.btn-criarconta:active {
+    transform: translateY(0px);
+}
+
+/* Link para login */
+.link-de-login {
+    text-align: center;
+    font-size: 14px;
+    color: white; /* Cor da fonte trocada para branco */
+    margin-top: 20px;
+}
+
+.link-de-login a {
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s text-decoration 0.3s;
+}
+
+.link-de-login a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Rodapé */
+.footerVisita {
+    background-color: rgba(51, 51, 51, 0.8); /* Fundo mais transparente */
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Estilos para o pop-up */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.popup-content p {
+  margin-bottom: 20px;
+}
+
+.popup-content button {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-content button:hover {
+  background: #0056b3;
+}

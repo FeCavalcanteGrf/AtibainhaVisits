@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     
+    <script src="js/validation.js" defer></script>
+    <link rel="icon" href="img/LogoTipo.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/login.css" />
+    <title>Login Atibainha</title>
+  </head>
+  <body>
+    <div id="page" class="flex">
+      <div>
+        <main>
+            <div class="headline">
+            <img src="img/LogoTipo.png" alt="LogoTipo">
+            <h1>Acesso Restrito</h1>
+
+            <p>
+              Faça login para continuar ou registre-se para começar a usar nossa
+              plataforma.
+            </p>
+          </div>
+          <form method="post" action="index.html" id="login-form">
+            <div class="input-wrapper">
+              <label for="email">E-mail</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                placeholder="Digite seu e-mail"
+              />
+            </div>
+
+            <div class="input-wrapper">
+                <div class="label-wrapper flex">
+                    <label for="senha">Senha</label>
+                    <a href="#">Esqueceu a senha? </a>
+                </div>
+                
+                <input 
+                type="password"
+                id="senha"
+                required
+                placeholder="Digite sua senha"
+                />
+                
+                <img 
+                onclick="togglePassword()"
+                class="eye"
+                src="img/eye-off.svg"
+                alt="ocultador de senha">
+                
+                <img 
+                onclick="togglePassword()"
+                class="eye hide"
+                src="img/eye.svg"
+                alt="ocultador de senha">
+            </div>
+
+            <button type="submit">Fazer Login</button>
+
+            <div class="registro flex">
+                <p> Ainda não tem uma conta? </p>
+                <a href="cadastro.html">Criar conta</a>
+            </div>
+
+          </form>
+        </main>
+      </div>
+      <img src="img/bg-fundo.jpg" alt="Imagem de Fundo">
+    </div>
+
+    <script>
+       function togglePassword() {
+        document
+          .querySelectorAll(".eye")
+          .forEach((eye) => eye.classList.toggle("hide"))
+
+        const type =
+          senha.getAttribute("type") == "password" ? "text" : "password"
+
+        senha.setAttribute("type", type)
+      }
+    </script>
+  </body>
+</html>

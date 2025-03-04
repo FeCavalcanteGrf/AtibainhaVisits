@@ -3,7 +3,8 @@ const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
-var cors = require('cors')
+var cors = require('cors');
+const { log } = require('console');
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -12,7 +13,7 @@ app.use(cors())
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '1234',
+  password: 'GloriaDeus12',
   database: 'atibainhavisit'
 });
 
@@ -26,6 +27,8 @@ connection.connect(err => {
 
 app.post('/register', (req, res) => {
   const { nome, email, senha, telefone } = req.body;
+  console.log('Dados recebidos:',{nome,email,senha,telefone});
+  
   const query = 'INSERT INTO tb_usuarios (tb_nome, tb_email, tb_senha, tb_telefone) VALUES (?, ?, ?, ?)';
 
   connection.query(query, [nome, email, senha, telefone], (err, results) => {
@@ -34,6 +37,8 @@ app.post('/register', (req, res) => {
       res.status(500).send('Erro ao cadastrar usuário.');
       return;
     }
+    console.log('Usuário cadastrado com sucesso.',results);
+    
     res.status(200).send('Usuário cadastrado com sucesso.');
   });
 });

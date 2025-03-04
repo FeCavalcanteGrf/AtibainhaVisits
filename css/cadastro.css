@@ -9,8 +9,10 @@ body {
     font-family: "Lora", sans-serif;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* Alterado de height para min-height */
     color: white; /* Cor da fonte trocada para branco */
+    background: linear-gradient(45deg, red, black, white);
+    margin: 0; /* Adicionado para remover margens padrão */
 }
 
 /* Container principal */
@@ -33,11 +35,11 @@ body {
     justify-content: space-between;
     align-items: center;
     background-color: rgba(51, 51, 51, 0.8); /* Fundo mais transparente */
-    padding: 10px 20px; /* Adicionado padding */
+    padding: 5px 10px; /* Reduzido padding */
 }
 
 .navbar .logo img {
-    max-height: 50px;
+    max-height: 40px; /* Reduzido tamanho da logo */
 }
 
 .navbar ul {
@@ -118,7 +120,7 @@ body {
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    padding: 20px;
+    padding: 15px; /* Reduzido padding */
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }

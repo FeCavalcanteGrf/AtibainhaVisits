@@ -79,21 +79,23 @@ setInterval(trocarFundo, 5000);
 /*--------------------------------------------------*/
 
 // Função para abrir o popup
-function openPopup(celula) {
+function openPopup(celula = null) {
     const popup = document.getElementById('visit-popup');
-    const nome = document.getElementById('nome');
-    const empresa = document.getElementById('empresa');
-    const data = document.getElementById('data');
-    const hora = document.getElementById('hora');
-    const locais = document.getElementById('locais');
-    
-    // Preencher os dados da visita (Exemplo fixo, pode ser ajustado)
-    if (celula.classList.contains('visita')) {
-        nome.textContent = celula.getAttribute('data-nome');
-        empresa.textContent = celula.getAttribute('data-empresa');
-        data.textContent = celula.getAttribute('data-data');
-        hora.textContent = celula.getAttribute('data-hora');
-        locais.textContent = celula.getAttribute('data-locais');
+    if (celula) {
+        const nome = document.getElementById('nome');
+        const empresa = document.getElementById('empresa');
+        const data = document.getElementById('data');
+        const hora = document.getElementById('hora');
+        const locais = document.getElementById('locais');
+        
+        // Preencher os dados da visita (Exemplo fixo, pode ser ajustado)
+        if (celula.classList.contains('visita')) {
+            nome.textContent = celula.getAttribute('data-nome');
+            empresa.textContent = celula.getAttribute('data-empresa');
+            data.textContent = celula.getAttribute('data-data');
+            hora.textContent = celula.getAttribute('data-hora');
+            locais.textContent = celula.getAttribute('data-locais');
+        }
     }
 
     popup.style.display = 'flex';
@@ -291,3 +293,16 @@ function closePopup() {
     popup.remove();
   }
 }
+
+
+       function togglePassword() {
+        document
+          .querySelectorAll(".eye")
+          .forEach((eye) => eye.classList.toggle("hide"))
+
+        const type =
+          senha.getAttribute("type") == "password" ? "text" : "password"
+
+        senha.setAttribute("type", type)
+      }
+

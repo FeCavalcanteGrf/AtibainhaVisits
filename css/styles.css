@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     font-family: Arial, sans-serif;
     background: url('img/Alvorada.jpeg') no-repeat center center fixed;
@@ -11,6 +15,9 @@ body {
     background-attachment: fixed;
     transition: background-image 1s ease-in-out;
     height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
 header {
@@ -26,10 +33,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
 }
 
 .navbar .logo img {
     max-height: 50px;
+    height: 50px;
 }
 
 .navbar ul {
@@ -60,6 +70,13 @@ header {
 .nav-links {
     display: flex;
     gap: 20px;
+    list-style: none;
+}
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
 }
 
 @media (max-width: 768px) {
@@ -107,6 +124,18 @@ header {
 
 main {
     padding-top: 1%;
+    padding: 20px;
+}
+
+section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-top: 0;
 }
 
 .botao-iniciar {
@@ -264,7 +293,10 @@ button.next {
     backdrop-filter: blur(3.3px);
     -webkit-backdrop-filter: blur(3.3px);
     padding: 10px;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
 }
 
 .container-progresso h2 {
@@ -313,7 +345,11 @@ footer {
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.6);
     color: white;
-    position: absolute;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    position: fixed;
 }
 
 .footerVisita {

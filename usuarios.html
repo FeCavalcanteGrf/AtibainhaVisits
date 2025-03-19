@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/LogoTipo.png">
     <title>Perfil do Usuario</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/usuarios.css"> <!-- Novo arquivo CSS -->
 </head>
 <body>
 
@@ -27,12 +28,113 @@
     </div>
 </header>
 <main>
-    
+    <section>
+        <h2>Usuários Cadastrados</h2>
+        <ul id="user-list">
+            <!-- Lista de usuários será gerada aqui -->
+        </ul>
+    </section>
+    <section class="user-details">
+        <h2>Detalhes do Usuário</h2>
+        <form id="user-form">
+            <label for="user-name">Nomeeee:</label>
+            <input type="text" id="user-name" name="user-name">
+            <label for="user-email">Email:</label>
+            <input type="email" id="user-email" name="user-email">
+            <label for="user-sector">Setor:</label>
+            <input type="text" id="user-sector" name="user-sector">
+            <label for="user-password">Senha:</label>
+            <input type="password" id="user-password" name="user-password">
+            <button type="button" id="update-user">Atualizar</button>
+            <button type="button" id="add-user">Adicionar</button>
+            <button type="button" id="delete-user">Excluir</button>
+        </form>
+    </section>
 </main>
 <footer>
     <label >© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
 </footer>
 
-<script src="script.js"></script>
+<!-- <script src="js/script.js"></script> comenta essa linha pra mim -->
+<script>
+console.log("SCRIPT")
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log("cheguei")
+    const userId = 1; // Substitua pelo ID do usuário que você deseja buscar
+    const response = await fetch(`http://localhost:3000/user-info?userId=${userId}`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+    }).then(response => response.json())
+        .then(data => {
+            document.getElementById('user-name').value = data.nome;
+            document.getElementById('user-email').value = data.email;
+            document.getElementById('user-sector').value = data.setor;
+        })
+        .catch(error => console.error('Erro ao buscar informações do usuário:', error));
+    const data = await response.json();
+
+  
+    
+});
+
+    document.getElementById('update-user').addEventListener('click', function() {
+        const nome = document.getElementById('user-name').value;
+        const email = document.getElementById('user-email').value;
+        const setor = document.getElementById('user-sector').value;
+        const senha = document.getElementById('user-password').value;
+
+        fetch('/update-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome, email, setor, senha })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Usuário atualizado com sucesso!');
+        })
+        .catch(error => console.error('Erro ao atualizar usuário:', error));
+    });
+
+    document.getElementById('add-user').addEventListener('click', function() {
+        const nome = document.getElementById('user-name').value;
+        const email = document.getElementById('user-email').value;
+        const setor = document.getElementById('user-sector').value;
+        const senha = document.getElementById('user-password').value;
+
+        fetch('/add-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome, email, setor, senha })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Usuário adicionado com sucesso!');
+        })
+        .catch(error => console.error('Erro ao adicionar usuário:', error));
+    });
+
+    document.getElementById('delete-user').addEventListener('click', function() {
+        const email = document.getElementById('user-email').value;
+
+        fetch('/delete-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Usuário excluído com sucesso!');
+        })
+        .catch(error => console.error('Erro ao excluir usuário:', error));
+    });
+</script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-# Project Name
+# Atibainha Visits
 
 ## Description
 This project is a web application that utilizes HTML, CSS, and JavaScript to create an interactive user experience. The project is structured to separate concerns, with distinct files for styles, scripts, and the main HTML document.

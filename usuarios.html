@@ -6,7 +6,7 @@
     <link rel="icon" href="img/LogoTipo.png">
     <title>Perfil do Usuario</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/usuarios.css"> <!-- Novo arquivo CSS -->
+    <link rel="stylesheet" href="css/usuarios.css">
 </head>
 <body>
 
@@ -27,32 +27,40 @@
         </div>
     </div>
 </header>
-<main>
-    <section>
-        <h2>Usuários Cadastrados</h2>
-        <ul id="user-list">
-            <!-- Lista de usuários será gerada aqui -->
-        </ul>
-    </section>
+
+<main class="user-details-container">
     <section class="user-details">
+        <div class="profile-image-container">
+            <div class="profile-image">
+                <input type="file" id="profile-image-upload" accept="image/*">
+                <label for="profile-image-upload">✎</label>
+            </div>
+        </div>
         <h2>Detalhes do Usuário</h2>
         <form id="user-form">
-            <label for="user-name">Nomeeee:</label>
-            <input type="text" id="user-name" name="user-name">
+            <label for="user-name">Nome:</label>
+            <input type="text" id="user-name" name="user-name" placeholder="Digite o nome" value="felipe">
+            
             <label for="user-email">Email:</label>
-            <input type="email" id="user-email" name="user-email">
+            <input type="email" id="user-email" name="user-email" placeholder="Digite o email" value="felipe@gmail.com">
+            
             <label for="user-sector">Setor:</label>
-            <input type="text" id="user-sector" name="user-sector">
+            <input type="text" id="user-sector" name="user-sector" placeholder="Digite o setor">
+            
             <label for="user-password">Senha:</label>
-            <input type="password" id="user-password" name="user-password">
-            <button type="button" id="update-user">Atualizar</button>
-            <button type="button" id="add-user">Adicionar</button>
-            <button type="button" id="delete-user">Excluir</button>
+            <input type="password" id="user-password" name="user-password" placeholder="Digite a senha">
+            
+            <div class="button-container">
+                <button type="button" id="update-user">Atualizar</button>
+                <button type="button" id="add-user">Adicionar</button>
+                <button type="button" id="delete-user">Excluir</button>
+            </div>
         </form>
     </section>
 </main>
+
 <footer>
-    <label >© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
+    <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
 </footer>
 
 <!-- <script src="js/script.js"></script> comenta essa linha pra mim -->

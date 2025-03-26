@@ -95,7 +95,9 @@ app.get('/user-info', (req, res) => {
 });
 
 app.post('/update-user', (req, res) => {
+  console.log('update-user');
   const { nome, email, setor, senha } = req.body;
+  console.log(nome, email, setor, senha, "Hello guys, how are you?")
   const query = 'UPDATE tb_usuarios SET tb_nome = ?, tb_setor = ?, tb_senha = ? WHERE tb_email = ?';
 
   connection.query(query, [nome, setor, senha, email], (err, results) => {

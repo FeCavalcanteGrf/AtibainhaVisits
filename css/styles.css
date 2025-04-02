@@ -202,6 +202,22 @@ h2 {
     -webkit-backdrop-filter: blur(2px);
 }
 
+.conteudo {
+    position: relative;
+}
+
+.checkbox {
+    display: none; /* Oculta o checkbox por padrão */
+}
+
+.conteudo.expandido .checkbox {
+    display: block; /* Mostra o checkbox quando expandido */
+    position: absolute;
+    top: 10px; /* Ajusta a posição da checkbox dentro da div */
+    right: 10px; /* Ajusta a posição da checkbox dentro da div */
+    transform: scale(2.5);
+}
+
 .glassmorphism .conteudo {
     display: flex;
     align-items: center;

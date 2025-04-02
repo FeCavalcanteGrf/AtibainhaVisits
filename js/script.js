@@ -11,9 +11,18 @@ function toggleSaloes() {
     saloesContainer.classList.toggle('minimized');
 }
 
-function toggleCarrossel(id) {
-    const carrossel = document.getElementById(id);
-    carrossel.style.display = carrossel.style.display === 'block' ? 'none' : 'block';
+function toggleCarrossel(carrosselId) {
+    const conteudo = document.querySelector(`[onclick="toggleCarrossel('${carrosselId}')"]`);
+    const carrossel = document.getElementById(carrosselId);
+
+    // Alterna a visibilidade do carrossel
+    if (carrossel.style.display === "none" || !carrossel.style.display) {
+        carrossel.style.display = "block";
+        conteudo.classList.add("expandido"); // Adiciona a classe expandido
+    } else {
+        carrossel.style.display = "none";
+        conteudo.classList.remove("expandido"); // Remove a classe expandido
+    }
 }
 
 function moveCarrossel(id, direction) {
@@ -294,15 +303,29 @@ function closePopup() {
   }
 }
 
+function togglePassword() {
+    document
+      .querySelectorAll(".eye")
+      .forEach((eye) => eye.classList.toggle("hide"))
 
-       function togglePassword() {
-        document
-          .querySelectorAll(".eye")
-          .forEach((eye) => eye.classList.toggle("hide"))
+    const type =
+      senha.getAttribute("type") == "password" ? "text" : "password"
 
-        const type =
-          senha.getAttribute("type") == "password" ? "text" : "password"
+    senha.setAttribute("type", type)
+}
 
-        senha.setAttribute("type", type)
-      }
+function atualizarProgresso() {
+    const checkboxes = document.querySelectorAll('.checkbox');
+    const totalCheckboxes = checkboxes.length;
+    const marcados = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+
+    const progresso = (marcados / totalCheckboxes) * 100;
+
+    // Atualiza a barra de progresso
+    const barraProgresso = document.getElementById('barra-progresso');
+    const textoProgresso = document.getElementById('texto-progresso');
+
+    barraProgresso.value = progresso;
+    textoProgresso.textContent = `${Math.round(progresso)}%`;
+}
 

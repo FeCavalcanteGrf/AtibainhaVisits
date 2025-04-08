@@ -49,17 +49,17 @@ function moveCarrossel(id, direction) {
 
 setInterval(() => {
     const carrossel1 = document.getElementById('carrossel1');
-    if (carrossel1.style.display === 'block') {
+    if (carrossel1 && carrossel1.style.display === 'block') {
         moveCarrossel('carrossel1', 1);
     }
 
     const carrossel2 = document.getElementById('carrossel2');
-    if (carrossel2.style.display === 'block') {
+    if (carrossel2 && carrossel2.style.display === 'block') {
         moveCarrossel('carrossel2', 1);
     }
 
     const carrossel3 = document.getElementById('carrossel3');
-    if (carrossel3.style.display === 'block') {
+    if (carrossel3 && carrossel3.style.display === 'block') {
         moveCarrossel('carrossel3', 1);
     }
 }, 3000);
@@ -246,7 +246,7 @@ window.onload = function() {
     gerarCalendario();
 }
 
-document.querySelector('.form-cadastro').addEventListener('submit', async function(event) {
+document.getElementById('cadastro-form').addEventListener('submit', async function(event) {
   event.preventDefault();
 
   const nome = document.getElementById('nome').value;

@@ -10,14 +10,13 @@ html, body {
 
 body {
     font-family: Arial, sans-serif;
-    background: url('img/Alvorada.jpeg') no-repeat center center fixed;
+    background: url('../img/Alvorada.jpeg') no-repeat center center fixed;
     background-size: cover;
-    background-attachment: fixed;
-    transition: background-image 1s ease-in-out;
+    background-attachment: fixed; /* Efeito parallax */
     height: 100vh;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    color: #333;
 }
 
 header {
@@ -494,10 +493,7 @@ footer {
     transform: translateY(-3px); /* Eleva ligeiramente o botão */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5); /* Sombra maior ao passar o mouse */
 }
-
-
-
-/* Estilo do Popup */
+    /* Estilo do Popup */
 #visit-popup {
     position: fixed; /* Usando fixed para garantir que fique sobre a tela */
     top: 0;
@@ -528,8 +524,8 @@ footer {
     color: white;
     font-size: 30px;
     position: absolute;
-    top: 600px;
-    right: 50px;
+    top: 10px; /* Ajustado para ficar dentro do popup */
+    right: 10px; /* Ajustado para ficar dentro do popup */
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
     padding: 8px;

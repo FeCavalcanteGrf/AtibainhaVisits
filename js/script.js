@@ -76,15 +76,6 @@ document.getElementById('menu-toggle').addEventListener('click', () => {
     navLinks.classList.toggle('active');
 });
 
-let indiceFundo = 0;
-
-function trocarFundo() {
-    document.body.style.backgroundImage = `url(${fundos[indiceFundo]})`;
-    indiceFundo = (indiceFundo + 1) % fundos.length;
-}
-
-setInterval(trocarFundo, 5000);
-
 /*--------------------------------------------------*/
 
 // Função para abrir o popup

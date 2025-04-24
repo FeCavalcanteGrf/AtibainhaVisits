@@ -1,1 +1,4 @@
 /node_modules
+
+#arquivos de .env
+.env

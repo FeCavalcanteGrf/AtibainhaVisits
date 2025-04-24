@@ -13,7 +13,8 @@ document.getElementById('login-form').addEventListener('submit', async function(
     alert('A senha deve ter pelo menos 6 caracteres.');
     return;
   }
-
+  
+  try {
   const response = await fetch('http://localhost:3000/login', {
     method: 'POST',
     headers: {
@@ -22,13 +23,28 @@ document.getElementById('login-form').addEventListener('submit', async function(
     body: JSON.stringify({ email, senha })
   });
 
-  if (response.ok) {
-    alert('Login bem-sucedido!');
+  if (!response.ok) {
+   const errorText = await response.text();
+   throw new Error(errorText);
     window.location.href = '../index.html';
-  } else {
-    alert('E-mail ou senha incorretos.');
+  } 
+   const data = await response.json();
+
+   localStorage.setItem('token', data.token);
+   localStorage.setItem('userId', data.userId);
+   localStorage.setItem('userName', data.nome);
+   
+   alert('Login realizado com sucesso!');
+   window.location.href = './index.html';
+  } 
+  catch (error) {
+    //console.error('Erro ao fazer login:', error);
+    alert(error.message = 'Ocorreu um erro ao fazer login. Tente novamente mais tarde.');
   }
 });
+
+
+
 
 /**
  * Valida o formato do e-mail.

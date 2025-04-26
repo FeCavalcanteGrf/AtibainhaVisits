@@ -67,18 +67,18 @@ body {
     color: #333;
 }
 
-#user-form {
+#update-user-form {
     display: flex;
     flex-direction: column;
 }
 
-#user-form label {
+#update-user-form label {
     margin-bottom: 8px;
     color: #555;
     font-weight: bold;
 }
 
-#user-form input {
+#update-user-form input {
     margin-bottom: 15px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -86,7 +86,7 @@ body {
     transition: border-color 0.3s;
 }
 
-#user-form input:focus {
+#update-user-form input:focus {
     outline: none;
     border-color: #007bff;
 }
@@ -115,13 +115,6 @@ body {
     background-color: #0056b3;
 }
 
-#add-user {
-    background-color: #28a745;
-}
-
-#add-user:hover {
-    background-color: #218838;
-}
 
 #delete-user {
     background-color: #dc3545;

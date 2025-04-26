@@ -6,6 +6,7 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
   const senha = document.getElementById('senha').value;
   const confirmarSenha = document.getElementById('confirmaSenha').value;
   const telefone = document.getElementById('telefone').value;
+  const setor = document.getElementById('setor').value;
 
   if (senha !== confirmarSenha) {
     alert('As senhas não coincidem.');
@@ -17,7 +18,7 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ nome, email, senha, telefone })
+    body: JSON.stringify({ nome, email, senha, telefone, setor })
   })
   .then(response => response.text())
   .then(data => {

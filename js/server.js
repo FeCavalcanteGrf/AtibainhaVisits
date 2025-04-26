@@ -29,16 +29,16 @@ connection.connect(err => {
 });
 
 app.post('/register', async (req, res) => {
-  const { nome, email, senha, telefone } = req.body;
+  const { nome, email, senha, telefone, setor } = req.body;
   console.log('Dados recebidos:',{nome,email,senha,telefone});
   
   try{
     const saltRounds = 10;
     const hashedSenha = await bcrypt.hash(senha, saltRounds);
     
-    const query = 'INSERT INTO tb_usuarios (tb_nome, tb_email, tb_senha, tb_telefone) VALUES (?, ?, ?, ?)';
+    const query = 'INSERT INTO tb_usuarios (tb_nome, tb_email, tb_senha, tb_telefone, tb_setor) VALUES (?, ?, ?, ?, ?)';
     
-    connection.query(query, [nome, email, hashedSenha, telefone], (err, results) => {
+    connection.query(query, [nome, email, hashedSenha, telefone, setor], (err, results) => {
       if (err) {
         console.error('Erro ao inserir usuário:', err);
         res.status(500).send('Erro ao cadastrar usuário.');
@@ -142,7 +142,7 @@ app.get('/user-info', verificarToken,(req, res) => {
     return res.status(403).json({message: 'Você não tem permissão para acessar essas informações.'});
    }
 
-  const query = 'SELECT tb_nome AS nome, tb_email AS email, tb_setor AS setor FROM tb_usuarios WHERE tb_id = ?';
+  const query = 'SELECT tb_nome AS nome, tb_email AS email, tb_setor AS setor, tb_telefone AS tel FROM tb_usuarios WHERE tb_id = ?';
   
   connection.query(query, [userId], (err, results) => {
     if (err) {
@@ -196,22 +196,14 @@ app.post('/update-user', verificarToken, async (req, res) => {
   }
 });
 
-app.post('/add-user', (req, res) => {
-  const { nome, email, setor, senha } = req.body;
-  const query = 'INSERT INTO tb_usuarios (tb_nome, tb_email, tb_setor, tb_senha) VALUES (?, ?, ?, ?)';
-
-  connection.query(query, [nome, email, setor, senha], (err, results) => {
-    if (err) {
-      console.error('Erro ao adicionar usuário:', err);
-      res.status(500).send('Erro ao adicionar usuário.');
-      return;
-    }
-    res.status(200).send('Usuário adicionado com sucesso.');
-  });
-});
-
-app.post('/delete-user', (req, res) => {
+app.post('/delete-user', verificarToken, (req, res) => {
   const { email } = req.body;
+  
+  // Verifica se o usuário está excluindo seu próprio perfil
+  if (req.usuario.email !== email) {
+    return res.status(403).json({ message: 'Acesso não autorizado' });
+  }
+  
   const query = 'DELETE FROM tb_usuarios WHERE tb_email = ?';
 
   connection.query(query, [email], (err, results) => {
@@ -220,11 +212,17 @@ app.post('/delete-user', (req, res) => {
       res.status(500).send('Erro ao excluir usuário.');
       return;
     }
-    res.status(200).send('Usuário excluído com sucesso.');
+    
+    if (results.affectedRows === 0) {
+      return res.status(404).send('Usuário não encontrado.');
+    }
+    
+    res.status(200).json({ message: 'Usuário excluído com sucesso.' });
   });
 });
 
-app.get('/verficartoken',verificarToken, (req,res) => {
+// Corrigido o endpoint para verificar token
+app.get('/verificar-token', verificarToken, (req, res) => {
   res.status(200).json({
     valid: true,
     userId: req.usuario.id,

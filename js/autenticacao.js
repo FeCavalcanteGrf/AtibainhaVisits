@@ -10,7 +10,7 @@ function verificarAutenticacao() {
     }
     
     // Verifica se o token é válido
-    fetch('http://localhost:3000/verificar-token', {
+    return fetch('http://localhost:3000/verificar-token', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -25,6 +25,11 @@ function verificarAutenticacao() {
     .then(data => {
       // Token válido, continua na página
       console.log('Usuário autenticado:', data.email);
+      
+      if(!localStorage.getItem('userId') )  {
+        localStorage.setItem('userId', data.userId);
+      }  
+
       return true;
     })
     .catch(error => {
@@ -35,12 +40,6 @@ function verificarAutenticacao() {
       return false;
     });
   }
-  
-//   // Função para fazer logout
-//   function logout() {
-//     localStorage.clear();
-//     window.location.href = './login.html';
-//   }
   
   // Verifica autenticação quando a página carrega
   document.addEventListener('DOMContentLoaded', verificarAutenticacao);

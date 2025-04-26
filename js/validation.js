@@ -5,7 +5,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
   const senha = document.getElementById('senha').value;
   
   if (!validateEmail(email)) {
-    alert('Por favor, insira um e-mail válido.');
+    alert('Insira um e-mail válido.');
     return;
   }
   
@@ -26,7 +26,6 @@ document.getElementById('login-form').addEventListener('submit', async function(
   if (!response.ok) {
    const errorText = await response.text();
    throw new Error(errorText);
-    window.location.href = '../index.html';
   } 
    const data = await response.json();
 
@@ -34,12 +33,13 @@ document.getElementById('login-form').addEventListener('submit', async function(
    localStorage.setItem('userId', data.userId);
    localStorage.setItem('userName', data.nome);
    
+   console.log('Login feito com sucesso:', {userId: data.userId, nome: data.nome});
    alert('Login realizado com sucesso!');
    window.location.href = './index.html';
   } 
   catch (error) {
-    //console.error('Erro ao fazer login:', error);
-    alert(error.message = 'Ocorreu um erro ao fazer login. Tente novamente mais tarde.');
+    console.error('Erro ao fazer login:', error);
+    alert('Ocorreu um erro ao fazer login.'+ (error.message));
   }
 });
 

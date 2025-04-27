@@ -160,10 +160,10 @@ app.get('/user-info', verificarToken,(req, res) => {
 });
 
 app.post('/update-user', verificarToken, async (req, res) => {
-  const { nome, email, setor, senha, tel } = req.body;
+  const { userId, nome, email, setor, senha, tel } = req.body;
   
   // Verifica se o usuário está atualizando seus próprios dados
-  if (req.usuario.email !== email) {
+  if (req.usuario.id !== userId) {
     return res.status(403).json({ message: 'Acesso não autorizado' });
   }
   
@@ -175,12 +175,12 @@ app.post('/update-user', verificarToken, async (req, res) => {
     if (senha && senha.trim() !== '') {
       const saltRounds = 10;
       const hashedSenha = await bcrypt.hash(senha, saltRounds);
-      query = 'UPDATE tb_usuarios SET tb_nome = ?, tb_setor = ?, tb_senha = ?, tb_telefone = ? WHERE tb_email = ?';
-      params = [nome, setor, hashedSenha, tel, email];
+      query = 'UPDATE tb_usuarios SET tb_nome = ?, tb_setor = ?, tb_senha = ?, tb_telefone = ? WHERE tb_id = ?';
+      params = [nome, setor, hashedSenha, tel, userId];
     } else {
       // Se a senha não foi fornecida, atualiza somente os outros campos
-      query = 'UPDATE tb_usuarios SET tb_nome = ?, tb_setor = ?, tb_telefone = ? WHERE tb_email = ?';
-      params = [nome, setor, tel, email];
+      query = 'UPDATE tb_usuarios SET tb_nome = ?, tb_setor = ?, tb_telefone = ? WHERE tb_id = ?';
+      params = [nome, setor, tel, userId];
     }
 
     connection.query(query, params, (err, results) => {

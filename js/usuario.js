@@ -113,6 +113,7 @@ document.getElementById('update-user-form').addEventListener('submit', async fun
     return;
   }
   
+  const userId = localStorage.getItem('userId'); // Obtém o ID do usuário logado
   const nome = document.getElementById('user-name').value;
   const email = document.getElementById('user-email').value;
   const tel = document.getElementById('user-tel').value;
@@ -120,7 +121,7 @@ document.getElementById('update-user-form').addEventListener('submit', async fun
   const setor = document.getElementById('user-sector').value;
 
   try {
-    console.log('Enviando dados para atualização:', { nome, email, setor, senha, tel });
+    console.log('Enviando dados para atualização:', { userId, nome, email, setor, senha, tel });
     
     const response = await fetch('http://localhost:3000/update-user', {
       method: 'POST',
@@ -128,7 +129,7 @@ document.getElementById('update-user-form').addEventListener('submit', async fun
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ nome, email, setor, senha, tel })
+      body: JSON.stringify({ userId, nome, email, setor, senha, tel }) // Inclui o userId no corpo da requisição
     });
     
     const responseData = await response.json();

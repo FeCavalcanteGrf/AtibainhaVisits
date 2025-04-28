@@ -31,14 +31,11 @@
     <div class="container">
         <!-- Mapa Calendário -->
         <div class="calendar-container glassmorphism">
-            <div id="calendar" class="calendar">
-                <!-- O calendário será gerado via JS -->
-                 <!-- Botões de Navegação para o Mês -->
+            <div id="calendar-controls">
+                <button id="prev-month">Mês Anterior</button>
+                <button id="next-month">Próximo Mês</button>
             </div>
-            <div class="navegacao-mes">
-                <button id="prev-month" class="btn-nav">Mês Anterior</button>
-                <button id="next-month" class="btn-nav">Próximo Mês</button>
-            </div>
+            <div id="calendar" class="calendar"></div>
         </div>
 
         <!-- Formulário de Cadastro de Visita -->
@@ -67,22 +64,15 @@
 </main>
 
 <!-- Popup para Exibir Visita Agendada -->
-<div id="visit-popup" class="popup">
-    <div class="popup-content">
-        <button class="close-btn" onclick="closePopup()">X</button>
-        <h2>Detalhes da Visita</h2>
-        <div id="visit-details">
-            <label for="nome">Nome:</label>
-            <p id="nome"></p>
-            <label for="empresa">Empresa:</label>
-            <p id="empresa"></p>
-            <label for="data">Data:</label>
-            <p id="data"></p>
-            <label for="hora">Hora:</label>
-            <p id="hora"></p>
-            <label for="locais">Locais em Foco:</label>
-            <p id="locais"></p>
-        </div>
+<div id="visit-popup" style="display: none;">
+    <div>
+        <h3>Detalhes da Visita</h3>
+        <p><strong>Nome:</strong> <span id="popup-nome"></span></p>
+        <p><strong>Empresa:</strong> <span id="popup-empresa"></span></p>
+        <p><strong>Data:</strong> <span id="popup-data"></span></p>
+        <p><strong>Hora:</strong> <span id="popup-hora"></span></p>
+        <p><strong>Locais:</strong> <span id="popup-locais"></span></p>
+        <button onclick="closePopup()">Fechar</button>
     </div>
 </div>
 

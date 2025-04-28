@@ -230,6 +230,22 @@ app.get('/verificar-token', verificarToken, (req, res) => {
   });
 });
 
+// Rota para buscar todas as visitas
+app.get('/api/visitas', (req, res) => {
+  const query = 'SELECT * FROM tb_visitas';
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar visitas:', err);
+      res.status(500).send('Erro ao buscar visitas.');
+      return;
+    }
+
+    console.log('Visitas carregadas:', results);
+    res.status(200).json(results);
+  });
+});
+
 app.listen(port, () => {
   console.log('Servidor rodando na porta 3000.');
 });

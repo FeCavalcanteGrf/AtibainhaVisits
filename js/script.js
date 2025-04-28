@@ -82,19 +82,19 @@ document.getElementById('menu-toggle').addEventListener('click', () => {
 function openPopup(celula = null) {
     const popup = document.getElementById('visit-popup');
     if (celula) {
-        const nome = document.getElementById('nome');
-        const empresa = document.getElementById('empresa');
-        const data = document.getElementById('data');
-        const hora = document.getElementById('hora');
-        const locais = document.getElementById('locais');
+        const nome = document.getElementById('popup-nome');
+        const empresa = document.getElementById('popup-empresa');
+        const data = document.getElementById('popup-data');
+        const hora = document.getElementById('popup-hora');
+        const locais = document.getElementById('popup-locais');
         
-        // Preencher os dados da visita (Exemplo fixo, pode ser ajustado)
+        // Preencher os dados da visita
         if (celula.classList.contains('visita')) {
-            nome.textContent = celula.getAttribute('data-nome');
-            empresa.textContent = celula.getAttribute('data-empresa');
-            data.textContent = celula.getAttribute('data-data');
-            hora.textContent = celula.getAttribute('data-hora');
-            locais.textContent = celula.getAttribute('data-locais');
+            nome.textContent = celula.getAttribute('data-nome') || "Não informado";
+            empresa.textContent = celula.getAttribute('data-empresa') || "Não informado";
+            data.textContent = celula.getAttribute('data-data') || "Não informado";
+            hora.textContent = celula.getAttribute('data-hora') || "Não informado";
+            locais.textContent = celula.getAttribute('data-locais') || "Não informado";
         }
     }
 
@@ -103,7 +103,10 @@ function openPopup(celula = null) {
 
 // Função para fechar o popup
 function closePopup() {
-    document.getElementById('visit-popup').style.display = 'none';
+    const popup = document.getElementById('visit-popup');
+    if (popup) {
+        popup.style.display = 'none';
+    }
 }
 
 // Função para cadastrar visita e marcar o calendário
@@ -160,17 +163,28 @@ function openVisitPopup(event) {
         const hora = dia.getAttribute('data-hora');
         const locais = dia.getAttribute('data-locais');
 
-        // Preenche as informações no popup
-        document.getElementById('popup-nome').textContent = nome;
-        document.getElementById('popup-empresa').textContent = empresa;
-        document.getElementById('popup-data').textContent = data;
-        document.getElementById('popup-hora').textContent = hora;
-        document.getElementById('popup-locais').textContent = locais;
+        // Verifica se os elementos do pop-up existem antes de definir os valores
+        const popupNome = document.getElementById('popup-nome');
+        const popupEmpresa = document.getElementById('popup-empresa');
+        const popupData = document.getElementById('popup-data');
+        const popupHora = document.getElementById('popup-hora');
+        const popupLocais = document.getElementById('popup-locais');
 
-        // Abre o popup
-        openPopup();
+        if (popupNome && popupEmpresa && popupData && popupHora && popupLocais) {
+            popupNome.textContent = nome || "Não informado";
+            popupEmpresa.textContent = empresa || "Não informado";
+            popupData.textContent = data || "Não informado";
+            popupHora.textContent = hora || "Não informado";
+            popupLocais.textContent = locais || "Não informado";
+
+            // Exibe o pop-up
+            const popup = document.getElementById('visit-popup');
+            popup.style.display = 'block';
+        } else {
+            console.error("Elementos do pop-up não encontrados no DOM.");
+        }
     } else {
-        // Se o dia não tiver visita, não abre o popup
+        // Se o dia não tiver visita, exibe uma mensagem de alerta
         alert("Não há visita registrada para este dia.");
     }
 }
@@ -185,9 +199,43 @@ calendarioDivs.forEach((div) => {
 let anoAtual = new Date().getFullYear();  // Ano atual
 let mesAtual = new Date().getMonth();  // Mês atual (0-11)
 
+// Função para obter o nome do mês
+function obterNomeMes(mes) {
+    const nomesDosMeses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+    return nomesDosMeses[mes];
+}
+
+// Função para carregar visitas do banco
+async function carregarVisitas() {
+    alert("Carregando visitas do banco...");
+    try {
+        const response = await fetch('http://localhost:3000/api/visitas'); // Substitua pela URL correta da API
+        const visitas = await response.json();
+
+        alert(`Visitas carregadas: ${JSON.stringify(visitas)}`);
+        marcarVisitasNoCalendario(visitas);
+    } catch (error) {
+        alert("Erro ao carregar visitas: " + error.message);
+        console.error("Erro ao carregar visitas:", error);
+    }
+}
+
+// Função para gerar o calendário
 function gerarCalendario() {
+    alert("Gerando calendário...");
     const diasDoMes = new Date(anoAtual, mesAtual + 1, 0).getDate(); // Número de dias no mês atual
+    const primeiroDiaSemana = new Date(anoAtual, mesAtual, 1).getDay(); // Dia da semana do primeiro dia do mês
     const calendarElement = document.getElementById('calendar');
+
+    if (!calendarElement) {
+        alert("Elemento #calendar não encontrado!");
+        console.error("Elemento #calendar não encontrado!");
+        return;
+    }
+
     calendarElement.innerHTML = ''; // Limpa o calendário antes de preencher
 
     // Atualiza o título do mês no calendário
@@ -195,128 +243,101 @@ function gerarCalendario() {
     tituloMes.textContent = `${obterNomeMes(mesAtual)} de ${anoAtual}`;
     calendarElement.appendChild(tituloMes);
 
+    // Adiciona espaços vazios para os dias antes do primeiro dia do mês
+    for (let i = 0; i < primeiroDiaSemana; i++) {
+        const div = document.createElement('div');
+        div.classList.add('empty'); // Classe para estilizar os espaços vazios
+        calendarElement.appendChild(div);
+    }
+
     // Gera os dias do mês
     for (let i = 1; i <= diasDoMes; i++) {
         const div = document.createElement('div');
         div.textContent = i;
-        div.addEventListener('click', function() {
+
+        // Adicionar o atributo data-date no formato YYYY-MM-DD
+        const data = new Date(anoAtual, mesAtual, i);
+        div.setAttribute('data-date', data.toISOString().split('T')[0]);
+
+        div.addEventListener('click', function () {
             openPopup(this);
         });
         calendarElement.appendChild(div);
     }
+
+    alert("Calendário gerado com sucesso!");
+    carregarVisitas(); // Chamar carregarVisitas após gerar o calendário
 }
 
-// Função auxiliar para obter o nome do mês
-function obterNomeMes(mes) {
-    const nomesMeses = [
-        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
-        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-    ];
-    return nomesMeses[mes];
-}
-
-// Função para alterar para o mês anterior
+// Funções para navegar entre os meses
 function mesAnterior() {
-    if (mesAtual === 0) {
-        mesAtual = 11;  // Dezembro
-        anoAtual--;  // Decrementa o ano
-    } else {
-        mesAtual--;
+    mesAtual--; // Vai para o mês anterior
+    if (mesAtual < 0) {
+        mesAtual = 11; // Volta para dezembro do ano anterior
+        anoAtual--;
     }
-    gerarCalendario();
+    gerarCalendario(); // Atualiza o calendário
 }
 
-// Função para alterar para o próximo mês
 function proximoMes() {
-    if (mesAtual === 11) {
-        mesAtual = 0;  // Janeiro
-        anoAtual++;  // Incrementa o ano
-    } else {
-        mesAtual++;
+    mesAtual++; // Vai para o próximo mês
+    if (mesAtual > 11) {
+        mesAtual = 0; // Volta para janeiro do próximo ano
+        anoAtual++;
     }
-    gerarCalendario();
+    gerarCalendario(); // Atualiza o calendário
+}
+
+function marcarVisitasNoCalendario(visitas) {
+    alert("Marcando visitas no calendário...");
+    const hoje = new Date();
+
+    visitas.forEach(visita => {
+        // Extrair apenas a parte da data no formato YYYY-MM-DD
+        const dataVisita = new Date(visita.tb_data);
+        const dataFormatada = dataVisita.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+
+        const diaElemento = document.querySelector(`[data-date="${dataFormatada}"]`);
+
+        if (diaElemento) {
+            // Adicionar classes e atributos de dados para a visita
+            if (dataVisita < hoje) {
+                diaElemento.classList.add('dia-passado'); // Vermelho
+            } else {
+                diaElemento.classList.add('dia-futuro'); // Verde
+            }
+
+            diaElemento.classList.add('visita'); // Classe para identificar dias com visitas
+            diaElemento.setAttribute('data-nome', visita.tb_nome);
+            diaElemento.setAttribute('data-empresa', visita.tb_empresa);
+            diaElemento.setAttribute('data-data', visita.tb_data);
+            diaElemento.setAttribute('data-hora', visita.tb_hora);
+            diaElemento.setAttribute('data-locais', visita.tb_locais);
+
+            diaElemento.addEventListener('click', () => openVisitPopup({ target: diaElemento }));
+        } else {
+            console.warn(`Elemento não encontrado para a data: ${dataFormatada}`);
+        }
+    });
 }
 
 // Adicionando eventos de clique para os botões de navegação
-document.getElementById('prev-month').addEventListener('click', mesAnterior);
-document.getElementById('next-month').addEventListener('click', proximoMes);
+document.addEventListener("DOMContentLoaded", () => {
+    const prevMonthButton = document.getElementById('prev-month');
+    const nextMonthButton = document.getElementById('next-month');
 
-// Chama a função para gerar o calendário ao carregar a página
-window.onload = function() {
-    gerarCalendario();
-}
+    if (prevMonthButton) {
+        prevMonthButton.addEventListener('click', mesAnterior);
+    } else {
+        console.error("Elemento #prev-month não encontrado.");
+    }
 
-document.getElementById('cadastro-form').addEventListener('submit', async function(event) {
-  event.preventDefault();
+    if (nextMonthButton) {
+        nextMonthButton.addEventListener('click', proximoMes);
+    } else {
+        console.error("Elemento #next-month não encontrado.");
+    }
 
-  const nome = document.getElementById('nome').value;
-  const email = document.getElementById('email').value;
-  const senha = document.getElementById('senha').value;
-  const confirmarSenha = document.getElementById('confirmarSenha').value;
-  const telefone = document.getElementById('telefone').value;
-
-  if (senha !== confirmarSenha) {
-    showPopup('As senhas não coincidem.');
-    return;
-  }
-
-  const response = await fetch('/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ nome, email, senha, telefone })
-  });
-
-  if (response.ok) {
-    showPopup('Usuário cadastrado com sucesso!');
-  } else {
-    showPopup('Erro ao cadastrar usuário.');
-  }
+    gerarCalendario(); // Gera o calendário e chama carregarVisitas
 });
-
-function showPopup(message) {
-  const popup = document.createElement('div');
-  popup.classList.add('popup');
-  popup.innerHTML = `
-    <div class="popup-content">
-      <p>${message}</p>
-      <button onclick="closePopup()">Fechar</button>
-    </div>
-  `;
-  document.body.appendChild(popup);
-}
-
-function closePopup() {
-  const popup = document.querySelector('.popup');
-  if (popup) {
-    popup.remove();
-  }
-}
-
-function togglePassword() {
-    document
-      .querySelectorAll(".eye")
-      .forEach((eye) => eye.classList.toggle("hide"))
-
-    const type =
-      senha.getAttribute("type") == "password" ? "text" : "password"
-
-    senha.setAttribute("type", type)
-}
-
-function atualizarProgresso() {
-    const checkboxes = document.querySelectorAll('.checkbox');
-    const totalCheckboxes = checkboxes.length;
-    const marcados = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
-
-    const progresso = (marcados / totalCheckboxes) * 100;
-
-    // Atualiza a barra de progresso
-    const barraProgresso = document.getElementById('barra-progresso');
-    const textoProgresso = document.getElementById('texto-progresso');
-
-    barraProgresso.value = progresso;
-    textoProgresso.textContent = `${Math.round(progresso)}%`;
-}
 

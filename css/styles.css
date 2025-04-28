@@ -454,110 +454,52 @@ footer {
 }
 
 /* Calendário */
-.calendar {
+#calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#calendar {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, 1fr); /* 7 colunas para os dias da semana */
     gap: 5px;
-    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordas sutis */
+    border-radius: 10px;
+    backdrop-filter: blur(10px); /* Efeito de desfoque */
+    -webkit-backdrop-filter: blur(10px); /* Compatibilidade com navegadores WebKit */
+    background-color: transparent; /* Remove o fundo cinza */
 }
 
-.calendar div {
-    background-color: #f0f0f0;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1.2em;
-}
-
-.calendar div:hover {
-    background-color: #c5e1a5;
-}
-
-/* Marcação de visita no calendário */
-.calendar div.visita {
-    background-color: #ffeb3b; /* Marca o dia com uma cor amarela clara */
-    color: #fff;
-    font-weight: bold;
-}
-/* Estilos para os botões de navegação */
-.navegacao-mes {
+#calendar div {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.btn-nav {
-    display: inline-block;
-    background: rgba(0, 0, 0, 0.3); /* Fundo com transparência */
-    color: white;
-    font-size: 1.2em;
-    padding: 15px 30px;
-    border-radius: 30px; /* Botão arredondado */
-    text-decoration: none;
-    text-align: center;
-    transition: all 0.3s ease; 
-    /* Efeito de Glassmorphism */
-    backdrop-filter: blur(10px); /* Desfoque do fundo */
-    -webkit-backdrop-filter: blur(10px); /* Para navegadores WebKit */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordas sutis */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */        
-}
-
-.btn-nav:hover {
-    background: rgba(0, 0, 0, 0.5); /* Aumenta a opacidade ao passar o mouse */
-    transform: translateY(-3px); /* Eleva ligeiramente o botão */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5); /* Sombra maior ao passar o mouse */
-}
-    /* Estilo do Popup */
-#visit-popup {
-    position: fixed; /* Usando fixed para garantir que fique sobre a tela */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fundo semitransparente */
-    display: none; /* Inicialmente escondido */
-    justify-content: center;
     align-items: center;
-    z-index: 1000; /* Garantir que o popup fique no topo */
-}
-
-/* Conteúdo do Popup */
-#visit-popup .popup-content {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 400px;
-    width: 90%;
-    text-align: center;
-}
-
-/* Botão de fechar */
-#visit-popup .btn-close {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 30px;
-    position: absolute;
-    top: 10px; /* Ajustado para ficar dentro do popup */
-    right: 10px; /* Ajustado para ficar dentro do popup */
+    height: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordas sutis */
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-    padding: 8px;
-    border-radius: 50%;
-    z-index: 1001; /* Garante que o botão fique por cima */
+    color: #000; /* Cor do texto */
+    background-color: white; /* Fundo branco para dias sem visitas */
 }
 
-/* Efeito de hover para o botão de fechar */
-#visit-popup .btn-close:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
+#calendar div:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Fundo ao passar o mouse */
 }
 
+.dia-passado {
+    background-color: red !important; /* Vermelho para dias passados com visitas */
+    color: white;
+}
 
-#visit-popup .popup-content h2,
-#visit-popup .popup-content p {
-    margin-bottom: 10px;
+.dia-futuro {
+    background-color: green !important; /* Verde para dias futuros com visitas */
+    color: white;
+}
+
+.empty {
+    background-color: transparent; /* Espaços vazios sem fundo */
+    border: none;
+    cursor: default;
 }

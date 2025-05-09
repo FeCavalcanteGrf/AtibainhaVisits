@@ -54,97 +54,56 @@
     transform: scale(1.1);
 }
 
-/* Estilos para o calendário */
+/* Estilos para o calendário em formato de tabela */
 #calendar {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
+    width: 100%;
+    color: white;
+    display: block;
 }
 
-/* Estilos para os dias da semana */
-.weekdays {
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
-    gap: 5px !important;
-    margin-bottom: 10px !important;
-    width: 100% !important;
+#calendar table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 5px;
+    table-layout: fixed;
 }
 
-.weekdays div {
-    text-align: center;
-    font-weight: bold;
+#calendar th {
     padding: 10px 0;
-    color: #fff;
-    font-size: 1rem;
+    text-align: center;
     background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-weight: bold;
     border-radius: 8px;
+    width: calc(100% / 7);
 }
 
-/* Estilos para o grid do calendário */
-.calendar-grid {
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
-    gap: 5px !important;
-    width: 100% !important;
-    min-height: 350px !important;
+#calendar td {
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 10px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: calc(100% / 7);
+    padding: 0;
 }
 
-.calendar-day {
-    aspect-ratio: 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 10px !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    position: relative !important;
-    font-weight: 500 !important;
-    font-size: 1.1rem !important;
-    color: white !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
+#calendar td:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
 }
 
-.calendar-day:hover {
-    background-color: rgba(255, 255, 255, 0.2) !important;
-    transform: translateY(-3px) !important;
+#calendar td:empty {
+    background-color: transparent;
+    cursor: default;
 }
 
-.calendar-day.empty {
-    background-color: transparent !important;
-    cursor: default !important;
-    box-shadow: none !important;
-}
-
-.calendar-day.empty:hover {
-    transform: none !important;
-}
-
-.calendar-day.today {
-    border: 2px solid rgba(255, 255, 255, 0.8) !important;
-    font-weight: bold !important;
-}
-
-.calendar-day.has-visit {
-    background-color: rgba(76, 175, 80, 0.6) !important;
-}
-
-.calendar-day.past-visit {
-    background-color: rgba(76, 175, 80, 0.6) !important; /* Alterado para verde também */
-}
-
-/* Indicador de evento */
-.calendar-day.has-visit::after {
-    content: '';
-    position: absolute;
-    bottom: 7px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: white;
+#calendar td:empty:hover {
+    transform: none;
 }
 
 /* Popup de visita */
@@ -244,6 +203,30 @@
     background: #e0e0e0;
 }
 
+/* Botão de iniciar visita */
+.btn-iniciar-visita {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-iniciar-visita:hover {
+    background-color: #3e8e41;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
 /* Formulário de cadastro de visita */
 .form-container {
     background: rgba(255, 255, 255, 0.15);
@@ -334,13 +317,13 @@
         font-size: 1.5rem;
     }
     
-    .weekdays div {
+    #calendar th {
         font-size: 0.9rem;
         padding: 8px 0;
     }
     
-    .calendar-day {
-        font-size: 0.9rem !important;
+    #calendar td {
+        font-size: 0.9rem;
     }
     
     .visit-popup-content {

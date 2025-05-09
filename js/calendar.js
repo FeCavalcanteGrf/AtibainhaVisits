@@ -2,7 +2,7 @@
 let currentDate = new Date();
 let visitas = [];
 let serverOnline = false;
-let DEBUG = false; // Controle para logs de depuração
+let DEBUG = true; // Ativando logs para depuração
 
 // Função para log condicional
 function logDebug(...args) {
@@ -107,27 +107,41 @@ function renderCalendar() {
     // Limpar o calendário
     calendarEl.innerHTML = '';
     
-    // Forçar o layout correto
-    calendarEl.style.display = 'flex';
-    calendarEl.style.flexDirection = 'column';
+    // Garantir que o calendário ocupe todo o espaço disponível
     calendarEl.style.width = '100%';
+    calendarEl.style.display = 'block';
     
-    // Adicionar cabeçalho dos dias da semana
+    // Criar uma tabela HTML para o calendário (abordagem mais compatível)
+    const table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.borderCollapse = 'separate';
+    table.style.borderSpacing = '5px';
+    table.style.tableLayout = 'fixed';
+    table.style.margin = '0';
+    table.style.padding = '0';
+    
+    // Criar cabeçalho com os dias da semana
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    
     const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-    const weekdaysContainer = document.createElement('div');
-    weekdaysContainer.className = 'weekdays';
-    
     weekdays.forEach(day => {
-        const dayEl = document.createElement('div');
-        dayEl.textContent = day;
-        weekdaysContainer.appendChild(dayEl);
+        const th = document.createElement('th');
+        th.textContent = day;
+        th.style.padding = '10px';
+        th.style.textAlign = 'center';
+        th.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+        th.style.color = 'white';
+        th.style.fontWeight = 'bold';
+        th.style.borderRadius = '8px';
+        headerRow.appendChild(th);
     });
     
-    calendarEl.appendChild(weekdaysContainer);
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
     
-    // Criar o grid do calendário
-    const calendarGrid = document.createElement('div');
-    calendarGrid.className = 'calendar-grid';
+    // Criar corpo da tabela
+    const tbody = document.createElement('tbody');
     
     // Determinar o primeiro dia do mês e o número de dias
     const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -135,67 +149,112 @@ function renderCalendar() {
     const totalDays = lastDay.getDate();
     const firstDayIndex = firstDay.getDay(); // 0 = Domingo, 1 = Segunda, etc.
     
-    // Adicionar células vazias para os dias antes do primeiro dia do mês
-    for (let i = 0; i < firstDayIndex; i++) {
-        const emptyDay = document.createElement('div');
-        emptyDay.className = 'calendar-day empty';
-        calendarGrid.appendChild(emptyDay);
-    }
-    
-    // Adicionar os dias do mês
-    const today = new Date();
-    
     // Filtrar visitas para o mês atual
     const visitasDoMes = visitas.filter(visita => {
-        if (!visita.tb_data) return false;
+        if (!visita.data) return false;
         
         // Corrigir o problema com o fuso horário
-        const dataStr = visita.tb_data;
-        const [ano, mes, dia] = dataStr.split('-').map(num => parseInt(num, 10));
+        const dataStr = visita.data;
+        // Remover a parte do fuso horário se existir
+        const dataSemFuso = dataStr.split('T')[0];
+        const [ano, mes, dia] = dataSemFuso.split('-').map(num => parseInt(num, 10));
         const mesAtual = currentDate.getMonth() + 1; // Mês atual (1-12)
         const anoAtual = currentDate.getFullYear();
         
         return mes === mesAtual && ano === anoAtual;
     });
     
-    for (let day = 1; day <= totalDays; day++) {
-        const dayEl = document.createElement('div');
-        dayEl.className = 'calendar-day';
-        dayEl.textContent = day;
+    logDebug(`🔍 Visitas filtradas para ${currentDate.getMonth() + 1}/${currentDate.getFullYear()}:`, visitasDoMes);
+    
+    // Criar as linhas e células do calendário
+    let day = 1;
+    const today = new Date();
+    
+    // Criar 6 linhas no máximo (suficiente para qualquer mês)
+    for (let i = 0; i < 6; i++) {
+        // Parar se já passamos do último dia do mês
+        if (day > totalDays) break;
         
-        // Verificar se é hoje
-        if (currentDate.getFullYear() === today.getFullYear() && 
-            currentDate.getMonth() === today.getMonth() && 
-            day === today.getDate()) {
-            dayEl.classList.add('today');
+        const row = document.createElement('tr');
+        
+        // Criar 7 células para cada dia da semana
+        for (let j = 0; j < 7; j++) {
+            const cell = document.createElement('td');
+            cell.style.height = '60px';
+            cell.style.textAlign = 'center';
+            cell.style.verticalAlign = 'middle';
+            cell.style.borderRadius = '10px';
+            cell.style.position = 'relative';
+            
+            // Adicionar dia apenas se estivermos no mês atual
+            if (i === 0 && j < firstDayIndex) {
+                // Dias vazios antes do início do mês
+                cell.style.backgroundColor = 'transparent';
+            } else if (day <= totalDays) {
+                // Dias do mês atual
+                cell.textContent = day;
+                cell.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                cell.style.color = 'white';
+                cell.style.cursor = 'pointer';
+                
+                // Verificar se é hoje
+                if (currentDate.getFullYear() === today.getFullYear() && 
+                    currentDate.getMonth() === today.getMonth() && 
+                    day === today.getDate()) {
+                    cell.style.border = '2px solid rgba(255, 255, 255, 0.8)';
+                    cell.style.fontWeight = 'bold';
+                }
+                
+                // Verificar se tem visita neste dia
+                const currentDay = day; // Capturar o valor atual de day
+                const visitasNoDia = visitasDoMes.filter(v => {
+                    const dataStr = v.data;
+                    const dataSemFuso = dataStr.split('T')[0];
+                    const [ano, mes, diaVisita] = dataSemFuso.split('-').map(num => parseInt(num, 10));
+                    return diaVisita === currentDay;
+                });
+                
+                if (visitasNoDia.length > 0) {
+                    // Marcar dias com visitas
+                    cell.style.backgroundColor = 'rgba(76, 175, 80, 0.6)';
+                    
+                    // Adicionar indicador visual
+                    const indicator = document.createElement('div');
+                    indicator.style.position = 'absolute';
+                    indicator.style.bottom = '5px';
+                    indicator.style.left = '50%';
+                    indicator.style.transform = 'translateX(-50%)';
+                    indicator.style.width = '6px';
+                    indicator.style.height = '6px';
+                    indicator.style.borderRadius = '50%';
+                    indicator.style.backgroundColor = 'white';
+                    cell.appendChild(indicator);
+                    
+                    // Adicionar evento de clique
+                    cell.addEventListener('click', function() {
+                        showVisitDetails(visitasNoDia);
+                    });
+                    
+                    // Armazenar dados da visita no atributo data
+                    cell.setAttribute('data-visitas', JSON.stringify(visitasNoDia));
+                }
+                
+                day++;
+            } else {
+                // Dias vazios após o fim do mês
+                cell.style.backgroundColor = 'transparent';
+            }
+            
+            row.appendChild(cell);
         }
         
-        // Verificar se tem visita neste dia
-        const visitasNoDia = visitasDoMes.filter(v => {
-            // Corrigir o problema com o fuso horário
-            const dataStr = v.tb_data;
-            const [ano, mes, diaVisita] = dataStr.split('-').map(num => parseInt(num, 10));
-            
-            return diaVisita === day;
-        });
-        
-        if (visitasNoDia.length > 0) {
-            // Usar sempre verde para todas as visitas
-            dayEl.classList.add('has-visit');
-            
-            // Adicionar dados da visita como atributos de dados
-            dayEl.setAttribute('data-visitas', JSON.stringify(visitasNoDia));
-            
-            // Adicionar evento de clique para mostrar detalhes da visita
-            dayEl.addEventListener('click', function() {
-                showVisitDetails(visitasNoDia);
-            });
-        }
-        
-        calendarGrid.appendChild(dayEl);
+        tbody.appendChild(row);
     }
     
-    calendarEl.appendChild(calendarGrid);
+    table.appendChild(tbody);
+    calendarEl.appendChild(table);
+    
+    logDebug('✅ Calendário renderizado com sucesso');
 }
 
 // Função para formatar data como YYYY-MM-DD
@@ -220,6 +279,7 @@ async function carregarVisitas() {
         // Verificar a estrutura dos dados
         if (Array.isArray(data)) {
             visitas = data;
+            console.log('✅ Visitas carregadas com sucesso:', visitas);
         } else {
             console.error('❌ Dados recebidos não são um array');
             visitas = [];
@@ -252,8 +312,10 @@ function showVisitDetails(visitasNoDia) {
     const title = document.createElement('h3');
     
     // Corrigir o problema com o fuso horário
-    const dataStr = visitasNoDia[0].tb_data;
-    const [ano, mes, dia] = dataStr.split('-').map(num => parseInt(num, 10));
+    const dataStr = visitasNoDia[0].data;
+    // Remover a parte do fuso horário se existir
+    const dataSemFuso = dataStr.split('T')[0];
+    const [ano, mes, dia] = dataSemFuso.split('-').map(num => parseInt(num, 10));
     const dataFormatada = new Date(ano, mes - 1, dia).toLocaleDateString('pt-BR');
     
     title.textContent = `Visitas em ${dataFormatada}`;
@@ -277,13 +339,28 @@ function showVisitDetails(visitasNoDia) {
         details.className = 'visit-details';
         
         details.innerHTML = `
-            <p><strong>Nome:</strong> ${visita.tb_nome || 'Não informado'}</p>
-            <p><strong>Empresa:</strong> ${visita.tb_empresa || 'Não informada'}</p>
-            <p><strong>Horário:</strong> ${visita.tb_hora || 'Não informado'}</p>
-            <p><strong>Locais:</strong> ${visita.tb_locais || 'Não informados'}</p>
+            <p><strong>Nome:</strong> ${visita.nome || 'Não informado'}</p>
+            <p><strong>Empresa:</strong> ${visita.empresa || 'Não informada'}</p>
+            <p><strong>Horário:</strong> ${visita.hora || 'Não informado'}</p>
+            <p><strong>Locais:</strong> ${visita.locais || 'Não informados'}</p>
         `;
         
         popupContent.appendChild(details);
+        
+        // Adicionar botão de iniciar visita
+        const iniciarBtn = document.createElement('button');
+        iniciarBtn.className = 'btn-iniciar-visita';
+        iniciarBtn.textContent = 'Iniciar Visita';
+        iniciarBtn.addEventListener('click', function() {
+            // Simplesmente redirecionar para a página de visita
+            window.location.href = 'visita.html';
+        });
+        
+        const btnContainer = document.createElement('div');
+        btnContainer.className = 'btn-container';
+        btnContainer.appendChild(iniciarBtn);
+        
+        popupContent.appendChild(btnContainer);
     });
     
     // Adicionar botões de ação

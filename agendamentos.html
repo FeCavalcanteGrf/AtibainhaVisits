@@ -27,6 +27,17 @@
         .calendar-container {
             width: 100%;
             margin-bottom: 30px;
+            box-sizing: border-box;
+        }
+        
+        #calendar {
+            width: 100%;
+            display: block;
+        }
+        
+        #calendar table {
+            width: 100%;
+            table-layout: fixed;
         }
         
         /* Formulário abaixo do calendário */
@@ -81,7 +92,7 @@
                     <button id="next-month"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
-            <div id="calendar">
+            <div id="calendar" style="width: 100%; display: block;">
                 <!-- O calendário será gerado dinamicamente pelo JavaScript -->
             </div>
         </div>

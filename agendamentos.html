@@ -3,9 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atibainha Visits</title>
+    <title>Atibainha Visits - Agendamentos</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/calendar.css">
     <link rel="icon" href="img/LogoTipo.png" type="image/png">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Correções específicas para esta página */
+        main {
+            padding-top: 80px;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* Garantir que o calendário ocupe todo o espaço disponível */
+        .calendar-container {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        /* Formulário abaixo do calendário */
+        .form-container {
+            width: 100%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* Layout para formulário em duas colunas */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+    </style>
 </head>
 <body>
 
@@ -29,50 +72,71 @@
 
 <main>
     <div class="container">
-        <!-- Mapa Calendário -->
+        <!-- Calendário Moderno -->
         <div class="calendar-container glassmorphism">
-            <div id="calendar-controls">
-                <button id="prev-month">Mês Anterior</button>
-                <button id="next-month">Próximo Mês</button>
+            <div class="calendar-header">
+                <h2 id="month-year">Agosto 2023</h2>
+                <div class="calendar-nav">
+                    <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                    <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                </div>
             </div>
-            <div id="calendar" class="calendar"></div>
+            <div id="calendar">
+                <!-- O calendário será gerado dinamicamente pelo JavaScript -->
+            </div>
         </div>
 
         <!-- Formulário de Cadastro de Visita -->
         <div class="form-container">
             <h3>Cadastrar Nova Visita</h3>
             <form id="register-visit-form" onsubmit="return cadastrarVisita(event)">
-                <label for="novo-nome">Nome:</label>
-                <input type="text" id="novo-nome" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="novo-nome">Nome:</label>
+                        <input type="text" id="novo-nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="novo-empresa">Empresa:</label>
+                        <input type="text" id="novo-empresa" required>
+                    </div>
+                </div>
                 
-                <label for="novo-empresa">Empresa:</label>
-                <input type="text" id="novo-empresa" required>
-                
-                <label for="novo-data">Data:</label>
-                <input type="date" id="novo-data" required>
-                
-                <label for="novo-hora">Hora:</label>
-                <input type="time" id="novo-hora" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="novo-data">Data:</label>
+                        <input type="date" id="novo-data" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="novo-hora">Hora:</label>
+                        <input type="time" id="novo-hora" required>
+                    </div>
+                </div>
                 
                 <label for="novo-locais">Locais em Foco:</label>
                 <input type="text" id="novo-locais" required>
                 
-                <button type="submit" class="btn-save">Cadastrar</button>
+                <button type="submit" class="btn-save">Cadastrar Visita</button>
             </form>
         </div>
     </div>
 </main>
 
-<!-- Popup para Exibir Visita Agendada -->
-<div id="visit-popup" style="display: none;">
-    <div>
+<!-- Popup para Exibir Visita Agendada (Versão Moderna) -->
+<div id="visit-popup" class="visit-popup">
+    <div id="popup-content" class="visit-popup-content">
+        <!-- O conteúdo será preenchido dinamicamente pelo JavaScript -->
         <h3>Detalhes da Visita</h3>
-        <p><strong>Nome:</strong> <span id="popup-nome"></span></p>
-        <p><strong>Empresa:</strong> <span id="popup-empresa"></span></p>
-        <p><strong>Data:</strong> <span id="popup-data"></span></p>
-        <p><strong>Hora:</strong> <span id="popup-hora"></span></p>
-        <p><strong>Locais:</strong> <span id="popup-locais"></span></p>
-        <button onclick="closePopup()">Fechar</button>
+        <button id="close-popup" class="close-popup">&times;</button>
+        <div class="visit-details">
+            <p><strong>Nome:</strong> <span id="popup-nome">Carregando...</span></p>
+            <p><strong>Empresa:</strong> <span id="popup-empresa">Carregando...</span></p>
+            <p><strong>Data:</strong> <span id="popup-data">Carregando...</span></p>
+            <p><strong>Hora:</strong> <span id="popup-hora">Carregando...</span></p>
+            <p><strong>Locais:</strong> <span id="popup-locais">Carregando...</span></p>
+        </div>
+        <div class="popup-actions">
+            <button class="btn-close">Fechar</button>
+        </div>
     </div>
 </div>
 
@@ -80,7 +144,8 @@
     <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
 </footer>
 
+<!-- Carregar scripts -->
 <script src="js/script.js"></script>
-<!-- <script src="js/autenticacao.js"></script> -->
+<script src="js/calendar.js"></script>
 </body>
 </html>

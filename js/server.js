@@ -232,7 +232,7 @@ app.get('/verificar-token', verificarToken, (req, res) => {
 
 // Rota para buscar todas as visitas
 app.get('/api/visitas', (req, res) => {
-  const query = 'SELECT * FROM tb_visitas';
+  const query = 'SELECT tb_id AS id, tb_nome AS nome, tb_empresa AS empresa, tb_data AS data, tb_hora AS hora, tb_locais AS locais FROM tb_visitas';
 
   connection.query(query, (err, results) => {
     if (err) {
@@ -243,6 +243,28 @@ app.get('/api/visitas', (req, res) => {
 
     console.log('Visitas carregadas:', results);
     res.status(200).json(results);
+  });
+});
+
+// Rota para cadastrar uma nova visita
+app.post('/api/cadastrar-visita', (req, res) => {
+  const { nome, empresa, data, hora, locais } = req.body;
+  console.log('Dados recebidos para cadastro de visita:', { nome, empresa, data, hora, locais });
+  
+  const query = 'INSERT INTO tb_visitas (tb_nome, tb_empresa, tb_data, tb_hora, tb_locais) VALUES (?, ?, ?, ?, ?)';
+  
+  connection.query(query, [nome, empresa, data, hora, locais], (err, results) => {
+    if (err) {
+      console.error('Erro ao cadastrar visita:', err);
+      res.status(500).send('Erro ao cadastrar visita.');
+      return;
+    }
+    
+    console.log('Visita cadastrada com sucesso:', results);
+    res.status(200).json({ 
+      message: 'Visita cadastrada com sucesso.',
+      id: results.insertId
+    });
   });
 });
 

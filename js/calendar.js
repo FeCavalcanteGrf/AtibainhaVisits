@@ -296,14 +296,19 @@ async function carregarVisitas() {
 }
 
 // Função para mostrar detalhes da visita
-function showVisitDetails(visitasNoDia) {
+async function showVisitDetails(visitasNoDia) {
+    console.log('🔄 Mostrando detalhes da visita', visitasNoDia);
+    
     const popup = document.getElementById('visit-popup');
     const popupContent = document.getElementById('popup-content');
     
     if (!popup || !popupContent) {
         console.error('❌ Elementos do popup não encontrados');
+        alert('Erro: Elementos do popup não encontrados. Verifique o console para mais detalhes.');
         return;
     }
+    
+    console.log('📦 Elementos do popup encontrados');
     
     // Limpar conteúdo anterior
     popupContent.innerHTML = '';
@@ -329,8 +334,8 @@ function showVisitDetails(visitasNoDia) {
     popupContent.appendChild(closeBtn);
     
     // Adicionar detalhes de cada visita
-    visitasNoDia.forEach((visita, index) => {
-        if (index > 0) {
+    for (const visita of visitasNoDia) {
+        if (visita !== visitasNoDia[0]) {
             const divider = document.createElement('hr');
             popupContent.appendChild(divider);
         }
@@ -347,21 +352,56 @@ function showVisitDetails(visitasNoDia) {
         
         popupContent.appendChild(details);
         
-        // Adicionar botão de iniciar visita
-        const iniciarBtn = document.createElement('button');
-        iniciarBtn.className = 'btn-iniciar-visita';
-        iniciarBtn.textContent = 'Iniciar Visita';
-        iniciarBtn.addEventListener('click', function() {
-            // Simplesmente redirecionar para a página de visita
-            window.location.href = 'visita.html';
-        });
-        
-        const btnContainer = document.createElement('div');
-        btnContainer.className = 'btn-container';
-        btnContainer.appendChild(iniciarBtn);
-        
-        popupContent.appendChild(btnContainer);
-    });
+        // Verificar se a visita já foi finalizada
+        try {
+            const finalizada = await verificarVisitaFinalizada(visita.id);
+            
+            // Adicionar botão apropriado
+            const btnContainer = document.createElement('div');
+            btnContainer.className = 'btn-container';
+            
+            if (finalizada) {
+                // Se a visita já foi finalizada, mostrar botão de relatório
+                const relatorioBtn = document.createElement('button');
+                relatorioBtn.className = 'btn-relatorio-visita';
+                relatorioBtn.textContent = 'Relatório da Visita';
+                relatorioBtn.addEventListener('click', function() {
+                    window.location.href = `relatorio.html?id=${finalizada.id}`;
+                });
+                btnContainer.appendChild(relatorioBtn);
+                console.log('✅ Botão de relatório adicionado para visita finalizada:', finalizada.id);
+            } else {
+                // Se a visita não foi finalizada, mostrar botão de iniciar
+                const iniciarBtn = document.createElement('button');
+                iniciarBtn.className = 'btn-iniciar-visita';
+                iniciarBtn.textContent = 'Iniciar Visita';
+                iniciarBtn.addEventListener('click', function() {
+                    window.location.href = `visita.html?id=${visita.id}`;
+                });
+                btnContainer.appendChild(iniciarBtn);
+                console.log('✅ Botão de iniciar visita adicionado');
+            }
+            
+            popupContent.appendChild(btnContainer);
+        } catch (error) {
+            console.error('❌ Erro ao verificar status da visita:', error);
+            
+            // Em caso de erro, mostrar botão de iniciar visita como fallback
+            const btnContainer = document.createElement('div');
+            btnContainer.className = 'btn-container';
+            
+            const iniciarBtn = document.createElement('button');
+            iniciarBtn.className = 'btn-iniciar-visita';
+            iniciarBtn.textContent = 'Iniciar Visita';
+            iniciarBtn.addEventListener('click', function() {
+                window.location.href = `visita.html?id=${visita.id}`;
+            });
+            
+            btnContainer.appendChild(iniciarBtn);
+            popupContent.appendChild(btnContainer);
+            console.log('✅ Botão de iniciar visita adicionado (fallback)');
+        }
+    }
     
     // Adicionar botões de ação
     const actions = document.createElement('div');
@@ -377,13 +417,53 @@ function showVisitDetails(visitasNoDia) {
     
     // Mostrar o popup
     popup.style.display = 'flex';
+    popup.style.position = 'fixed';
+    popup.style.top = '0';
+    popup.style.left = '0';
+    popup.style.width = '100%';
+    popup.style.height = '100%';
+    popup.style.zIndex = '1000';
+    popup.style.justifyContent = 'center';
+    popup.style.alignItems = 'center';
+    popup.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    
+    console.log('✅ Popup exibido');
+}
+
+// Função para verificar se uma visita já foi finalizada
+async function verificarVisitaFinalizada(visitaId) {
+    console.log(`🔄 Verificando se a visita ${visitaId} já foi finalizada`);
+    
+    try {
+        const response = await fetch(`http://localhost:3000/api/verificar-visita-finalizada/${visitaId}`);
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                // Visita não finalizada
+                console.log(`ℹ️ Visita ${visitaId} não foi finalizada`);
+                return null;
+            }
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const resultado = await response.json();
+        console.log(`✅ Visita ${visitaId} já foi finalizada:`, resultado);
+        return resultado;
+    } catch (error) {
+        console.error(`❌ Erro ao verificar se a visita ${visitaId} foi finalizada:`, error);
+        throw error;
+    }
 }
 
 // Função para fechar o popup de visita
 function closeVisitPopup() {
+    console.log('🔄 Fechando popup');
     const popup = document.getElementById('visit-popup');
     if (popup) {
         popup.style.display = 'none';
+        console.log('✅ Popup fechado');
+    } else {
+        console.error('❌ Elemento popup não encontrado');
     }
 }
 

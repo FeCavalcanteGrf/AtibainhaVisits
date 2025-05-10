@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Visita - Atibainha Visits</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/relatorio.css">
+    <link rel="icon" href="img/LogoTipo.png" type="image/png">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="img/LogoTipo.png" alt="Logo">
+            </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+            </ul>
+            <div class="menu-toggle" id="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="relatorio-container glassmorphism">
+                <h1>Relatório de Visita</h1>
+                
+                <div class="info-visita">
+                    <h2>Informações da Visita</h2>
+                    <div id="dados-visita">
+                        <!-- Dados da visita serão inseridos aqui pelo JavaScript -->
+                        <p>Carregando dados da visita...</p>
+                    </div>
+                </div>
+                
+                <div class="locais-visitados">
+                    <h2>Locais Visitados</h2>
+                    <div id="lista-locais">
+                        <!-- Lista de locais visitados será inserida aqui pelo JavaScript -->
+                        <p>Carregando locais visitados...</p>
+                    </div>
+                </div>
+                
+                <div class="progresso-container">
+                    <h2>Progresso da Visita</h2>
+                    <div class="wrapper-progresso">
+                        <progress id="barra-progresso" value="0" max="100"></progress>
+                        <div id="texto-progresso">0%</div>
+                    </div>
+                </div>
+                
+                <div class="acoes">
+                    <a href="index.html" class="btn-voltar">Voltar para Home</a>
+                    <a href="agendamentos.html" class="btn-agendamentos">Ver Agendamentos</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
+    </footer>
+    
+    <script src="js/script.js"></script>
+    <script src="js/relatorio.js"></script>
+</body>
+</html>

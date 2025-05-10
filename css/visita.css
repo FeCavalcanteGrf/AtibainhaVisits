@@ -1,0 +1,148 @@
+/* Estilos para a página de visita */
+
+/* Estilo para o campo de observações */
+.observacao-container {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.observacao-container:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.observacao-input {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.observacao-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.observacao-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Estilos para a barra de progresso */
+.container-progresso {
+    width: 100%;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    text-align: center;
+}
+
+.container-progresso h2 {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.wrapper-progresso {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#barra-progresso {
+    flex-grow: 1;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#barra-progresso::-webkit-progress-bar {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+#barra-progresso::-webkit-progress-value {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+#barra-progresso::-moz-progress-bar {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+#texto-progresso {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Estilo para o botão de finalizar visita */
+.botao-iniciar {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.botao-iniciar:hover {
+    background-color: #3e8e41;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .observacao-container {
+        padding: 10px;
+    }
+    
+    .observacao-input {
+        min-height: 60px;
+    }
+    
+    .container-progresso {
+        padding: 15px;
+    }
+    
+    .container-progresso h2 {
+        font-size: 1.5rem;
+    }
+    
+    #texto-progresso {
+        font-size: 1rem;
+    }
+    
+    .botao-iniciar {
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+}

@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Carregar dados da visita
         carregarDadosVisita(visitaId);
     }
+    
+    // Configurar o botão de gerar PDF
+    const btnGerarPDF = document.getElementById('btn-gerar-pdf');
+    if (btnGerarPDF) {
+        btnGerarPDF.addEventListener('click', gerarPDF);
+    }
 });
 
 // Função para carregar dados de demonstração
@@ -214,4 +220,140 @@ function atualizarProgresso(dadosVisita) {
     } else {
         console.error('❌ Elementos da barra de progresso não encontrados');
     }
+}
+
+// Função para gerar PDF
+function gerarPDF() {
+    console.log('🔄 Iniciando geração de PDF');
+    
+    // Verificar se os dados da visita estão disponíveis
+    if (!dadosVisitaGlobal) {
+        console.error('❌ Dados da visita não disponíveis para gerar PDF');
+        alert('Não foi possível gerar o PDF. Dados da visita não disponíveis.');
+        return;
+    }
+    
+    // Mostrar mensagem de carregamento
+    const btnGerarPDF = document.getElementById('btn-gerar-pdf');
+    const textoOriginal = btnGerarPDF.innerHTML;
+    btnGerarPDF.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando...';
+    btnGerarPDF.disabled = true;
+    
+    try {
+        // Criar um elemento temporário para o conteúdo do PDF
+        const pdfContainer = document.createElement('div');
+        pdfContainer.className = 'pdf-container';
+        pdfContainer.style.position = 'absolute';
+        pdfContainer.style.left = '-9999px';
+        pdfContainer.style.top = '-9999px';
+        document.body.appendChild(pdfContainer);
+        
+        // Formatar datas
+        const dataObj = new Date(dadosVisitaGlobal.data);
+        const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+        
+        const dataVisitaObj = new Date(dadosVisitaGlobal.dataVisita);
+        const dataVisitaFormatada = dataVisitaObj.toLocaleDateString('pt-BR');
+        
+        // Calcular progresso
+        const totalLocais = dadosVisitaGlobal.locaisVisitados ? dadosVisitaGlobal.locaisVisitados.length : 0;
+        const locaisVisitados = dadosVisitaGlobal.locaisVisitados ? dadosVisitaGlobal.locaisVisitados.filter(local => local.visitado).length : 0;
+        const percentual = totalLocais > 0 ? Math.round((locaisVisitados / totalLocais) * 100) : 0;
+        
+        // Preencher o conteúdo do PDF
+        pdfContainer.innerHTML = `
+            <div class="pdf-header">
+                <h1>Relatório de Visita - Hotel Estância Atibainha</h1>
+                <p>Data de geração: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</p>
+            </div>
+            
+            <div class="pdf-section">
+                <h2>Informações da Visita</h2>
+                <p><strong>Cliente:</strong> ${dadosVisitaGlobal.nome || 'Não informado'}</p>
+                <p><strong>Empresa:</strong> ${dadosVisitaGlobal.empresa || 'Não informada'}</p>
+                <p><strong>Data Agendada:</strong> ${dataFormatada}</p>
+                <p><strong>Hora Agendada:</strong> ${dadosVisitaGlobal.hora || 'Não informado'}</p>
+                <p><strong>Locais de Interesse:</strong> ${dadosVisitaGlobal.locais || 'Não informados'}</p>
+                <p><strong>Data da Visita:</strong> ${dataVisitaFormatada}</p>
+            </div>
+            
+            <div class="pdf-section">
+                <h2>Progresso da Visita</h2>
+                <p>Locais visitados: ${locaisVisitados} de ${totalLocais} (${percentual}%)</p>
+            </div>
+            
+            <div class="pdf-section">
+                <h2>Locais Visitados</h2>
+                ${gerarHTMLLocaisVisitados()}
+            </div>
+        `;
+        
+        // Usar html2canvas e jsPDF para gerar o PDF
+        setTimeout(() => {
+            html2canvas(pdfContainer, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jspdf.jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                const imgWidth = 210; // A4 width in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                
+                // Nome do arquivo: relatorio-visita-ID-DATA.pdf
+                const nomeArquivo = `relatorio-visita-${dadosVisitaGlobal.id}-${new Date().toISOString().split('T')[0]}.pdf`;
+                pdf.save(nomeArquivo);
+                
+                // Remover o elemento temporário
+                document.body.removeChild(pdfContainer);
+                
+                // Restaurar o botão
+                btnGerarPDF.innerHTML = textoOriginal;
+                btnGerarPDF.disabled = false;
+                
+                console.log('✅ PDF gerado com sucesso');
+            }).catch(error => {
+                console.error('❌ Erro ao gerar canvas para PDF:', error);
+                alert('Erro ao gerar PDF. Por favor, tente novamente.');
+                btnGerarPDF.innerHTML = textoOriginal;
+                btnGerarPDF.disabled = false;
+            });
+        }, 500);
+    } catch (error) {
+        console.error('❌ Erro ao gerar PDF:', error);
+        alert('Erro ao gerar PDF. Por favor, tente novamente.');
+        btnGerarPDF.innerHTML = textoOriginal;
+        btnGerarPDF.disabled = false;
+    }
+}
+
+// Função auxiliar para gerar HTML dos locais visitados para o PDF
+function gerarHTMLLocaisVisitados() {
+    if (!dadosVisitaGlobal.locaisVisitados || dadosVisitaGlobal.locaisVisitados.length === 0) {
+        return '<p>Nenhum local visitado registrado.</p>';
+    }
+    
+    let html = '';
+    
+    dadosVisitaGlobal.locaisVisitados.forEach(local => {
+        html += `
+            <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <h3 style="margin: 0 0 5px 0; color: ${local.visitado ? '#4CAF50' : '#F44336'};">
+                    ${local.visitado ? '✓' : '✗'} ${local.nome}
+                </h3>
+                <p style="margin: 5px 0;">Status: ${local.visitado ? 'Visitado' : 'Não visitado'}</p>
+                ${dadosVisitaGlobal.observacoes && dadosVisitaGlobal.observacoes[local.id] ? 
+                    `<div style="margin-top: 10px; padding: 5px; border-left: 3px solid #4CAF50;">
+                        <h4 style="margin: 0 0 5px 0; color: #4CAF50;">Observação:</h4>
+                        <p style="margin: 0; font-style: italic;">${dadosVisitaGlobal.observacoes[local.id]}</p>
+                    </div>` : 
+                    ''}
+            </div>
+        `;
+    });
+    
+    return html;
 }

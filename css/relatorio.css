@@ -163,7 +163,7 @@
     margin-top: 40px;
 }
 
-.btn-voltar, .btn-agendamentos {
+.btn-voltar, .btn-agendamentos, .btn-gerar-pdf {
     padding: 12px 25px;
     background-color: #4CAF50;
     color: white;
@@ -176,8 +176,25 @@
     display: inline-block;
 }
 
+.btn-gerar-pdf {
+    background-color: #2196F3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-gerar-pdf i {
+    font-size: 1.2rem;
+}
+
 .btn-voltar:hover, .btn-agendamentos:hover {
     background-color: #3e8e41;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-gerar-pdf:hover {
+    background-color: #0b7dda;
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
@@ -221,6 +238,41 @@
     padding: 20px;
 }
 
+/* Estilos para o PDF */
+.pdf-container {
+    background-color: white;
+    color: black;
+    padding: 20px;
+}
+
+.pdf-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pdf-header img {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+.pdf-header h1 {
+    color: #4CAF50;
+    font-size: 24px;
+    margin: 0;
+}
+
+.pdf-section {
+    margin-bottom: 20px;
+}
+
+.pdf-section h2 {
+    color: #4CAF50;
+    font-size: 18px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .relatorio-container {
@@ -240,8 +292,9 @@
         align-items: center;
     }
     
-    .btn-voltar, .btn-agendamentos {
+    .btn-voltar, .btn-agendamentos, .btn-gerar-pdf {
         width: 100%;
         text-align: center;
+        justify-content: center;
     }
 }

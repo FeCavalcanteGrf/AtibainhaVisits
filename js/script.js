@@ -261,8 +261,9 @@ function openVisitPopup(event) {
         const data = dia.getAttribute('data-data');
         const hora = dia.getAttribute('data-hora');
         const locais = dia.getAttribute('data-locais');
+        const visitaId = dia.getAttribute('data-id');
         
-        console.log('📋 Dados obtidos:', { nome, empresa, data, hora, locais });
+        console.log('📋 Dados obtidos:', { nome, empresa, data, hora, locais, visitaId });
 
         // Verifica se os elementos do pop-up existem antes de definir os valores
         const popupNome = document.getElementById('popup-nome');
@@ -270,13 +271,15 @@ function openVisitPopup(event) {
         const popupData = document.getElementById('popup-data');
         const popupHora = document.getElementById('popup-hora');
         const popupLocais = document.getElementById('popup-locais');
+        const btnIniciarVisita = document.getElementById('btn-iniciar-visita');
         
         console.log('📦 Elementos do popup encontrados:', 
             popupNome ? 'Nome: Sim' : 'Nome: Não',
             popupEmpresa ? 'Empresa: Sim' : 'Empresa: Não',
             popupData ? 'Data: Sim' : 'Data: Não',
             popupHora ? 'Hora: Sim' : 'Hora: Não',
-            popupLocais ? 'Locais: Sim' : 'Locais: Não'
+            popupLocais ? 'Locais: Sim' : 'Locais: Não',
+            btnIniciarVisita ? 'Botão Iniciar: Sim' : 'Botão Iniciar: Não'
         );
 
         if (popupNome && popupEmpresa && popupData && popupHora && popupLocais) {
@@ -286,6 +289,40 @@ function openVisitPopup(event) {
             popupHora.textContent = hora || "Não informado";
             popupLocais.textContent = locais || "Não informado";
             console.log('✅ Dados preenchidos no popup');
+
+            // Verificar se a visita já foi finalizada
+            if (visitaId) {
+                verificarVisitaFinalizada(visitaId).then(finalizada => {
+                    if (finalizada && btnIniciarVisita) {
+                        // Se a visita já foi finalizada, mudar o botão para "Relatório da Visita"
+                        btnIniciarVisita.textContent = "Relatório da Visita";
+                        btnIniciarVisita.onclick = function() {
+                            window.location.href = `relatorio.html?id=${finalizada.id}`;
+                        };
+                        console.log('✅ Botão alterado para Relatório da Visita');
+                    } else if (btnIniciarVisita) {
+                        // Se a visita não foi finalizada, manter o botão como "Iniciar Visita"
+                        btnIniciarVisita.textContent = "Iniciar Visita";
+                        btnIniciarVisita.onclick = function() {
+                            window.location.href = `visita.html?id=${visitaId}`;
+                        };
+                        console.log('✅ Botão configurado para Iniciar Visita');
+                    }
+                }).catch(error => {
+                    console.error('❌ Erro ao verificar status da visita:', error);
+                    // Em caso de erro, manter o botão como "Iniciar Visita"
+                    if (btnIniciarVisita) {
+                        btnIniciarVisita.textContent = "Iniciar Visita";
+                        btnIniciarVisita.onclick = function() {
+                            window.location.href = `visita.html?id=${visitaId}`;
+                        };
+                    }
+                });
+            } else if (btnIniciarVisita) {
+                // Se não tiver ID da visita, esconder o botão
+                btnIniciarVisita.style.display = 'none';
+                console.log('✅ Botão de iniciar visita ocultado');
+            }
 
             // Exibe o pop-up
             const popup = document.getElementById('visit-popup');
@@ -298,6 +335,31 @@ function openVisitPopup(event) {
         console.log('ℹ️ Dia não contém classe visita');
         // Se o dia não tiver visita, exibe uma mensagem de alerta
         alert("Não há visita registrada para este dia.");
+    }
+}
+
+// Função para verificar se uma visita já foi finalizada
+async function verificarVisitaFinalizada(visitaId) {
+    console.log(`🔄 Verificando se a visita ${visitaId} já foi finalizada`);
+    
+    try {
+        const response = await fetch(`http://localhost:3000/api/verificar-visita-finalizada/${visitaId}`);
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                // Visita não finalizada
+                console.log(`ℹ️ Visita ${visitaId} não foi finalizada`);
+                return null;
+            }
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const resultado = await response.json();
+        console.log(`✅ Visita ${visitaId} já foi finalizada:`, resultado);
+        return resultado;
+    } catch (error) {
+        console.error(`❌ Erro ao verificar se a visita ${visitaId} foi finalizada:`, error);
+        throw error;
     }
 }
 

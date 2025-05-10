@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const bcryptjs = require('bcryptjs'); // Usando bcryptjs em vez de bcrypt
+const jwt = require('jsonwebtoken');
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -48,7 +49,6 @@ function verificarToken(req, res, next) {
     return res.status(401).json({ message: 'Token não fornecido' });
   }
   
-  const jwt = require('jsonwebtoken');
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.status(403).json({ message: 'Token inválido' });
@@ -104,8 +104,7 @@ app.post('/login', (req, res) => {
         return res.status(401).json({ message: 'Email ou senha incorretos' });
       }
       
-      // Gerar token JWT
-      const jwt = require('jsonwebtoken');
+      // Gerar token JWT com userId (não id)
       const token = jwt.sign(
         { userId: usuario.tb_id, email: usuario.tb_email },
         process.env.JWT_SECRET,

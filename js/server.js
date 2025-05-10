@@ -2,16 +2,20 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+
+// Carregar variáveis de ambiente
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Configuração do banco de dados
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '4321',
-  database: 'atibainha_visits'
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || 'root',
+  database: process.env.DB_NAME || 'atibainha_visits'
 });
 
 // Conectar ao banco de dados

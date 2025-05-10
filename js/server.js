@@ -134,10 +134,36 @@ function salvarDadosVisitaFinalizada(visitaId, dataVisita, locaisVisitados, obse
   const locaisJSON = JSON.stringify(locaisVisitados);
   const observacoesJSON = JSON.stringify(observacoes);
   
+  // Formatar a data para o formato aceito pelo MySQL (YYYY-MM-DD HH:MM:SS)
+  let formattedDate;
+  try {
+    // Converter a string ISO para objeto Date
+    const date = new Date(dataVisita);
+    // Verificar se a data é válida
+    if (isNaN(date.getTime())) {
+      throw new Error('Data inválida');
+    }
+    
+    // Formatar para o formato MySQL YYYY-MM-DD HH:MM:SS usando UTC
+    const utcYear = date.getUTCFullYear();
+    const utcMonth = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const utcDay = String(date.getUTCDate()).padStart(2, '0');
+    const utcHours = String(date.getUTCHours()).padStart(2, '0');
+    const utcMinutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const utcSeconds = String(date.getUTCSeconds()).padStart(2, '0');
+    
+    formattedDate = `${utcYear}-${utcMonth}-${utcDay} ${utcHours}:${utcMinutes}:${utcSeconds}`;
+    console.log('Data formatada:', formattedDate);
+  } catch (error) {
+    console.error('Erro ao formatar data:', error);
+    res.status(400).send('Formato de data inválido.');
+    return;
+  }
+  
   // Inserir na tabela de visitas finalizadas
   const query = 'INSERT INTO tb_visitas_finalizadas (tb_visita_id, tb_data_visita, tb_locais_visitados, tb_observacoes) VALUES (?, ?, ?, ?)';
   
-  connection.query(query, [visitaId, dataVisita, locaisJSON, observacoesJSON], (err, results) => {
+  connection.query(query, [visitaId, formattedDate, locaisJSON, observacoesJSON], (err, results) => {
     if (err) {
       console.error('Erro ao salvar visita finalizada:', err);
       res.status(500).send('Erro ao salvar visita finalizada.');

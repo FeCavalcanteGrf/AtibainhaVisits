@@ -1,5 +1,5 @@
 // Variáveis globais
-let totalLocais = 8; // Total de locais a serem visitados
+let totalLocais = 10; // Atualizado para 10 locais (incluindo Nobre 02 e Abacateiro 02)
 let locaisVisitados = 0;
 let visitaAtual = null; // Armazenará os dados da visita atual
 
@@ -20,11 +20,13 @@ document.addEventListener('DOMContentLoaded', function() {
     configurarCheckboxes();
     
     // Configurar o botão de finalizar visita
-    const btnFinalizar = document.querySelector('.botao-iniciar');
+    const btnFinalizar = document.getElementById('finalizar-visita');
     if (btnFinalizar) {
         btnFinalizar.addEventListener('click', function() {
             finalizarVisita();
         });
+    } else {
+        console.error('❌ Botão de finalizar visita não encontrado');
     }
 });
 
@@ -76,11 +78,11 @@ function atualizarProgresso() {
     const percentual = (locaisVisitados / totalLocais) * 100;
     
     const barraProgresso = document.getElementById('barra-progresso');
-    const textoProgresso = document.getElementById('texto-progresso');
+    const porcentagemProgresso = document.getElementById('porcentagem-progresso');
     
-    if (barraProgresso && textoProgresso) {
+    if (barraProgresso && porcentagemProgresso) {
         barraProgresso.value = percentual;
-        textoProgresso.textContent = `${Math.round(percentual)}%`;
+        porcentagemProgresso.textContent = `${Math.round(percentual)}%`;
         console.log(`📊 Progresso atualizado: ${Math.round(percentual)}%`);
     } else {
         console.error('❌ Elementos da barra de progresso não encontrados');

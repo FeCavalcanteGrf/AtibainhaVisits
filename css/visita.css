@@ -37,7 +37,85 @@
     color: rgba(255, 255, 255, 0.7);
 }
 
-/* Estilos para a barra de progresso */
+/* Estilos para a barra de progresso fixa na parte inferior */
+.barra-progresso-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.barra-progresso-wrapper {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+#barra-progresso {
+    flex-grow: 1;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#barra-progresso::-webkit-progress-bar {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+#barra-progresso::-webkit-progress-value {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+#barra-progresso::-moz-progress-bar {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+#porcentagem-progresso {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    min-width: 50px;
+    text-align: right;
+    font-size: 1.2rem;
+}
+
+/* Estilo para o botão de finalizar visita */
+.btn-finalizar {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-weight: bold;
+    min-width: 150px;
+}
+
+.btn-finalizar:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-finalizar:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para a barra de progresso antiga (mantido para compatibilidade) */
 .container-progresso {
     width: 100%;
     max-width: 800px;
@@ -64,28 +142,6 @@
     gap: 15px;
 }
 
-#barra-progresso {
-    flex-grow: 1;
-    height: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-#barra-progresso::-webkit-progress-bar {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-
-#barra-progresso::-webkit-progress-value {
-    background-color: #4CAF50;
-    border-radius: 10px;
-}
-
-#barra-progresso::-moz-progress-bar {
-    background-color: #4CAF50;
-    border-radius: 10px;
-}
-
 #texto-progresso {
     font-size: 1.2rem;
     font-weight: bold;
@@ -94,7 +150,7 @@
     text-align: right;
 }
 
-/* Estilo para o botão de finalizar visita */
+/* Estilo para o botão antigo (mantido para compatibilidade) */
 .botao-iniciar {
     display: block;
     width: 100%;
@@ -119,6 +175,11 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Adicionar espaço no final da página para a barra de progresso fixa */
+main {
+    padding-bottom: 70px;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .observacao-container {
@@ -129,20 +190,22 @@
         min-height: 60px;
     }
     
-    .container-progresso {
-        padding: 15px;
+    .barra-progresso-container {
+        padding: 10px;
+        flex-direction: column;
     }
     
-    .container-progresso h2 {
-        font-size: 1.5rem;
+    .barra-progresso-wrapper {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
     }
     
-    #texto-progresso {
-        font-size: 1rem;
+    .btn-finalizar {
+        width: 100%;
     }
     
-    .botao-iniciar {
-        padding: 12px;
-        font-size: 1.1rem;
+    main {
+        padding-bottom: 120px;
     }
 }

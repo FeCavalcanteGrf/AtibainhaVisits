@@ -503,3 +503,14 @@ footer {
     border: none;
     cursor: default;
 }
+/* Estilo específico para o botão de logout */
+#logout-btn {
+    color: #ff5252;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+#logout-btn:hover {
+    color: #ff1a1a;
+    text-shadow: 0 0 5px rgba(255, 82, 82, 0.5);
+}

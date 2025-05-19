@@ -514,8 +514,14 @@ app.get('/api/relatorio-visita/:id', (req, res) => {
     
     // Converter strings JSON para objetos
     try {
-      relatorio.locaisVisitados = JSON.parse(relatorio.locaisVisitados);
-      relatorio.observacoes = JSON.parse(relatorio.observacoes);
+      // Verificar se os dados já são objetos antes de tentar fazer parse
+      relatorio.locaisVisitados = typeof relatorio.locaisVisitados === 'string' 
+        ? JSON.parse(relatorio.locaisVisitados) 
+        : relatorio.locaisVisitados;
+      
+      relatorio.observacoes = typeof relatorio.observacoes === 'string' 
+        ? JSON.parse(relatorio.observacoes) 
+        : relatorio.observacoes;
     } catch (error) {
       console.error('Erro ao processar dados JSON:', error);
       relatorio.locaisVisitados = [];

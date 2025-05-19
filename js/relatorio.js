@@ -160,6 +160,14 @@ function exibirLocaisVisitados(dadosVisita) {
         return;
     }
     
+    // Mapear nomes de locais para garantir que todos sejam exibidos corretamente
+    const nomesMapeados = {
+        'Nobre 02': 'Nobre 02',
+        'Nobre02': 'Nobre 02',
+        'Abacateiro 02': 'Abacateiro 02',
+        'Abacateiro02': 'Abacateiro 02'
+    };
+    
     // Adicionar cada local
     dadosVisita.locaisVisitados.forEach(local => {
         const localEl = document.createElement('div');
@@ -172,9 +180,12 @@ function exibirLocaisVisitados(dadosVisita) {
             localEl.classList.add('nao-visitado');
         }
         
+        // Usar nome mapeado se existir, caso contrário usar o nome original
+        const nomeExibicao = nomesMapeados[local.nome] || local.nome;
+        
         // Criar conteúdo do local
         localEl.innerHTML = `
-            <h3>${local.nome}</h3>
+            <h3>${nomeExibicao}</h3>
             <p class="status">${local.visitado ? '✓ Visitado' : '✗ Não visitado'}</p>
         `;
         

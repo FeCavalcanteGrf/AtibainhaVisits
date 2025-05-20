@@ -251,14 +251,6 @@ function gerarPDF() {
     btnGerarPDF.disabled = true;
     
     try {
-        // Criar um elemento temporário para o conteúdo do PDF
-        const pdfContainer = document.createElement('div');
-        pdfContainer.className = 'pdf-container';
-        pdfContainer.style.position = 'absolute';
-        pdfContainer.style.left = '-9999px';
-        pdfContainer.style.top = '-9999px';
-        document.body.appendChild(pdfContainer);
-        
         // Formatar datas
         const dataObj = new Date(dadosVisitaGlobal.data);
         const dataFormatada = dataObj.toLocaleDateString('pt-BR');
@@ -271,68 +263,165 @@ function gerarPDF() {
         const locaisVisitados = dadosVisitaGlobal.locaisVisitados ? dadosVisitaGlobal.locaisVisitados.filter(local => local.visitado).length : 0;
         const percentual = totalLocais > 0 ? Math.round((locaisVisitados / totalLocais) * 100) : 0;
         
-        // Preencher o conteúdo do PDF
-        pdfContainer.innerHTML = `
-            <div class="pdf-header">
-                <h1>Relatório de Visita - Hotel Estância Atibainha</h1>
-                <p>Data de geração: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</p>
-            </div>
-            
-            <div class="pdf-section">
-                <h2>Informações da Visita</h2>
-                <p><strong>Cliente:</strong> ${dadosVisitaGlobal.nome || 'Não informado'}</p>
-                <p><strong>Empresa:</strong> ${dadosVisitaGlobal.empresa || 'Não informada'}</p>
-                <p><strong>Data Agendada:</strong> ${dataFormatada}</p>
-                <p><strong>Hora Agendada:</strong> ${dadosVisitaGlobal.hora || 'Não informado'}</p>
-                <p><strong>Locais de Interesse:</strong> ${dadosVisitaGlobal.locais || 'Não informados'}</p>
-                <p><strong>Data da Visita:</strong> ${dataVisitaFormatada}</p>
-            </div>
-            
-            <div class="pdf-section">
-                <h2>Progresso da Visita</h2>
-                <p>Locais visitados: ${locaisVisitados} de ${totalLocais} (${percentual}%)</p>
-            </div>
-            
-            <div class="pdf-section">
-                <h2>Locais Visitados</h2>
-                ${gerarHTMLLocaisVisitados()}
-            </div>
-        `;
+        // Inicializar o PDF
+        const pdf = new jspdf.jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
         
-        // Usar html2canvas e jsPDF para gerar o PDF
-        setTimeout(() => {
-            html2canvas(pdfContainer, { scale: 2 }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jspdf.jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4'
-                });
+        // Definir margens e dimensões
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 10;
+        const contentWidth = pageWidth - (margin * 2);
+        
+        // Posição Y atual (começa do topo com margem)
+        let yPos = margin;
+        
+        // Adicionar cabeçalho
+        pdf.setFontSize(18);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Relatório de Visita - Hotel Estância Atibainha', margin, yPos);
+        yPos += 10;
+        
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Data de geração: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`, margin, yPos);
+        yPos += 15;
+        
+        // Adicionar informações da visita
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Informações da Visita', margin, yPos);
+        yPos += 8;
+        
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Cliente: ${dadosVisitaGlobal.nome || 'Não informado'}`, margin, yPos);
+        yPos += 6;
+        
+        pdf.text(`Empresa: ${dadosVisitaGlobal.empresa || 'Não informada'}`, margin, yPos);
+        yPos += 6;
+        
+        pdf.text(`Data Agendada: ${dataFormatada}`, margin, yPos);
+        yPos += 6;
+        
+        pdf.text(`Hora Agendada: ${dadosVisitaGlobal.hora || 'Não informado'}`, margin, yPos);
+        yPos += 6;
+        
+        pdf.text(`Locais de Interesse: ${dadosVisitaGlobal.locais || 'Não informados'}`, margin, yPos);
+        yPos += 6;
+        
+        pdf.text(`Data da Visita: ${dataVisitaFormatada}`, margin, yPos);
+        yPos += 15;
+        
+        // Adicionar progresso da visita
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Progresso da Visita', margin, yPos);
+        yPos += 8;
+        
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Locais visitados: ${locaisVisitados} de ${totalLocais} (${percentual}%)`, margin, yPos);
+        yPos += 15;
+        
+        // Adicionar locais visitados
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Locais Visitados', margin, yPos);
+        yPos += 10;
+        
+        // Verificar se há locais visitados
+        if (!dadosVisitaGlobal.locaisVisitados || dadosVisitaGlobal.locaisVisitados.length === 0) {
+            pdf.setFontSize(10);
+            pdf.setFont('helvetica', 'italic');
+            pdf.text('Nenhum local visitado registrado.', margin, yPos);
+        } else {
+            // Adicionar cada local visitado
+            dadosVisitaGlobal.locaisVisitados.forEach(local => {
+                // Verificar se precisamos adicionar uma nova página
+                if (yPos > pageHeight - 30) {
+                    pdf.addPage();
+                    yPos = margin;
+                }
                 
-                const imgWidth = 210; // A4 width in mm
-                const imgHeight = canvas.height * imgWidth / canvas.width;
+                // Nome do local
+                pdf.setFontSize(12);
+                pdf.setFont('helvetica', 'bold');
                 
-                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                // Cor baseada no status
+                if (local.visitado) {
+                    pdf.setTextColor(0, 128, 0); // Verde para visitado
+                } else {
+                    pdf.setTextColor(220, 0, 0); // Vermelho para não visitado
+                }
                 
-                // Nome do arquivo: relatorio-visita-ID-DATA.pdf
-                const nomeArquivo = `relatorio-visita-${dadosVisitaGlobal.id}-${new Date().toISOString().split('T')[0]}.pdf`;
-                pdf.save(nomeArquivo);
+                pdf.text(`${local.visitado ? '✓' : '✗'} ${local.nome}`, margin, yPos);
+                yPos += 6;
                 
-                // Remover o elemento temporário
-                document.body.removeChild(pdfContainer);
+                // Status
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setTextColor(0, 0, 0); // Voltar para preto
+                pdf.text(`Status: ${local.visitado ? 'Visitado' : 'Não visitado'}`, margin, yPos);
+                yPos += 6;
                 
-                // Restaurar o botão
-                btnGerarPDF.innerHTML = textoOriginal;
-                btnGerarPDF.disabled = false;
+                // Observação (se existir)
+                if (dadosVisitaGlobal.observacoes && dadosVisitaGlobal.observacoes[local.id]) {
+                    // Verificar se precisamos adicionar uma nova página para a observação
+                    if (yPos > pageHeight - 40) {
+                        pdf.addPage();
+                        yPos = margin;
+                    }
+                    
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.text('Observação:', margin, yPos);
+                    yPos += 6;
+                    
+                    pdf.setFont('helvetica', 'italic');
+                    
+                    // Quebrar texto longo em múltiplas linhas
+                    const observacao = dadosVisitaGlobal.observacoes[local.id];
+                    const splitText = pdf.splitTextToSize(observacao, contentWidth - 10);
+                    
+                    splitText.forEach(line => {
+                        // Verificar se precisamos adicionar uma nova página
+                        if (yPos > pageHeight - 20) {
+                            pdf.addPage();
+                            yPos = margin;
+                        }
+                        
+                        pdf.text(line, margin + 5, yPos);
+                        yPos += 5;
+                    });
+                }
                 
-                console.log('✅ PDF gerado com sucesso');
-            }).catch(error => {
-                console.error('❌ Erro ao gerar canvas para PDF:', error);
-                alert('Erro ao gerar PDF. Por favor, tente novamente.');
-                btnGerarPDF.innerHTML = textoOriginal;
-                btnGerarPDF.disabled = false;
+                // Espaço entre locais
+                yPos += 10;
+                
+                // Adicionar linha divisória
+                pdf.setDrawColor(200, 200, 200);
+                pdf.line(margin, yPos - 5, pageWidth - margin, yPos - 5);
+                
+                // Verificar se precisamos adicionar uma nova página para o próximo local
+                if (yPos > pageHeight - 40) {
+                    pdf.addPage();
+                    yPos = margin;
+                }
             });
-        }, 500);
+        }
+        
+        // Nome do arquivo: relatorio-visita-ID-DATA.pdf
+        const nomeArquivo = `relatorio-visita-${dadosVisitaGlobal.id}-${new Date().toISOString().split('T')[0]}.pdf`;
+        pdf.save(nomeArquivo);
+        
+        // Restaurar o botão
+        btnGerarPDF.innerHTML = textoOriginal;
+        btnGerarPDF.disabled = false;
+        
+        console.log('✅ PDF gerado com sucesso');
     } catch (error) {
         console.error('❌ Erro ao gerar PDF:', error);
         alert('Erro ao gerar PDF. Por favor, tente novamente.');

@@ -1,5 +1,17 @@
 console.log('🔍 Arquivo usuario.js carregado');
 
+document.addEventListener('DOMContentLoaded', function() {
+  const menuToggle = document.getElementById('menu-toggle');
+  const navLinks = document.getElementById('nav-links');
+  
+  if (menuToggle) {
+    menuToggle.addEventListener('click', function() {
+      navLinks.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    });
+  }
+});
+
 document.addEventListener('DOMContentLoaded', async function() {
   console.log('🚀 DOMContentLoaded - Iniciando carregamento de dados do usuário');
   

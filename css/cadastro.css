@@ -74,7 +74,7 @@ body {
 
 /* Estilos responsivos para a barra de navegação */
 @media (max-width: 768px) {
-    .navbar ul {
+     .navbar ul {
         display: none;
     }
 
@@ -92,6 +92,7 @@ body {
         padding: 20px;
         text-align: center;
         flex-direction: column;
+        z-index: 1000;
     }
 
     .nav-links li {
@@ -162,6 +163,18 @@ body {
 .inputs input:focus {
     border-color: #007bff;
     transform: scale(1.02);
+}
+
+/* Estilo para mensagens de erro */
+.erro-mensagem {
+    color: #ff3333;
+    font-size: 12px;
+    margin-top: 5px;
+    animation: fadeIn 0.3s ease;
+}
+
+.inputs input.erro {
+    border-color: #ff3333;
 }
 
 /* Botão de criar conta */

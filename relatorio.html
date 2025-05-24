@@ -1,30 +1,53 @@
+<!--
+/**
+ * @file relatorio.html
+ * @description Página de relatório de visita do sistema Atibainha Visits
+ * @author TCC Atibainha Visits
+ * @version 1.0
+ * 
+ * Esta página exibe um relatório detalhado de uma visita realizada,
+ * incluindo informações do cliente, locais visitados e progresso da visita.
+ * Permite também a geração de um PDF do relatório.
+ */
+-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Meta tags para configuração do documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de Visita - Atibainha Visits</title>
+    
+    <!-- Folhas de estilo -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/relatorio.css">
     <link rel="icon" href="img/LogoTipo.png" type="image/png">
+    
     <!-- Font Awesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Bibliotecas para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
+    <!-- Cabeçalho com menu de navegação -->
     <header>
         <div class="navbar">
+            <!-- Logo do sistema -->
             <div class="logo">
                 <img src="img/LogoTipo.png" alt="Logo">
             </div>
+            
+            <!-- Menu de navegação principal -->
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="agendamentos.html">Agendamentos</a></li>
                 <li><a href="usuarios.html">Usuarios</a></li>
                 <li><a href="#" id="logout-btn">Logout</a></li>
             </ul>
+            
+            <!-- Menu hambúrguer para dispositivos móveis -->
             <div class="menu-toggle" id="menu-toggle">
                 <div class="bar"></div>
                 <div class="bar"></div>
@@ -33,11 +56,15 @@
         </div>
     </header>
     
+    <!-- Conteúdo principal - Relatório de visita -->
     <main>
         <div class="container">
+            <!-- Container do relatório com efeito glassmorphism -->
             <div class="relatorio-container glassmorphism" id="relatorio-content">
+                <!-- Título do relatório -->
                 <h1>Relatório de Visita</h1>
                 
+                <!-- Seção de informações gerais da visita -->
                 <div class="info-visita">
                     <h2>Informações da Visita</h2>
                     <div id="dados-visita">
@@ -46,6 +73,7 @@
                     </div>
                 </div>
                 
+                <!-- Seção de locais visitados -->
                 <div class="locais-visitados">
                     <h2>Locais Visitados</h2>
                     <div id="lista-locais">
@@ -54,14 +82,17 @@
                     </div>
                 </div>
                 
+                <!-- Seção de progresso da visita -->
                 <div class="progresso-container">
                     <h2>Progresso da Visita</h2>
                     <div class="wrapper-progresso">
+                        <!-- Barra de progresso visual -->
                         <progress id="barra-progresso" value="0" max="100"></progress>
                         <div id="texto-progresso">0%</div>
                     </div>
                 </div>
                 
+                <!-- Botões de ação -->
                 <div class="acoes">
                     <a href="index.html" class="btn-voltar">Voltar para Home</a>
                     <a href="agendamentos.html" class="btn-agendamentos">Ver Agendamentos</a>
@@ -71,12 +102,14 @@
         </div>
     </main>
     
+    <!-- Rodapé com informações de copyright -->
     <footer>
         <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
     </footer>
     
-    <script src="js/script.js"></script>
-<script src="js/logout.js"></script>
-    <script src="js/relatorio.js"></script>
+    <!-- Scripts JavaScript -->
+    <script src="js/script.js"></script> <!-- Script principal com funcionalidades comuns -->
+    <script src="js/logout.js"></script> <!-- Script para gerenciamento de logout -->
+    <script src="js/relatorio.js"></script> <!-- Script específico para funcionalidades do relatório -->
 </body>
 </html>

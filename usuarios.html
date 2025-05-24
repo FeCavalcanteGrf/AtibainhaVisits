@@ -1,70 +1,104 @@
+<!--
+/**
+ * @file usuarios.html
+ * @description Página de gerenciamento de perfil de usuário do sistema Atibainha Visits
+ * @author TCC Atibainha Visits
+ * @version 1.0
+ * 
+ * Esta página permite que usuários visualizem e editem suas informações pessoais,
+ * atualizem suas credenciais e excluam sua conta se necessário.
+ */
+-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Meta tags para configuração do documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Favicon do sistema -->
     <link rel="icon" href="img/LogoTipo.png">
+    
     <title>Perfil do Usuario</title>
+    
+    <!-- Folhas de estilo -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/usuarios.css">
 </head>
 <body>
-
-<header>
-    <div class="navbar">
-        <div class="logo">
-            <img src="img/LogoTipo.png" alt="Logo">
-        </div>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="agendamentos.html">Agendamentos</a></li>
-            <li><a href="usuarios.html">Usuarios</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
-        </ul>
-        <div class="menu-toggle" id="menu-toggle">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-    </div>
-</header>
-
-<main class="user-details-container">
-    <section class="user-details">
-        
-        <h2>Detalhes do Usuário</h2>
-        <form id="update-user-form">
-            <label for="user-name">Nome:</label>
-            <input type="text" id="user-name" name="user-name" placeholder="Digite o nome" value="">
-            
-            <label for="user-email">Email:</label>
-            <input type="email" id="user-email" name="user-email" placeholder="Digite o email" value="">
-
-            <label for="user-telefone">Telefone:</label>
-            <input type="text" id="user-tel" name="user-telefone" placeholder="Digite o telefone" value="">
-            
-            <label for="user-password">Senha:</label>
-            <input type="password" id="user-password" name="user-password" placeholder="Digite a senha">
-            
-            <label for="user-sector">Setor:</label>
-            <input type="text" id="user-sector" name="user-sector" placeholder="Digite o setor" value="">
-            
-            
-            <div class="button-container">
-                <button type="submit" id="update-user">Atualizar Usuario</button>
-                <button type="button" id="delete-user">Excluir Usuario</button>
+    <!-- Cabeçalho com menu de navegação -->
+    <header>
+        <div class="navbar">
+            <!-- Logo do sistema -->
+            <div class="logo">
+                <img src="img/LogoTipo.png" alt="Logo">
             </div>
-        </form>
-    </section>
-</main>
+            
+            <!-- Menu de navegação principal -->
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li>
+            </ul>
+            
+            <!-- Menu hambúrguer para dispositivos móveis -->
+            <div class="menu-toggle" id="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+    </header>
 
-<footer>
-    <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
-</footer>
+    <!-- Conteúdo principal - Formulário de detalhes do usuário -->
+    <main class="user-details-container">
+        <section class="user-details">
+            <!-- Título da seção -->
+            <h2>Detalhes do Usuário</h2>
+            
+            <!-- Formulário de atualização de dados do usuário -->
+            <form id="update-user-form">
+                <!-- Campo para nome -->
+                <label for="user-name">Nome:</label>
+                <input type="text" id="user-name" name="user-name" placeholder="Digite o nome" value="">
+                
+                <!-- Campo para email -->
+                <label for="user-email">Email:</label>
+                <input type="email" id="user-email" name="user-email" placeholder="Digite o email" value="">
 
-<!-- <script src="js/autenticacao.js"></script> -->
-<!-- <script src="js/script.js"></script>
-<script src="js/logout.js"></script> comenta essa linha pra mim -->
-<script src="js/usuario.js" defer></script>
+                <!-- Campo para telefone -->
+                <label for="user-telefone">Telefone:</label>
+                <input type="text" id="user-tel" name="user-telefone" placeholder="Digite o telefone" value="">
+                
+                <!-- Campo para senha -->
+                <label for="user-password">Senha:</label>
+                <input type="password" id="user-password" name="user-password" placeholder="Digite a senha">
+                
+                <!-- Campo para setor -->
+                <label for="user-sector">Setor:</label>
+                <input type="text" id="user-sector" name="user-sector" placeholder="Digite o setor" value="">
+                
+                <!-- Botões de ação -->
+                <div class="button-container">
+                    <button type="submit" id="update-user">Atualizar Usuario</button>
+                    <button type="button" id="delete-user">Excluir Usuario</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Rodapé com informações de copyright -->
+    <footer>
+        <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
+    </footer>
+
+    <!-- Scripts JavaScript comentados (não ativos) -->
+    <!-- <script src="js/autenticacao.js"></script> -->
+    <!-- <script src="js/script.js"></script>
+    <script src="js/logout.js"></script> comenta essa linha pra mim -->
+    
+    <!-- Script específico para funcionalidades de usuário -->
+    <script src="js/usuario.js" defer></script>
 </body>
 </html>

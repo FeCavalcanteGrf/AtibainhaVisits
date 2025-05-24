@@ -534,3 +534,127 @@ function gerarHTMLLocaisVisitados() {
     
     return html;
 }
+// Função para exibir locais visitados
+function exibirLocaisVisitados(dadosVisita) {
+    console.log('🔄 Exibindo locais visitados');
+    
+    // Limpar o container existente
+    const listaLocaisEl = document.getElementById('lista-locais');
+    listaLocaisEl.innerHTML = '';
+    
+    // Verificar se há locais visitados
+    if (!dadosVisita.locaisVisitados || dadosVisita.locaisVisitados.length === 0) {
+        listaLocaisEl.innerHTML = '<p class="sem-dados">Nenhum local visitado registrado.</p>';
+        return;
+    }
+    
+    // Criar container flex para as duas colunas
+    const flexContainer = document.createElement('div');
+    flexContainer.style.display = 'flex';
+    flexContainer.style.gap = '20px';
+    
+    // Criar coluna para salões
+    const colunaSaloes = document.createElement('div');
+    colunaSaloes.style.flex = '1';
+    colunaSaloes.innerHTML = '<h3 style="color:white;border-bottom:2px solid white;margin-bottom:15px;">Salões</h3>';
+    
+    // Criar coluna para chalés
+    const colunaChales = document.createElement('div');
+    colunaChales.style.flex = '1';
+    colunaChales.innerHTML = '<h3 style="color:white;border-bottom:2px solid white;margin-bottom:15px;">Chalés</h3>';
+    
+    // Adicionar colunas ao container
+    flexContainer.appendChild(colunaSaloes);
+    flexContainer.appendChild(colunaChales);
+    
+    // Adicionar container ao elemento principal
+    listaLocaisEl.appendChild(flexContainer);
+    
+    // Exibir salões e chalés
+    exibirSaloes(dadosVisita, colunaSaloes);
+    exibirChales(dadosVisita, colunaChales);
+    
+    console.log('✅ Locais visitados exibidos');
+}
+
+// Função para exibir salões
+function exibirSaloes(dadosVisita, container) {
+    // Filtrar apenas os salões (sessao1 até sessao10)
+    const saloes = dadosVisita.locaisVisitados.filter(local => 
+        parseInt(local.id.replace('sessao', '')) <= 10
+    );
+    
+    if (saloes.length === 0) {
+        container.innerHTML += '<p class="sem-dados">Nenhum salão visitado.</p>';
+        return;
+    }
+    
+    saloes.forEach(local => {
+        const localEl = document.createElement('div');
+        localEl.className = 'local-item';
+        
+        if (local.visitado) {
+            localEl.classList.add('visitado');
+        } else {
+            localEl.classList.add('nao-visitado');
+        }
+        
+        localEl.innerHTML = `
+            <h3>${local.nome}</h3>
+            <p class="status">${local.visitado ? '✓ Visitado' : '✗ Não visitado'}</p>
+        `;
+        
+        if (dadosVisita.observacoes && dadosVisita.observacoes[local.id]) {
+            const obsEl = document.createElement('div');
+            obsEl.className = 'observacao';
+            obsEl.innerHTML = `
+                <h4>Observação:</h4>
+                <p>${dadosVisita.observacoes[local.id]}</p>
+            `;
+            localEl.appendChild(obsEl);
+        }
+        
+        container.appendChild(localEl);
+    });
+}
+
+// Função para exibir chalés
+function exibirChales(dadosVisita, container) {
+    // Filtrar apenas os chalés (sessao11 em diante)
+    const chales = dadosVisita.locaisVisitados.filter(local => 
+        parseInt(local.id.replace('sessao', '')) > 10
+    );
+    
+    if (chales.length === 0) {
+        container.innerHTML += '<p class="sem-dados">Nenhum chalé visitado.</p>';
+        return;
+    }
+    
+    chales.forEach(local => {
+        const localEl = document.createElement('div');
+        localEl.className = 'local-item';
+        
+        if (local.visitado) {
+            localEl.classList.add('visitado');
+        } else {
+            localEl.classList.add('nao-visitado');
+        }
+        
+        localEl.innerHTML = `
+            <h3>${local.nome}</h3>
+            <p class="status">${local.visitado ? '✓ Visitado' : '✗ Não visitado'}</p>
+        `;
+        
+        if (dadosVisita.observacoes && dadosVisita.observacoes[local.id]) {
+            const obsEl = document.createElement('div');
+            obsEl.className = 'observacao';
+            obsEl.innerHTML = `
+                <h4>Observação:</h4>
+                <p>${dadosVisita.observacoes[local.id]}</p>
+            `;
+            localEl.appendChild(obsEl);
+        }
+        
+        container.appendChild(localEl);
+    });
+}

@@ -1,5 +1,5 @@
 // Variáveis globais
-let totalLocais = 10; // Atualizado para 10 locais (incluindo Nobre 02 e Abacateiro 02)
+let totalLocais = 15; // Atualizado para 15 locais (10 salões + 5 chalés)
 let locaisVisitados = 0;
 let visitaAtual = null; // Armazenará os dados da visita atual
 

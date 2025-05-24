@@ -270,34 +270,56 @@ function gerarPDF() {
             format: 'a4'
         });
         
+        // Definir cores do tema vermelho
+        const corPrimaria = [180, 0, 0];       // Vermelho escuro
+        const corSecundaria = [220, 0, 0];     // Vermelho médio
+        const corDestaque = [255, 0, 0];       // Vermelho vivo
+        const corFundo = [255, 240, 240];      // Vermelho claro (fundo)
+        
         // Definir margens e dimensões
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
         const margin = 10;
         const contentWidth = pageWidth - (margin * 2);
         
+        // Adicionar fundo vermelho claro na página
+        pdf.setFillColor(corFundo[0], corFundo[1], corFundo[2]);
+        pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+        
         // Posição Y atual (começa do topo com margem)
         let yPos = margin;
         
-        // Adicionar cabeçalho
+        // Adicionar cabeçalho com tema vermelho
         pdf.setFontSize(18);
         pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(corPrimaria[0], corPrimaria[1], corPrimaria[2]);
         pdf.text('Relatório de Visita - Hotel Estância Atibainha', margin, yPos);
         yPos += 10;
         
+        // Adicionar barra decorativa vermelha
+        pdf.setFillColor(corSecundaria[0], corSecundaria[1], corSecundaria[2]);
+        pdf.rect(margin, yPos - 5, contentWidth, 1, 'F');
+        
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(0, 0, 0);
         pdf.text(`Data de geração: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`, margin, yPos);
         yPos += 15;
         
-        // Adicionar informações da visita
+        // Adicionar informações da visita com tema vermelho
         pdf.setFontSize(14);
         pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(corPrimaria[0], corPrimaria[1], corPrimaria[2]);
         pdf.text('Informações da Visita', margin, yPos);
         yPos += 8;
         
+        // Adicionar barra decorativa vermelha
+        pdf.setFillColor(corSecundaria[0], corSecundaria[1], corSecundaria[2]);
+        pdf.rect(margin, yPos - 5, contentWidth / 2, 1, 'F');
+        
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(0, 0, 0);
         pdf.text(`Cliente: ${dadosVisitaGlobal.nome || 'Não informado'}`, margin, yPos);
         yPos += 6;
         
@@ -316,27 +338,56 @@ function gerarPDF() {
         pdf.text(`Data da Visita: ${dataVisitaFormatada}`, margin, yPos);
         yPos += 15;
         
-        // Adicionar progresso da visita
+        // Adicionar progresso da visita com tema vermelho
         pdf.setFontSize(14);
         pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(corPrimaria[0], corPrimaria[1], corPrimaria[2]);
         pdf.text('Progresso da Visita', margin, yPos);
         yPos += 8;
         
+        // Adicionar barra decorativa vermelha
+        pdf.setFillColor(corSecundaria[0], corSecundaria[1], corSecundaria[2]);
+        pdf.rect(margin, yPos - 5, contentWidth / 2, 1, 'F');
+        
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(0, 0, 0);
         pdf.text(`Locais visitados: ${locaisVisitados} de ${totalLocais} (${percentual}%)`, margin, yPos);
+        
+        // Adicionar barra de progresso visual
+        yPos += 6;
+        const barraWidth = contentWidth * 0.8;
+        const barraHeight = 5;
+        const progressWidth = (percentual / 100) * barraWidth;
+        
+        // Fundo da barra (cinza claro)
+        pdf.setFillColor(230, 230, 230);
+        pdf.rect(margin, yPos, barraWidth, barraHeight, 'F');
+        
+        // Progresso da barra (vermelho)
+        pdf.setFillColor(corSecundaria[0], corSecundaria[1], corSecundaria[2]);
+        pdf.rect(margin, yPos, progressWidth, barraHeight, 'F');
+        
         yPos += 15;
         
-        // Adicionar locais visitados
+        // Adicionar locais visitados com tema vermelho
         pdf.setFontSize(14);
         pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(corPrimaria[0], corPrimaria[1], corPrimaria[2]);
         pdf.text('Locais Visitados', margin, yPos);
-        yPos += 10;
+        yPos += 8;
+        
+        // Adicionar barra decorativa vermelha
+        pdf.setFillColor(corSecundaria[0], corSecundaria[1], corSecundaria[2]);
+        pdf.rect(margin, yPos - 5, contentWidth / 2, 1, 'F');
+        
+        yPos += 2;
         
         // Verificar se há locais visitados
         if (!dadosVisitaGlobal.locaisVisitados || dadosVisitaGlobal.locaisVisitados.length === 0) {
             pdf.setFontSize(10);
             pdf.setFont('helvetica', 'italic');
+            pdf.setTextColor(0, 0, 0);
             pdf.text('Nenhum local visitado registrado.', margin, yPos);
         } else {
             // Adicionar cada local visitado
@@ -344,8 +395,20 @@ function gerarPDF() {
                 // Verificar se precisamos adicionar uma nova página
                 if (yPos > pageHeight - 30) {
                     pdf.addPage();
+                    // Adicionar fundo vermelho claro na nova página
+                    pdf.setFillColor(corFundo[0], corFundo[1], corFundo[2]);
+                    pdf.rect(0, 0, pageWidth, pageHeight, 'F');
                     yPos = margin;
                 }
+                
+                // Adicionar caixa de fundo para cada local
+                const boxHeight = local.visitado ? 
+                    (dadosVisitaGlobal.observacoes && dadosVisitaGlobal.observacoes[local.id] ? 30 : 20) : 
+                    (dadosVisitaGlobal.observacoes && dadosVisitaGlobal.observacoes[local.id] ? 30 : 20);
+                
+                pdf.setFillColor(255, 255, 255); // Fundo branco para a caixa
+                pdf.setDrawColor(corSecundaria[0], corSecundaria[1], corSecundaria[2]); // Borda vermelha
+                pdf.roundedRect(margin - 2, yPos - 5, contentWidth + 4, boxHeight, 2, 2, 'FD');
                 
                 // Nome do local
                 pdf.setFontSize(12);
@@ -355,7 +418,7 @@ function gerarPDF() {
                 if (local.visitado) {
                     pdf.setTextColor(0, 128, 0); // Verde para visitado
                 } else {
-                    pdf.setTextColor(220, 0, 0); // Vermelho para não visitado
+                    pdf.setTextColor(corDestaque[0], corDestaque[1], corDestaque[2]); // Vermelho vivo para não visitado
                 }
                 
                 pdf.text(`${local.visitado ? '✓' : '✗'} ${local.nome}`, margin, yPos);
@@ -373,14 +436,19 @@ function gerarPDF() {
                     // Verificar se precisamos adicionar uma nova página para a observação
                     if (yPos > pageHeight - 40) {
                         pdf.addPage();
+                        // Adicionar fundo vermelho claro na nova página
+                        pdf.setFillColor(corFundo[0], corFundo[1], corFundo[2]);
+                        pdf.rect(0, 0, pageWidth, pageHeight, 'F');
                         yPos = margin;
                     }
                     
                     pdf.setFont('helvetica', 'bold');
+                    pdf.setTextColor(corPrimaria[0], corPrimaria[1], corPrimaria[2]); // Vermelho escuro
                     pdf.text('Observação:', margin, yPos);
                     yPos += 6;
                     
                     pdf.setFont('helvetica', 'italic');
+                    pdf.setTextColor(0, 0, 0); // Preto
                     
                     // Quebrar texto longo em múltiplas linhas
                     const observacao = dadosVisitaGlobal.observacoes[local.id];
@@ -390,6 +458,9 @@ function gerarPDF() {
                         // Verificar se precisamos adicionar uma nova página
                         if (yPos > pageHeight - 20) {
                             pdf.addPage();
+                            // Adicionar fundo vermelho claro na nova página
+                            pdf.setFillColor(corFundo[0], corFundo[1], corFundo[2]);
+                            pdf.rect(0, 0, pageWidth, pageHeight, 'F');
                             yPos = margin;
                         }
                         
@@ -401,17 +472,23 @@ function gerarPDF() {
                 // Espaço entre locais
                 yPos += 10;
                 
-                // Adicionar linha divisória
-                pdf.setDrawColor(200, 200, 200);
-                pdf.line(margin, yPos - 5, pageWidth - margin, yPos - 5);
-                
                 // Verificar se precisamos adicionar uma nova página para o próximo local
                 if (yPos > pageHeight - 40) {
                     pdf.addPage();
+                    // Adicionar fundo vermelho claro na nova página
+                    pdf.setFillColor(corFundo[0], corFundo[1], corFundo[2]);
+                    pdf.rect(0, 0, pageWidth, pageHeight, 'F');
                     yPos = margin;
                 }
             });
         }
+        
+        // Adicionar rodapé com tema vermelho
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'italic');
+        pdf.setTextColor(corPrimaria[0], corPrimaria[1], corPrimaria[2]);
+        pdf.text('Hotel Estância Atibainha - Relatório de Visita', margin, pageHeight - 10);
+        pdf.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, pageWidth - margin - 40, pageHeight - 10, { align: 'right' });
         
         // Nome do arquivo: relatorio-visita-ID-DATA.pdf
         const nomeArquivo = `relatorio-visita-${dadosVisitaGlobal.id}-${new Date().toISOString().split('T')[0]}.pdf`;

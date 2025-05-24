@@ -165,3 +165,79 @@ async function finalizarVisita() {
         window.location.href = `relatorio.html?id=${demoId}&demo=true`;
     }
 }
+// Função para corrigir os carrosséis dos chalés
+document.addEventListener('DOMContentLoaded', function() {
+    // Corrigir Chalé Standart
+    const chaleStandart = document.querySelector('#sessao11 .conteudo');
+    if (chaleStandart) {
+        chaleStandart.onclick = function() { 
+            const carrossel = document.querySelector('#sessao11 .carrossel');
+            if (carrossel.style.display === "none" || !carrossel.style.display) {
+                carrossel.style.display = "block";
+                chaleStandart.classList.add("expandido");
+            } else {
+                carrossel.style.display = "none";
+                chaleStandart.classList.remove("expandido");
+            }
+        };
+    }
+    
+    // Corrigir Chalé Family 1D
+    const chaleFamily1D = document.querySelector('#sessao12 .conteudo');
+    if (chaleFamily1D) {
+        chaleFamily1D.onclick = function() { 
+            const carrossel = document.querySelector('#sessao12 .carrossel');
+            if (carrossel.style.display === "none" || !carrossel.style.display) {
+                carrossel.style.display = "block";
+                chaleFamily1D.classList.add("expandido");
+            } else {
+                carrossel.style.display = "none";
+                chaleFamily1D.classList.remove("expandido");
+            }
+        };
+    }
+    
+    // Corrigir Chalé Family 2D
+    const chaleFamily2D = document.querySelector('#sessao13 .conteudo');
+    if (chaleFamily2D) {
+        chaleFamily2D.onclick = function() { 
+            const carrossel = document.querySelector('#sessao13 .carrossel');
+            if (carrossel.style.display === "none" || !carrossel.style.display) {
+                carrossel.style.display = "block";
+                chaleFamily2D.classList.add("expandido");
+            } else {
+                carrossel.style.display = "none";
+                chaleFamily2D.classList.remove("expandido");
+            }
+        };
+    }
+    
+    // Corrigir Chalé Suiço
+    const chaleSuico = document.querySelector('#sessao14 .conteudo');
+    if (chaleSuico) {
+        chaleSuico.onclick = function() { 
+            const carrossel = document.querySelector('#sessao14 .carrossel');
+            if (carrossel.style.display === "none" || !carrossel.style.display) {
+                carrossel.style.display = "block";
+                chaleSuico.classList.add("expandido");
+            } else {
+                carrossel.style.display = "none";
+                chaleSuico.classList.remove("expandido");
+            }
+        };
+    }
+});
+    // Corrigir Villa Atibainha
+    const villaAtibainha = document.querySelector('#sessao15 .conteudo');
+    if (villaAtibainha) {
+        villaAtibainha.onclick = function() { 
+            const carrossel = document.querySelector('#sessao15 .carrossel');
+            if (carrossel.style.display === "none" || !carrossel.style.display) {
+                carrossel.style.display = "block";
+                villaAtibainha.classList.add("expandido");
+            } else {
+                carrossel.style.display = "none";
+                villaAtibainha.classList.remove("expandido");
+            }
+        };
+    }

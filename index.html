@@ -1,53 +1,81 @@
+<!--
+/**
+ * @file index.html
+ * @description Página inicial do sistema Atibainha Visits
+ * @author TCC Atibainha Visits
+ * @version 1.0
+ * 
+ * Página principal do sistema de gerenciamento de visitas do Hotel Estância Atibainha.
+ * Apresenta informações introdutórias sobre o hotel e fornece navegação para as
+ * demais funcionalidades do sistema.
+ */
+-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Meta tags para configuração do documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atibainha Visits</title>
+    <!-- Folha de estilos principal -->
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Favicon do sistema -->
     <link rel="icon" href="img/LogoTipo.png" type="image/png"> 
 </head>
 <body>
-
-<header>
-    <div class="navbar">
-        <div class="logo">
-            <img src="img/LogoTipo.png" alt="Logo">
+    <!-- Cabeçalho com menu de navegação -->
+    <header>
+        <div class="navbar">
+            <!-- Logo do sistema -->
+            <div class="logo">
+                <img src="img/LogoTipo.png" alt="Logo">
+            </div>
+            <!-- Menu de navegação principal -->
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li>
+            </ul>
+            <!-- Menu hambúrguer para dispositivos móveis -->
+            <div class="menu-toggle" id="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
         </div>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="agendamentos.html">Agendamentos</a></li>
-            <li><a href="usuarios.html">Usuarios</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
-        </ul>
-        <div class="menu-toggle" id="menu-toggle">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-    </div>
-</header>
-<main>
-    <div class="container">
-        <div class="glassmorphism">
-        <h1>Seja bem-vindo ao</br> <b>Atibainha Visits</b></h1></br>
+    </header>
+    
+    <!-- Conteúdo principal -->
+    <main>
+        <div class="container">
+            <!-- Painel com efeito glassmorphism -->
+            <div class="glassmorphism">
+                <!-- Título de boas-vindas -->
+                <h1>Seja bem-vindo ao</br> <b>Atibainha Visits</b></h1></br>
 
-        <h2>Vamos conhecer o Hotel Fazenda Estância Atibainha</h2><br>
-        <h3>
-            Comodidade e muito conforto fazem parte de todos os detalhes do Estância Atibainha, localizado na cidade de Nazaré Paulista – SP, apenas 72 Km de distância da cidade de São Paulo. Todas as acomodações muito bem estruturadas com muito bom gosto, além de categorias com capacidade para receber até 6 pessoas. Nossa área de lazer conta com 7 piscinas e em todas as diárias você terá a oportunidade de provar o que temos de melhor em gastronomia. 
-        </h3></br>
-        <h2>Seu Resort pertinho de São Paulo</h2>
-        <h3>
-            Fugir da rotina e enfrentar uma grande jornada de trânsito e horas na estrada não combina nada com descanso, o Estância Atibainha está localizado a 72 Km de São Paulo. Vai dizer que você não vem?
-        </h3><br>
-        </div>
-    </div><br><br><br><br>
-</main>
-<footer class="footerVisita">
-    <label >© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
-</footer>
+                <!-- Seção de apresentação do hotel -->
+                <h2>Vamos conhecer o Hotel Fazenda Estância Atibainha</h2><br>
+                <h3>
+                    Comodidade e muito conforto fazem parte de todos os detalhes do Estância Atibainha, localizado na cidade de Nazaré Paulista – SP, apenas 72 Km de distância da cidade de São Paulo. Todas as acomodações muito bem estruturadas com muito bom gosto, além de categorias com capacidade para receber até 6 pessoas. Nossa área de lazer conta com 7 piscinas e em todas as diárias você terá a oportunidade de provar o que temos de melhor em gastronomia. 
+                </h3></br>
+                
+                <!-- Seção de destaque da localização -->
+                <h2>Seu Resort pertinho de São Paulo</h2>
+                <h3>
+                    Fugir da rotina e enfrentar uma grande jornada de trânsito e horas na estrada não combina nada com descanso, o Estância Atibainha está localizado a 72 Km de São Paulo. Vai dizer que você não vem?
+                </h3><br>
+            </div>
+        </div><br><br><br><br>
+    </main>
+    
+    <!-- Rodapé com informações de copyright -->
+    <footer class="footerVisita">
+        <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
+    </footer>
 
-<script src="js/script.js"></script>
-<script src="js/logout.js"></script>
+    <!-- Scripts JavaScript -->
+    <script src="js/script.js"></script> <!-- Script principal com funcionalidades comuns -->
+    <script src="js/logout.js"></script> <!-- Script para gerenciamento de logout -->
 </body>
 </html>

@@ -1,71 +1,111 @@
+<!--
+/**
+ * @file cadastro.html
+ * @description Página de cadastro de novos usuários no sistema Atibainha Visits
+ * @author TCC Atibainha Visits
+ * @version 1.0
+ * 
+ * Esta página permite que novos usuários criem uma conta no sistema,
+ * coletando informações pessoais e profissionais necessárias para o acesso.
+ */
+-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Meta tags para configuração do documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      
+    <!-- Favicon do sistema -->
     <link rel="icon" href="img/LogoTipo.png" type="image/png" />
+    
+    <!-- Importação de fontes do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">
+    
+    <!-- Folha de estilos específica para cadastro -->
     <link rel="stylesheet" href="css/cadastro.css">
+    
     <title>Criar conta</title>
+    
+    <!-- Script JavaScript para validação e envio do formulário -->
     <script src="js/cadastro.js" defer></script>
 </head>
 <body>
+  <!-- Cabeçalho com menu de navegação simplificado -->
   <header>
     <div class="navbar">
+        <!-- Logo do sistema -->
         <div class="logo">
             <img src="img/LogoTipo.png" alt="Logo">
         </div>
+        
+        <!-- Links de navegação para autenticação -->
         <ul class="nav-links" id="nav-links">
             <li><a href="login.html">Entrar</a></li>
             <li><a href="cadastro.html">Cadastre-se</a></li>
         </ul>
+        
+        <!-- Menu hambúrguer para dispositivos móveis -->
         <div class="menu-toggle" id="menu-toggle">
             <div class="bar"></div>
             <div class="bar"></div>
         </div>
     </div>
   </header>
+  
+  <!-- Conteúdo principal - Formulário de cadastro -->
   <main class="main-content" style="padding: 20px;">
     <form class="form-cadastro" id="cadastro-form" style="max-width: 500px; margin: auto;">
+        <!-- Título do formulário -->
         <h1>Crie Sua Conta</h1>
+        
+      <!-- Campo para nome completo -->
       <div class="inputs">
         <Label for="nome">Nome Completo</Label>
         <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
       </div>
 
+      <!-- Campo para e-mail -->
       <div class="inputs">
         <label for="email">E-mail</label>
         <input type="email" id="email" name="email" autocomplete="off" placeholder="Digite seu e-mail aqui" required>
       </div>
 
+      <!-- Campo para criação de senha -->
       <div class="inputs">
         <label for="senha">Crie uma senha</label>
         <input type="password" id="senha" name="senha" autocomplete="on" placeholder="Digite sua senha" required>
       </div>
 
+      <!-- Campo para confirmação de senha -->
       <div class="inputs">
         <label for="confirmaSenha">Confirme sua senha</label>
         <input type="password" id="confirmaSenha" placeholder="Confirme sua senha" required>
       </div>
 
+      <!-- Campo para telefone -->
       <div class="inputs">
         <label for="telefone">Insira seu Telefone</label>
         <input type="tel" id="telefone" name="telefone" placeholder="Digite seu telefone" required>
       </div>
 
+      <!-- Campo para setor de trabalho -->
       <div class="inputs">
          <label for="setor">Setor de Trabalho</label>
          <input type="text" id="setor" name="setor" placeholder="Digite seu setor de trabalho" required>
       </div>
 
+      <!-- Botão de submissão do formulário -->
       <button type="submit" class="btn-criarconta">Criar conta</button>
+      
+      <!-- Link para página de login -->
       <p class="link-de-login">Já tem uma conta? <a href="login.html">Faça login</a></p>
     </form>
 </main>
 
+<!-- Rodapé com informações de copyright -->
 <footer class="footerVisita">
   <p>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</p>
 </footer>

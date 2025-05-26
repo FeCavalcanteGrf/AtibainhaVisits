@@ -1,21 +1,44 @@
+<!--
+/**
+ * @file login.html
+ * @description Página de autenticação do sistema Atibainha Visits
+ * @author TCC Atibainha Visits
+ * @version 1.0
+ * 
+ * Esta página permite que usuários já cadastrados acessem o sistema
+ * através de suas credenciais (e-mail e senha).
+ */
+-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Meta tags para configuração do documento -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      
+    <!-- Script de validação do formulário -->
     <script src="js/validation.js" defer></script>
+    
+    <!-- Favicon do sistema -->
     <link rel="icon" href="img/LogoTipo.png" type="image/png" />
+    
+    <!-- Importação de fontes do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">
+    
+    <!-- Folha de estilos específica para login -->
     <link rel="stylesheet" href="css/login.css" />
+    
     <title>Login Atibainha</title>
   </head>
   <body>
+    <!-- Container principal da página -->
     <div id="page" class="flex">
       <div>
+        <!-- Conteúdo principal - Formulário de login -->
         <main>
+            <!-- Cabeçalho do formulário -->
             <div class="headline">
             <img src="img/LogoTipo.png" alt="LogoTipo">
             <h1>Acesso Restrito</h1>
@@ -25,7 +48,10 @@
               plataforma.
             </p>
           </div>
+          
+          <!-- Formulário de autenticação -->
           <form method="post" action="index.html" id="login-form">
+            <!-- Campo para e-mail -->
             <div class="input-wrapper">
               <label for="email">E-mail</label>
               <input
@@ -37,6 +63,7 @@
               />
             </div>
 
+            <!-- Campo para senha com funcionalidade de mostrar/ocultar -->
             <div class="input-wrapper">
                 <div class="label-wrapper flex">
                     <label for="senha">Senha</label>
@@ -50,6 +77,7 @@
                 placeholder="Digite sua senha"
                 />
                 
+                <!-- Ícones para alternar visibilidade da senha -->
                 <img 
                 onclick="togglePassword()"
                 class="eye"
@@ -63,8 +91,10 @@
                 alt="ocultador de senha">
             </div>
 
+            <!-- Botão de submissão do formulário -->
             <button type="submit">Fazer Login</button>
 
+            <!-- Link para página de cadastro -->
             <div class="registro flex">
                 <p> Ainda não tem uma conta? </p>
                 <a href="cadastro.html">Criar conta</a>
@@ -73,10 +103,17 @@
           </form>
         </main>
       </div>
+      
+      <!-- Imagem de fundo decorativa -->
       <img src="img/bg-fundo.jpg" alt="Imagem de Fundo">
     </div>
 
+    <!-- Script para alternar visibilidade da senha -->
     <script>
+       /**
+        * Função para alternar entre mostrar e ocultar a senha
+        * Alterna a visibilidade dos ícones de olho e muda o tipo do campo
+        */
        function togglePassword() {
         document
           .querySelectorAll(".eye")

@@ -1,10 +1,3 @@
-const fundos = [
-    '../img/Alvorada.jpeg',
-    '../img/Castelinho.jpeg',
-    '../img/Fonte.jpeg',
-    '../img/RecantoDaHarmonia.jpeg',
-    '../img/PianoBar.jpeg',
-];
 
 console.log('🔍 Script.js carregado');
 

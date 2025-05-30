@@ -11,7 +11,7 @@ body {
     align-items: center;
     min-height: 100vh; /* Alterado de height para min-height */
     color: white; /* Cor da fonte trocada para branco */
-    background: linear-gradient(45deg, red, black, white);
+    background: linear-gradient(45deg, red, white);
     margin: 0; /* Adicionado para remover margens padrão */
 }
 
@@ -168,7 +168,7 @@ body {
 /* Estilo para mensagens de erro */
 .erro-mensagem {
     color: #ff3333;
-    font-size: 12px;
+    font-size: 14px;
     margin-top: 5px;
     animation: fadeIn 0.3s ease;
 }

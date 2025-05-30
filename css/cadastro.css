@@ -11,7 +11,7 @@ body {
     align-items: center;
     min-height: 100vh; /* Alterado de height para min-height */
     color: white; /* Cor da fonte trocada para branco */
-    background: linear-gradient(45deg, red, white);
+    background: linear-gradient(65deg, red, white);
     margin: 0; /* Adicionado para remover margens padrão */
 }
 

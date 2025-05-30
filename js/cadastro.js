@@ -28,7 +28,7 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
     mostrarErro('nome', 'Por favor, digite seu nome completo');
     return;
   } else if (nome.length < 3) {
-    mostrarErro('nome', 'O nome deve ter pelo menos 3 caracteres');
+    mostrarErro('nome', 'O nome deve ter pelo menos 3 caracteres ou mais');
     return;
   }
   
@@ -41,7 +41,7 @@ document.getElementById('cadastro-form').addEventListener('submit', function(eve
   
   // Validação da senha
   if (senha.length < 6) {
-    mostrarErro('senha', 'A senha deve ter pelo menos 6 caracteres');
+    mostrarErro('senha', 'A senha deve ter pelo menos 6 caracteres ou mais');
     return;
   }
   

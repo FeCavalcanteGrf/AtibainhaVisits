@@ -1,7 +1,3 @@
-/**
- * Logout functionality for Atibainha Visits application
- * This script handles the logout process by clearing session data and redirecting to login page
- */
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔄 Logout script loaded');

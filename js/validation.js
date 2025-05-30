@@ -39,7 +39,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
   } 
   catch (error) {
     console.error('Erro ao fazer login:', error);
-    alert('Ocorreu um erro ao fazer login.'+ (error.message));
+    alert('Ocorreu um erro ao fazer login.' + ' Verifique suas credenciais e tente novamente.');
   }
 });
 

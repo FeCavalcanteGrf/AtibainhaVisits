@@ -9,21 +9,22 @@ CREATE TABLE IF NOT EXISTS tb_usuarios (
     tb_email VARCHAR(100) NOT NULL UNIQUE,
     tb_senha VARCHAR(255) NOT NULL,
     tb_telefone VARCHAR(20),
-    tb_setor VARCHAR(50),
+    tb_setor VARCHAR(50) NOT NULL,
     tb_data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Tabela de visitas
 CREATE TABLE IF NOT EXISTS tb_visitas (
     tb_id INT AUTO_INCREMENT PRIMARY KEY,
+    tb_usuario_id INT,
     tb_nome VARCHAR(100) NOT NULL,
     tb_empresa VARCHAR(100) NOT NULL,
     tb_data DATE NOT NULL,
     tb_hora TIME NOT NULL,
     tb_locais TEXT NOT NULL,
-    tb_data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    tb_data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tb_usuario_id) REFERENCES tb_usuarios(tb_id)
 );
-
 -- Inserir alguns dados de exemplo para usuários
 INSERT INTO tb_usuarios (tb_nome, tb_email, tb_senha, tb_telefone, tb_setor) VALUES
 ('Admin', 'admin@example.com', '$2b$10$XdR0Z9XfMCi7UrTDgN7ZAOg5xKIoVsJ1Ey6YyqM.jP8JW/Kqvs9Ky', '11999999999', 'Administração'),
@@ -39,10 +40,12 @@ INSERT INTO tb_visitas (tb_nome, tb_empresa, tb_data, tb_hora, tb_locais) VALUES
 CREATE TABLE IF NOT EXISTS tb_visitas_finalizadas (
   tb_id INT AUTO_INCREMENT PRIMARY KEY,
   tb_visita_id INT,
+  tb_usuario_id INT,
   tb_data_visita DATETIME NOT NULL,
   tb_locais_visitados JSON NOT NULL,
   tb_observacoes JSON,
-  FOREIGN KEY (tb_visita_id) REFERENCES tb_visitas(tb_id) ON DELETE SET NULL
+  FOREIGN KEY (tb_visita_id) REFERENCES tb_visitas(tb_id) ON DELETE SET NULL,
+  FOREIGN KEY (tb_usuario_id) REFERENCES tb_usuarios(tb_id) ON DELETE SET NULL
 );
 
 -- Índice para melhorar a performance das consultas

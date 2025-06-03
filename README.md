@@ -41,7 +41,7 @@ AtibainhaVisits/
 |   |-- script.js         # Scripts globais
 |   |-- server.js         # Servidor Node.js/Express
 |   |-- usuario.js        # Lógica de gerenciamento de usuários
-|   |-- validation.js     # Validações de formulários
+|   |-- login.js          # Validações do formulário de login
 |   `-- visita.js         # Lógica de visitas
 |-- node_modules          # Pasta Node_Modules (não versionado)
 |-- .env                  # Variáveis de ambiente (não versionado)

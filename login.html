@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      
     <!-- Script de validação do formulário -->
-    <script src="js/validation.js" defer></script>
+    <script src="js/login.js" defer></script>
     
     <!-- Favicon do sistema -->
     <link rel="icon" href="img/LogoTipo.png" type="image/png" />
@@ -107,23 +107,5 @@
       <!-- Imagem de fundo decorativa -->
       <img src="img/bg-fundo.jpg" alt="Imagem de Fundo">
     </div>
-
-    <!-- Script para alternar visibilidade da senha -->
-    <script>
-       /**
-        * Função para alternar entre mostrar e ocultar a senha
-        * Alterna a visibilidade dos ícones de olho e muda o tipo do campo
-        */
-       function togglePassword() {
-        document
-          .querySelectorAll(".eye")
-          .forEach((eye) => eye.classList.toggle("hide"))
-
-        const type =
-          senha.getAttribute("type") == "password" ? "text" : "password"
-
-        senha.setAttribute("type", type)
-      }
-    </script>
   </body>
 </html>

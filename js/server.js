@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Middleware para tratamento de erros
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   console.error('Erro global:', err);
   res.status(500).json({ message: 'Erro interno do servidor' });
 });
@@ -61,7 +61,7 @@ function verificarToken(req, res, next) {
 }
 
 // Rota de teste de conexão
-app.get('/test-connection', (req, res) => {
+app.get('/test-connection', (_req, res) => {
   res.status(200).json({ message: 'Conexão estabelecida com sucesso!' });
 });
 
@@ -182,7 +182,7 @@ app.post('/cadastrar-usuario', async (req, res) => {
 });
 
 // Rota para listar todos os usuários
-app.get('/usuarios', verificarToken, (req, res) => {
+app.get('/usuarios', verificarToken, (_req, res) => {
   const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios';
   
   connection.query(query, (err, results) => {
@@ -290,7 +290,7 @@ app.post('/update-user', verificarToken, async (req, res) => {
     
     const queryAtualizar = `UPDATE tb_usuarios SET ${campos} WHERE tb_id = ?`;
     
-    connection.query(queryAtualizar, valores, (err, results) => {
+    connection.query(queryAtualizar, valores, (err, _results) => {
       if (err) {
         console.error('Erro ao atualizar usuário:', err);
         return res.status(500).json({ message: 'Erro ao atualizar usuário' });
@@ -321,7 +321,7 @@ app.post('/delete-user', verificarToken, (req, res) => {
     // Excluir o usuário
     const queryExcluir = 'DELETE FROM tb_usuarios WHERE tb_email = ?';
     
-    connection.query(queryExcluir, [email], (err, results) => {
+    connection.query(queryExcluir, [email], (err, _results) => {
       if (err) {
         console.error('Erro ao excluir usuário:', err);
         return res.status(500).json({ message: 'Erro ao excluir usuário' });
@@ -333,7 +333,7 @@ app.post('/delete-user', verificarToken, (req, res) => {
 });
 
 // Rota para obter todas as visitas
-app.get('/api/visitas', (req, res) => {
+app.get('/api/visitas', (_req, res) => {
   const query = 'SELECT tb_id AS id, tb_nome AS nome, tb_empresa AS empresa, tb_data AS data, tb_hora AS hora, tb_locais AS locais FROM tb_visitas';
   
   connection.query(query, (err, results) => {

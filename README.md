@@ -1,6 +1,6 @@
 # AtibainhaVisits
 
-Sistema de gerenciamento de visitas para o Atibainha, permitindo cadastro, agendamento e relatórios de visitas aos espaços disponíveis.
+Sistema de gerenciamento de visitas para o Atibainha, permitindo cadastro de usuários(funcionários), agendamentos e relatórios de visitas aos espaços disponíveis.
 
 ## Índice
 
@@ -30,7 +30,10 @@ AtibainhaVisits/
 |   |-- usuarios.css      # Estilos para gerenciamento de usuários
 |   `-- visita.css        # Estilos para página de visitas
 |-- db/                   # Scripts de banco de dados
-|   `-- Banco.sql         # Script de criação do banco de dados
+|   |-- Banco.sql         # Script de criação do banco de dados
+|-- documentos/           # Pasta contendo Documentos do projeto
+|   |-- Documentação.md   # Documentação do banco de dados
+|   `-- Mer do Projeto    # Mer do projeto do atibainha visits
 |-- img/                  # Imagens e recursos visuais
 |-- js/                   # Scripts JavaScript
 |   |-- autenticacao.js   # Lógica de autenticação
@@ -43,7 +46,7 @@ AtibainhaVisits/
 |   |-- usuario.js        # Lógica de gerenciamento de usuários
 |   |-- login.js          # Validações do formulário de login
 |   `-- visita.js         # Lógica de visitas
-|-- node_modules          # Pasta Node_Modules (não versionado)
+|-- node_modules/         # Pasta Node_Modules (não versionado)
 |-- .env                  # Variáveis de ambiente (não versionado)
 |-- .env.example          # Exemplo de variáveis de ambiente
 |-- .gitignore            # Arquivos ignorados pelo Git
@@ -72,6 +75,12 @@ git clone https://github.com/seu-usuario/AtibainhaVisits.git
 cd AtibainhaVisits
 ```
 
+1.5 Instalar a pasta node_modules:
+```bash
+npm i   
+```
+>**IMPORTANTE**: É necessário a execução desse comando `npm i` para fazer a instalação da pasta node_modules no projeto, pois sem ela o projeto não vai funcionar.
+
 2. Instale as dependências:
 
 ```bash
@@ -90,14 +99,14 @@ npm install
 1. Crie um arquivo `.env` na raiz do projeto baseado no `.env.example`:
 
 ```bash
-cp .env.example .env
+touch .env
 ```
 
 2. Edite o arquivo `.env` com suas configurações:
 
 ```
-PORT=porta do servidor
-DB_HOST=localhost
+PORT=porta_do_servidor
+DB_HOST=seu_host
 DB_USER=seu_usuario
 DB_PASSWORD=sua_senha
 DB_NAME=atibainha_visits
@@ -129,7 +138,7 @@ Os seguintes arquivos e diretórios devem ser adicionados ao `.gitignore`:
 
 ## Funcionalidades
 
-- **Autenticação**: Login e registro de usuários
+- **Login/Cadastro**: Login e registro de usuários
 - **Gerenciamento de Usuários**: Cadastro, edição e exclusão de usuários
 - **Agendamento de Visitas**: Cadastro e visualização de visitas
 - **Calendário**: Visualização de visitas agendadas

@@ -3,6 +3,9 @@ CREATE DATABASE IF NOT EXISTS atibainha_visits;
 USE atibainha_visits;
 
 -- Tabela de usuários
+ -- Representa os usuários(Funcionários) do sistema que podem registrar visitas
+ -- Um usuário pode registrar várias visitas (1:N com tb_visitas)
+ -- Um usuário pode ter várias visitas finalizadas (1:N com tb_visitas_finalizadas)
 CREATE TABLE IF NOT EXISTS tb_usuarios (
     tb_id INT AUTO_INCREMENT PRIMARY KEY,
     tb_nome VARCHAR(100) NOT NULL,
@@ -14,6 +17,9 @@ CREATE TABLE IF NOT EXISTS tb_usuarios (
 );
 
 -- Tabela de visitas
+ -- Representa as visitas registradas pelos usuários
+ -- Uma visita agendada pode pertencer a um usuário (N:1 com tb_usuarios)
+ -- Uma visita agendada pode ter várias visitas finalizadas ou não (1:0..1 com tb_visitas_finalizadas) 
 CREATE TABLE IF NOT EXISTS tb_visitas (
     tb_id INT AUTO_INCREMENT PRIMARY KEY,
     tb_usuario_id INT,
@@ -25,18 +31,11 @@ CREATE TABLE IF NOT EXISTS tb_visitas (
     tb_data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tb_usuario_id) REFERENCES tb_usuarios(tb_id)
 );
--- Inserir alguns dados de exemplo para usuários
-INSERT INTO tb_usuarios (tb_nome, tb_email, tb_senha, tb_telefone, tb_setor) VALUES
-('Admin', 'admin@example.com', '$2b$10$XdR0Z9XfMCi7UrTDgN7ZAOg5xKIoVsJ1Ey6YyqM.jP8JW/Kqvs9Ky', '11999999999', 'Administração'),
-('Usuário Teste', 'teste@example.com', '$2b$10$XdR0Z9XfMCi7UrTDgN7ZAOg5xKIoVsJ1Ey6YyqM.jP8JW/Kqvs9Ky', '11988888888', 'Recepção');
 
--- Inserir alguns dados de exemplo para visitas
-INSERT INTO tb_visitas (tb_nome, tb_empresa, tb_data, tb_hora, tb_locais) VALUES
-('João Silva', 'Empresa ABC', '2025-05-15', '14:00:00', 'Recepção, Área Externa'),
-('Maria Oliveira', 'Empresa XYZ', '2025-05-20', '10:30:00', 'Salão Principal, Jardim'),
-('Carlos Santos', 'Empresa 123', '2025-05-05', '15:45:00', 'Área de Eventos'),
-('Ana Pereira', 'Empresa Futura', '2025-05-15', '09:00:00', 'Todas as áreas');
-
+-- Tabela de visitas finalizadas
+ -- Representa as visitas que foram finalizadas
+ -- Uma visita finalizada pertence a uma visita agendada (N:1 com tb_visitas)
+ -- Uma visita finalizada pertence a um usuário que a realizou (N:1 com tb_usuarios)
 CREATE TABLE IF NOT EXISTS tb_visitas_finalizadas (
   tb_id INT AUTO_INCREMENT PRIMARY KEY,
   tb_visita_id INT,

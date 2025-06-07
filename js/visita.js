@@ -33,7 +33,19 @@ document.addEventListener('DOMContentLoaded', function() {
 // Função para carregar dados da visita do servidor
 async function carregarDadosVisita(visitaId) {
     try {
-        const response = await fetch(`http://localhost:3000/api/visita/${visitaId}`);
+        // Obter token de autenticação do localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Você precisa estar autenticado para visualizar uma visita.');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        const response = await fetch(`http://localhost:3000/api/visita/${visitaId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         
         if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.status}`);
@@ -102,6 +114,14 @@ async function finalizarVisita() {
         if (!confirmar) return;
     }
     
+    // Obter token de autenticação do localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Você precisa estar autenticado para finalizar uma visita.');
+        window.location.href = 'login.html';
+        return;
+    }
+    
     // Coletar dados da visita
     const dadosVisita = {
         visitaId: visitaAtual ? visitaAtual.id : null,
@@ -136,7 +156,8 @@ async function finalizarVisita() {
         const response = await fetch('http://localhost:3000/api/finalizar-visita', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(dadosVisita)
         });

@@ -268,7 +268,19 @@ function formatDate(date) {
 // Função para carregar visitas do servidor
 async function carregarVisitas() {
     try {
-        const response = await fetch('http://localhost:3000/api/visitas');
+        // Obter token de autenticação do localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('❌ Token de autenticação não encontrado');
+            visitas = [];
+            return visitas;
+        }
+        
+        const response = await fetch('http://localhost:3000/api/visitas', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         
         if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.status}`);
@@ -435,7 +447,18 @@ async function verificarVisitaFinalizada(visitaId) {
     console.log(`🔄 Verificando se a visita ${visitaId} já foi finalizada`);
     
     try {
-        const response = await fetch(`http://localhost:3000/api/verificar-visita-finalizada/${visitaId}`);
+        // Obter token de autenticação do localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('❌ Token de autenticação não encontrado');
+            return null;
+        }
+        
+        const response = await fetch(`http://localhost:3000/api/verificar-visita-finalizada/${visitaId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         
         if (!response.ok) {
             if (response.status === 404) {
@@ -482,11 +505,20 @@ function cadastrarVisita(event) {
         return false;
     }
     
+    // Obter token de autenticação do localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Você precisa estar autenticado para cadastrar uma visita.');
+        window.location.href = 'login.html';
+        return false;
+    }
+    
     // Enviar dados para o servidor
     fetch('http://localhost:3000/api/cadastrar-visita', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ 
             nome: nome, 

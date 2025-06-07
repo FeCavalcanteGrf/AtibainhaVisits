@@ -54,11 +54,18 @@ function carregarDadosDemostracao() {
             { id: "sessao5", nome: "Abacateiro", visitado: false },
             { id: "sessao6", nome: "Pinheiro", visitado: false },
             { id: "sessao7", nome: "Primavera", visitado: false },
-            { id: "sessao8", nome: "Sabia", visitado: false }
+            { id: "sessao8", nome: "Sabia", visitado: false },
+            { id: "sessao11", nome: "Chalé Standart", visitado: true },
+            { id: "sessao12", nome: "Chalé Family 1D", visitado: true },
+            { id: "sessao13", nome: "Chalé Family 2D", visitado: false },
+            { id: "sessao14", nome: "Chalé Suiço", visitado: false },
+            { id: "sessao15", nome: "Villa Atibainha", visitado: true }
         ],
         observacoes: {
             "sessao1": "Observação de demonstração para o salão Nobre.",
-            "sessao2": "Observação de demonstração para o Auditório."
+            "sessao2": "Observação de demonstração para o Auditório.",
+            "sessao11": "Observação de demonstração para o Chalé Standart.",
+            "sessao15": "Observação de demonstração para a Villa Atibainha."
         }
     };
     
@@ -82,7 +89,18 @@ async function carregarDadosVisita(visitaId) {
     console.log(`🔄 Carregando dados da visita ID: ${visitaId}`);
     
     try {
-        const response = await fetch(`http://localhost:3000/api/relatorio-visita/${visitaId}`);
+        // Obter token de autenticação do localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('❌ Token de autenticação não encontrado');
+            throw new Error('Autenticação necessária');
+        }
+        
+        const response = await fetch(`http://localhost:3000/api/relatorio-visita/${visitaId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         
         if (!response.ok) {
             throw new Error(`Erro na requisição: ${response.status}`);

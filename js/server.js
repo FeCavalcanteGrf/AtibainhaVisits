@@ -312,180 +312,203 @@ app.post('/delete-user', verificarToken, async (req, res) => {
 });
 
 // Rota para obter todas as visitas
-app.get('/api/visitas', (_req, res) => {
-  const query = 'SELECT tb_id AS id, tb_nome AS nome, tb_empresa AS empresa, tb_data AS data, tb_hora AS hora, tb_locais AS locais FROM tb_visitas';
-  
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar visitas:', err);
-      res.status(500).json({ message: 'Erro ao buscar visitas' });
-      return;
-    }
+app.get('/api/visitas', verificarToken, async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        v.tb_id AS id, 
+        v.tb_nome AS nome, 
+        v.tb_empresa AS empresa, 
+        v.tb_data AS data, 
+        v.tb_hora AS hora, 
+        v.tb_locais AS locais,
+        v.tb_usuario_id AS usuarioId,
+        u.tb_nome AS nomeUsuario
+      FROM 
+        tb_visitas v
+      LEFT JOIN
+        tb_usuarios u ON v.tb_usuario_id = u.tb_id
+    `;
     
+    const [results] = await pool.query(query);
     res.status(200).json(results);
-  });
+  } catch (err) {
+    console.error('Erro ao buscar visitas:', err);
+    res.status(500).json({ message: 'Erro ao buscar visitas' });
+  }
 });
 
 // Rota para cadastrar uma nova visita
-app.post('/api/cadastrar-visita', (req, res) => {
-  const { nome, empresa, data, hora, locais } = req.body;
-  
-  if (!nome || !empresa || !data || !hora || !locais) {
-    res.status(400).json({ message: 'Todos os campos são obrigatórios' });
-    return;
-  }
-  
-  const query = 'INSERT INTO tb_visitas (tb_nome, tb_empresa, tb_data, tb_hora, tb_locais) VALUES (?, ?, ?, ?, ?)';
-  
-  connection.query(query, [nome, empresa, data, hora, locais], (err, results) => {
-    if (err) {
-      console.error('Erro ao cadastrar visita:', err);
-      res.status(500).json({ message: 'Erro ao cadastrar visita' });
-      return;
+app.post('/api/cadastrar-visita', verificarToken, async (req, res) => {
+  try {
+    const { nome, empresa, data, hora, locais } = req.body;
+    const userId = req.userId; // Obtém o ID do usuário do token JWT
+    
+    if (!nome || !empresa || !data || !hora || !locais) {
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
     }
+    
+    const query = 'INSERT INTO tb_visitas (tb_usuario_id, tb_nome, tb_empresa, tb_data, tb_hora, tb_locais) VALUES (?, ?, ?, ?, ?, ?)';
+    
+    const [result] = await pool.query(query, [userId, nome, empresa, data, hora, locais]);
     
     res.status(201).json({
       message: 'Visita cadastrada com sucesso!',
-      id: results.insertId
+      id: result.insertId
     });
-  });
+  } catch (error) {
+    console.error('Erro ao cadastrar visita:', error);
+    res.status(500).json({ message: 'Erro ao cadastrar visita' });
+  }
 });
 
 // Rota para obter dados de uma visita específica
-app.get('/api/visita/:id', (req, res) => {
-  const visitaId = req.params.id;
-  
-  const query = 'SELECT tb_id AS id, tb_nome AS nome, tb_empresa AS empresa, tb_data AS data, tb_hora AS hora, tb_locais AS locais FROM tb_visitas WHERE tb_id = ?';
-  
-  connection.query(query, [visitaId], (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar visita:', err);
-      res.status(500).json({ message: 'Erro ao buscar visita' });
-      return;
-    }
+app.get('/api/visita/:id', verificarToken, async (req, res) => {
+  try {
+    const visitaId = req.params.id;
+    
+    const query = `
+      SELECT 
+        v.tb_id AS id, 
+        v.tb_nome AS nome, 
+        v.tb_empresa AS empresa, 
+        v.tb_data AS data, 
+        v.tb_hora AS hora, 
+        v.tb_locais AS locais,
+        v.tb_usuario_id AS usuarioId,
+        u.tb_nome AS nomeUsuario,
+        u.tb_setor AS setorUsuario
+      FROM 
+        tb_visitas v
+      LEFT JOIN
+        tb_usuarios u ON v.tb_usuario_id = u.tb_id
+      WHERE 
+        v.tb_id = ?
+    `;
+    
+    const [results] = await pool.query(query, [visitaId]);
     
     if (results.length === 0) {
-      res.status(404).json({ message: 'Visita não encontrada' });
-      return;
+      return res.status(404).json({ message: 'Visita não encontrada' });
     }
     
     res.status(200).json(results[0]);
-  });
+  } catch (err) {
+    console.error('Erro ao buscar visita:', err);
+    res.status(500).json({ message: 'Erro ao buscar visita' });
+  }
 });
 
 // Rota para finalizar uma visita
-app.post('/api/finalizar-visita', (req, res) => {
-  const { visitaId, dataVisita, locaisVisitados, observacoes } = req.body;
-  
-  // Verificar se a visita existe
-  if (visitaId) {
-    const queryVerificar = 'SELECT tb_id FROM tb_visitas WHERE tb_id = ?';
+app.post('/api/finalizar-visita', verificarToken, async (req, res) => {
+  try {
+    const { visitaId, dataVisita, locaisVisitados, observacoes } = req.body;
+    const userId = req.userId; // Obtém o ID do usuário do token JWT
     
-    connection.query(queryVerificar, [visitaId], (err, results) => {
-      if (err) {
-        console.error('Erro ao verificar visita:', err);
-        res.status(500).json({ message: 'Erro ao verificar visita' });
-        return;
-      }
+    // Verificar se a visita existe
+    if (visitaId) {
+      const queryVerificar = 'SELECT tb_id FROM tb_visitas WHERE tb_id = ?';
+      
+      const [results] = await pool.query(queryVerificar, [visitaId]);
       
       if (results.length === 0) {
-        res.status(404).json({ message: 'Visita não encontrada' });
-        return;
+        return res.status(404).json({ message: 'Visita não encontrada' });
       }
       
       // Salvar os dados da visita finalizada
-      salvarDadosVisitaFinalizada(visitaId, dataVisita, locaisVisitados, observacoes, res);
-    });
-  } else {
-    // Se não tiver ID da visita, apenas salvar os dados
-    salvarDadosVisitaFinalizada(null, dataVisita, locaisVisitados, observacoes, res);
+      await salvarDadosVisitaFinalizada(visitaId, dataVisita, locaisVisitados, observacoes, res, userId);
+    } else {
+      // Se não tiver ID da visita, apenas salvar os dados
+      await salvarDadosVisitaFinalizada(null, dataVisita, locaisVisitados, observacoes, res, userId);
+    }
+  } catch (error) {
+    console.error('Erro ao finalizar visita:', error);
+    res.status(500).json({ message: 'Erro ao finalizar visita' });
   }
 });
 
 // Função para salvar os dados da visita finalizada
-function salvarDadosVisitaFinalizada(visitaId, dataVisita, locaisVisitados, observacoes, res) {
-  // Converter os dados para formato JSON
-  const locaisJSON = JSON.stringify(locaisVisitados);
-  const observacoesJSON = JSON.stringify(observacoes);
-  
-  // Formatar a data para o formato aceito pelo MySQL (YYYY-MM-DD HH:MM:SS)
-  let formattedDate;
+async function salvarDadosVisitaFinalizada(visitaId, dataVisita, locaisVisitados, observacoes, res, userId) {
   try {
-    // Converter a string ISO para objeto Date
-    const date = new Date(dataVisita);
-    // Verificar se a data é válida
-    if (isNaN(date.getTime())) {
-      throw new Error('Data inválida');
+    // Converter os dados para formato JSON
+    const locaisJSON = JSON.stringify(locaisVisitados);
+    const observacoesJSON = JSON.stringify(observacoes);
+    
+    // Formatar a data para o formato aceito pelo MySQL (YYYY-MM-DD HH:MM:SS)
+    let formattedDate;
+    try {
+      // Converter a string ISO para objeto Date
+      const date = new Date(dataVisita);
+      // Verificar se a data é válida
+      if (isNaN(date.getTime())) {
+        throw new Error('Data inválida');
+      }
+      
+      // Formatar para o formato MySQL YYYY-MM-DD HH:MM:SS usando UTC
+      const utcYear = date.getUTCFullYear();
+      const utcMonth = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const utcDay = String(date.getUTCDate()).padStart(2, '0');
+      const utcHours = String(date.getUTCHours()).padStart(2, '0');
+      const utcMinutes = String(date.getUTCMinutes()).padStart(2, '0');
+      const utcSeconds = String(date.getUTCSeconds()).padStart(2, '0');
+      
+      formattedDate = `${utcYear}-${utcMonth}-${utcDay} ${utcHours}:${utcMinutes}:${utcSeconds}`;
+      console.log('Data formatada:', formattedDate);
+    } catch (error) {
+      console.error('Erro ao formatar data:', error);
+      return res.status(400).json({ message: 'Formato de data inválido' });
     }
     
-    // Formatar para o formato MySQL YYYY-MM-DD HH:MM:SS usando UTC
-    const utcYear = date.getUTCFullYear();
-    const utcMonth = String(date.getUTCMonth() + 1).padStart(2, '0');
-    const utcDay = String(date.getUTCDate()).padStart(2, '0');
-    const utcHours = String(date.getUTCHours()).padStart(2, '0');
-    const utcMinutes = String(date.getUTCMinutes()).padStart(2, '0');
-    const utcSeconds = String(date.getUTCSeconds()).padStart(2, '0');
+    // Inserir na tabela de visitas finalizadas
+    const query = 'INSERT INTO tb_visitas_finalizadas (tb_visita_id, tb_usuario_id, tb_data_visita, tb_locais_visitados, tb_observacoes) VALUES (?, ?, ?, ?, ?)';
     
-    formattedDate = `${utcYear}-${utcMonth}-${utcDay} ${utcHours}:${utcMinutes}:${utcSeconds}`;
-    console.log('Data formatada:', formattedDate);
-  } catch (error) {
-    console.error('Erro ao formatar data:', error);
-    res.status(400).json({ message: 'Formato de data inválido' });
-    return;
-  }
-  
-  // Inserir na tabela de visitas finalizadas
-  const query = 'INSERT INTO tb_visitas_finalizadas (tb_visita_id, tb_data_visita, tb_locais_visitados, tb_observacoes) VALUES (?, ?, ?, ?)';
-  
-  connection.query(query, [visitaId, formattedDate, locaisJSON, observacoesJSON], (err, results) => {
-    if (err) {
-      console.error('Erro ao salvar visita finalizada:', err);
-      res.status(500).json({ message: 'Erro ao salvar visita finalizada' });
-      return;
-    }
+    const [result] = await pool.query(query, [visitaId, userId, formattedDate, locaisJSON, observacoesJSON]);
     
-    console.log('Visita finalizada com sucesso:', results);
-    res.status(200).json({ 
+    console.log('Visita finalizada com sucesso:', result);
+    return res.status(200).json({ 
       message: 'Visita finalizada com sucesso.',
-      id: results.insertId
+      id: result.insertId
     });
-  });
+  } catch (error) {
+    console.error('Erro ao salvar visita finalizada:', error);
+    return res.status(500).json({ message: 'Erro ao salvar visita finalizada' });
+  }
 }
 
 // Rota para obter relatório de uma visita
-app.get('/api/relatorio-visita/:id', (req, res) => {
-  const visitaFinalizadaId = req.params.id;
-  
-  // Buscar dados da visita finalizada
-  const query = `
-    SELECT 
-      vf.tb_id AS id,
-      vf.tb_data_visita AS dataVisita,
-      vf.tb_locais_visitados AS locaisVisitados,
-      vf.tb_observacoes AS observacoes,
-      v.tb_nome AS nome,
-      v.tb_empresa AS empresa,
-      v.tb_data AS data,
-      v.tb_hora AS hora,
-      v.tb_locais AS locais
-    FROM 
-      tb_visitas_finalizadas vf
-    LEFT JOIN 
-      tb_visitas v ON vf.tb_visita_id = v.tb_id
-    WHERE 
-      vf.tb_id = ?
-  `;
-  
-  connection.query(query, [visitaFinalizadaId], (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar relatório de visita:', err);
-      res.status(500).json({ message: 'Erro ao buscar relatório de visita' });
-      return;
-    }
+app.get('/api/relatorio-visita/:id', verificarToken, async (req, res) => {
+  try {
+    const visitaFinalizadaId = req.params.id;
+    
+    // Buscar dados da visita finalizada
+    const query = `
+      SELECT 
+        vf.tb_id AS id,
+        vf.tb_data_visita AS dataVisita,
+        vf.tb_locais_visitados AS locaisVisitados,
+        vf.tb_observacoes AS observacoes,
+        vf.tb_usuario_id AS usuarioId,
+        v.tb_nome AS nome,
+        v.tb_empresa AS empresa,
+        v.tb_data AS data,
+        v.tb_hora AS hora,
+        v.tb_locais AS locais,
+        u.tb_nome AS nomeUsuario,
+        u.tb_setor AS setorUsuario
+      FROM 
+        tb_visitas_finalizadas vf
+      LEFT JOIN 
+        tb_visitas v ON vf.tb_visita_id = v.tb_id
+      LEFT JOIN
+        tb_usuarios u ON vf.tb_usuario_id = u.tb_id
+      WHERE 
+        vf.tb_id = ?
+    `;
+    
+    const [results] = await pool.query(query, [visitaFinalizadaId]);
     
     if (results.length === 0) {
-      res.status(404).json({ message: 'Relatório de visita não encontrado' });
-      return;
+      return res.status(404).json({ message: 'Relatório de visita não encontrado' });
     }
     
     // Processar os dados
@@ -508,29 +531,44 @@ app.get('/api/relatorio-visita/:id', (req, res) => {
     }
     
     res.status(200).json(relatorio);
-  });
+  } catch (error) {
+    console.error('Erro ao buscar relatório de visita:', error);
+    res.status(500).json({ message: 'Erro ao buscar relatório de visita' });
+  }
 });
 
 // Rota para verificar se uma visita já foi finalizada
-app.get('/api/verificar-visita-finalizada/:id', (req, res) => {
-  const visitaId = req.params.id;
-  
-  const query = 'SELECT tb_id AS id FROM tb_visitas_finalizadas WHERE tb_visita_id = ? ORDER BY tb_id DESC LIMIT 1';
-  
-  connection.query(query, [visitaId], (err, results) => {
-    if (err) {
-      console.error('Erro ao verificar visita finalizada:', err);
-      res.status(500).json({ message: 'Erro ao verificar visita finalizada' });
-      return;
-    }
+app.get('/api/verificar-visita-finalizada/:id', verificarToken, async (req, res) => {
+  try {
+    const visitaId = req.params.id;
+    
+    const query = `
+      SELECT 
+        vf.tb_id AS id,
+        vf.tb_usuario_id AS usuarioId,
+        u.tb_nome AS nomeUsuario
+      FROM 
+        tb_visitas_finalizadas vf
+      LEFT JOIN
+        tb_usuarios u ON vf.tb_usuario_id = u.tb_id
+      WHERE 
+        vf.tb_visita_id = ? 
+      ORDER BY 
+        vf.tb_id DESC 
+      LIMIT 1
+    `;
+    
+    const [results] = await pool.query(query, [visitaId]);
     
     if (results.length === 0) {
-      res.status(404).json({ message: 'Visita não finalizada' });
-      return;
+      return res.status(404).json({ message: 'Visita não finalizada' });
     }
     
     res.status(200).json(results[0]);
-  });
+  } catch (err) {
+    console.error('Erro ao verificar visita finalizada:', err);
+    res.status(500).json({ message: 'Erro ao verificar visita finalizada' });
+  }
 });
 
 // Inicialização do servidor

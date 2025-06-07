@@ -11,6 +11,8 @@
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     overflow: visible;
+    margin-bottom: 30px;
+    box-sizing: border-box;
 }
 
 .calendar-header {
@@ -249,6 +251,7 @@
     width: 100%;
     max-width: 1000px;
     margin: 30px auto;
+    margin-bottom: 30px;
 }
 
 .form-container h3 {
@@ -314,6 +317,20 @@
 .form-group {
     flex: 1;
     min-width: 200px;
+}
+
+/* Estilos para o container principal */
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Ajuste do espaçamento superior para acomodar a barra de navegação fixa */
+main {
+    padding-top: 80px;
 }
 
 /* Responsividade */

@@ -1,79 +1,63 @@
+<!--
+/*
+ * Funcionalidades principais:
+ * - Visualização de visitas em formato de calendário mensal
+ * - Navegação entre meses (anterior/próximo)
+ * - Cadastro de novas visitas através de formulário
+ * - Visualização detalhada de visitas agendadas
+ * - Iniciar processo de visita a partir de um agendamento
+ */
+-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Metadados básicos da página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atibainha Visits - Agendamentos</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/calendar.css">
-    <link rel="icon" href="img/LogoTipo.png" type="image/png">
-    <!-- Font Awesome para ícones -->
+    
+    <!-- Arquivos CSS externos -->
+    <link rel="stylesheet" href="css/styles.css"> <!-- Estilos globais do sistema -->
+    <link rel="stylesheet" href="css/calendar.css"> <!-- Estilos específicos do calendário -->
+    <link rel="icon" href="img/LogoTipo.png" type="image/png"> <!-- Favicon do site -->
+    
+    <!-- Biblioteca de ícones Font Awesome - usada para ícones de navegação do calendário -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Correções específicas para esta página */
-        main {
-            padding-top: 80px;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        /* Garantir que o calendário ocupe todo o espaço disponível */
-        .calendar-container {
-            width: 100%;
-            margin-bottom: 30px;
-            box-sizing: border-box;
-        }
-        
-        #calendar {
-            width: 100%;
-            display: block;
-        }
-        
-        #calendar table {
-            width: 100%;
-            table-layout: fixed;
-        }
-        
-        /* Formulário abaixo do calendário */
-        .form-container {
-            width: 100%;
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-        
-        /* Layout para formulário em duas colunas */
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .form-group {
-            flex: 1;
-            min-width: 200px;
-        }
-    </style>
 </head>
 <body>
 
+<!-- 
+    Cabeçalho com navegação 
+    Contém o logo do sistema e links para as principais áreas do aplicativo.
+    Inclui menu responsivo para dispositivos móveis.
+-->
 <header>
     <div class="navbar">
+        <!-- Logo do sistema - identidade visual -->
         <div class="logo">
             <img src="img/LogoTipo.png" alt="Logo">
         </div>
+        
+        <!-- 
+            Links de navegação principal 
+            Permite acesso às diferentes áreas do sistema:
+            - Home: Página inicial
+            - Agendamentos: Página atual
+            - Usuários: Gerenciamento de usuários
+            - Logout: Encerra a sessão do usuário
+        -->
         <ul class="nav-links" id="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="agendamentos.html">Agendamentos</a></li>
             <li><a href="usuarios.html">Usuarios</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li> <!-- Controlado pelo script logout.js -->
         </ul>
+        
+        <!-- 
+            Menu hambúrguer para dispositivos móveis 
+            Aparece apenas em telas pequenas e controla a exibição do menu
+            através de JavaScript (script.js).
+        -->
         <div class="menu-toggle" id="menu-toggle">
             <div class="bar"></div>
             <div class="bar"></div>
@@ -82,26 +66,62 @@
     </div>
 </header>
 
+<!-- 
+    Conteúdo principal da página 
+    Contém o calendário de agendamentos e o formulário para cadastro de novas visitas.
+-->
 <main>
     <div class="container">
-        <!-- Calendário Moderno -->
+        <!-- 
+            Calendário com efeito glassmorphism 
+            Exibe os dias do mês atual e destaca os dias que possuem visitas agendadas.
+            Permite navegação entre meses e visualização de detalhes das visitas.
+        -->
         <div class="calendar-container glassmorphism">
+            <!-- 
+                Cabeçalho do calendário 
+                Exibe o mês/ano atual e botões para navegação entre meses.
+            -->
             <div class="calendar-header">
-                <h2 id="month-year">Agosto 2023</h2>
+                <h2 id="month-year">Agosto 2023</h2> <!-- Atualizado dinamicamente pelo calendar.js -->
                 <div class="calendar-nav">
+                    <!-- 
+                        Botões de navegação do calendário 
+                        Permitem avançar ou retroceder entre os meses.
+                        Controlados pelo calendar.js.
+                    -->
                     <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
                     <button id="next-month"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
-            <div id="calendar" style="width: 100%; display: block;">
-                <!-- O calendário será gerado dinamicamente pelo JavaScript -->
+            
+            <!-- 
+                Container do calendário 
+                Preenchido dinamicamente pelo calendar.js com os dias do mês.
+                Os dias com visitas agendadas são destacados visualmente.
+                Ao clicar em um dia com visita, exibe o popup com detalhes.
+            -->
+            <div id="calendar">
+                <!-- Conteúdo gerado dinamicamente pelo JavaScript -->
             </div>
         </div>
 
-        <!-- Formulário de Cadastro de Visita -->
+        <!-- 
+            Formulário para cadastro de novas visitas 
+            Permite registrar novos agendamentos de visitas ao hotel.
+            Os dados são enviados para a API através da função cadastrarVisita() em calendar.js.
+        -->
         <div class="form-container">
             <h3>Cadastrar Nova Visita</h3>
+            <!-- 
+                Formulário de cadastro 
+                Ao ser submetido, chama a função cadastrarVisita() que valida e envia os dados.
+            -->
             <form id="register-visit-form" onsubmit="return cadastrarVisita(event)">
+                <!-- 
+                    Campos para informações do visitante 
+                    Nome e empresa do visitante, dispostos lado a lado em telas maiores.
+                -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="novo-nome">Nome:</label>
@@ -113,6 +133,11 @@
                     </div>
                 </div>
                 
+                <!-- 
+                    Campos para data e hora da visita 
+                    Permitem selecionar quando a visita ocorrerá.
+                    O campo de data é preenchido automaticamente com a data atual pelo calendar.js.
+                -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="novo-data">Data:</label>
@@ -124,21 +149,39 @@
                     </div>
                 </div>
                 
+                <!-- 
+                    Campo para locais de interesse 
+                    Permite especificar quais áreas do hotel o visitante deseja conhecer.
+                -->
                 <label for="novo-locais">Locais em Foco:</label>
                 <input type="text" id="novo-locais" required>
                 
+                <!-- Botão para enviar o formulário -->
                 <button type="submit" class="btn-save">Cadastrar Visita</button>
             </form>
         </div>
     </div>
 </main>
 
-<!-- Popup para Exibir Visita Agendada (Versão Moderna) -->
+<!-- 
+    Popup modal para detalhes da visita 
+    Exibido quando o usuário clica em um dia do calendário que possui visita agendada.
+    Mostra informações detalhadas sobre a visita e permite iniciar o processo de visita.
+    Inicialmente oculto, controlado pelo calendar.js.
+-->
 <div id="visit-popup" class="visit-popup">
     <div id="popup-content" class="visit-popup-content">
-        <!-- O conteúdo será preenchido dinamicamente pelo JavaScript -->
+        <!-- Título do popup -->
         <h3>Detalhes da Visita</h3>
+        
+        <!-- Botão para fechar o popup - controlado pelo calendar.js -->
         <button id="close-popup" class="close-popup">&times;</button>
+        
+        <!-- 
+            Detalhes da visita 
+            Preenchidos dinamicamente pelo calendar.js quando uma visita é selecionada.
+            Exibe nome, empresa, data, hora e locais de interesse.
+        -->
         <div class="visit-details">
             <p><strong>Nome:</strong> <span id="popup-nome">Carregando...</span></p>
             <p><strong>Empresa:</strong> <span id="popup-empresa">Carregando...</span></p>
@@ -146,20 +189,47 @@
             <p><strong>Hora:</strong> <span id="popup-hora">Carregando...</span></p>
             <p><strong>Locais:</strong> <span id="popup-locais">Carregando...</span></p>
         </div>
+        
+        <!-- 
+            Botões de ação do popup 
+            Permitem iniciar a visita ou fechar o popup.
+        -->
         <div class="popup-actions">
+            <!-- 
+                Botão para iniciar visita 
+                Redireciona para a página de visita.html com o ID da visita selecionada.
+                Controlado pelo calendar.js.
+            -->
             <button id="btn-iniciar-visita" class="btn-iniciar-visita">Iniciar Visita</button>
+            
+            <!-- Botão alternativo para fechar o popup -->
             <button class="btn-close">Fechar</button>
         </div>
     </div>
 </div>
 
+<!-- Rodapé da página com informações de copyright -->
 <footer>
     <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
 </footer>
 
-<!-- Carregar scripts -->
-<script src="js/script.js"></script>
-<script src="js/logout.js"></script>
-<script src="js/calendar.js"></script>
+<!-- 
+    Scripts JavaScript 
+    Carregados no final do documento para melhor performance.
+-->
+<script src="js/script.js"></script> <!-- Script global com funções comuns -->
+<script src="js/logout.js"></script> <!-- Script para gerenciar o logout -->
+<script src="js/calendar.js"></script> <!-- Script específico do calendário e agendamentos -->
+
+<!--
+    Fluxo de funcionamento da página:
+    1. Ao carregar, o calendar.js inicializa o calendário com o mês atual
+    2. O script busca as visitas agendadas na API e marca os dias correspondentes
+    3. O usuário pode navegar entre os meses usando os botões de navegação
+    4. Ao clicar em um dia com visita, o popup de detalhes é exibido
+    5. O usuário pode iniciar uma visita a partir do popup ou fechá-lo
+    6. O formulário permite cadastrar novas visitas que são enviadas para a API
+    7. Após o cadastro bem-sucedido, o calendário é atualizado automaticamente
+-->
 </body>
 </html>

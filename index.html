@@ -1,13 +1,10 @@
 <!--
-/**
- * @file index.html
- * @description Página inicial do sistema Atibainha Visits
- * @author TCC Atibainha Visits
- * @version 1.0
- * 
- * Página principal do sistema de gerenciamento de visitas do Hotel Estância Atibainha.
- * Apresenta informações introdutórias sobre o hotel e fornece navegação para as
- * demais funcionalidades do sistema.
+/*
+ * Funcionalidades principais:
+ * - Apresentação do hotel e suas características
+ * - Navegação para outras áreas do sistema (agendamentos, usuários)
+ * - Autenticação (logout)
+ * - Interface responsiva para diferentes dispositivos
  */
 -->
 <!DOCTYPE html>
@@ -23,21 +20,36 @@
     <link rel="icon" href="img/LogoTipo.png" type="image/png"> 
 </head>
 <body>
-    <!-- Cabeçalho com menu de navegação -->
+    <!-- 
+        Cabeçalho com menu de navegação 
+        Esta seção contém o logo e os links de navegação principal do sistema.
+        O menu é responsivo e se adapta a diferentes tamanhos de tela.
+    -->
     <header>
         <div class="navbar">
-            <!-- Logo do sistema -->
+            <!-- Logo do sistema - identidade visual -->
             <div class="logo">
                 <img src="img/LogoTipo.png" alt="Logo">
             </div>
-            <!-- Menu de navegação principal -->
+            <!-- 
+                Menu de navegação principal 
+                Links para as principais áreas do sistema:
+                - Home: Retorna à página inicial
+                - Agendamentos: Gerenciamento de visitas agendadas
+                - Usuários: Gerenciamento de usuários do sistema
+                - Logout: Encerra a sessão do usuário (controlado por JavaScript)
+            -->
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="agendamentos.html">Agendamentos</a></li>
                 <li><a href="usuarios.html">Usuarios</a></li>
                 <li><a href="#" id="logout-btn">Logout</a></li>
             </ul>
-            <!-- Menu hambúrguer para dispositivos móveis -->
+            <!-- 
+                Menu hambúrguer para dispositivos móveis 
+                Aparece apenas em telas pequenas e é controlado por JavaScript
+                para mostrar/ocultar o menu de navegação.
+            -->
             <div class="menu-toggle" id="menu-toggle">
                 <div class="bar"></div>
                 <div class="bar"></div>
@@ -46,21 +58,37 @@
         </div>
     </header>
     
-    <!-- Conteúdo principal -->
+    <!-- 
+        Conteúdo principal 
+        Apresenta informações sobre o Hotel Estância Atibainha
+        com efeito visual glassmorphism para melhor apresentação.
+    -->
     <main>
         <div class="container">
-            <!-- Painel com efeito glassmorphism -->
+            <!-- 
+                Painel com efeito glassmorphism 
+                Cria um painel semi-transparente com efeito de vidro fosco
+                para melhor legibilidade do conteúdo sobre o fundo.
+            -->
             <div class="glassmorphism">
-                <!-- Título de boas-vindas -->
+                <!-- Título de boas-vindas - Primeira interação com o usuário -->
                 <h1>Seja bem-vindo ao</br> <b>Atibainha Visits</b></h1></br>
 
-                <!-- Seção de apresentação do hotel -->
+                <!-- 
+                    Seção de apresentação do hotel 
+                    Fornece uma descrição geral do Hotel Fazenda Estância Atibainha,
+                    destacando suas características principais.
+                -->
                 <h2>Vamos conhecer o Hotel Fazenda Estância Atibainha</h2><br>
                 <h3>
                     Comodidade e muito conforto fazem parte de todos os detalhes do Estância Atibainha, localizado na cidade de Nazaré Paulista – SP, apenas 72 Km de distância da cidade de São Paulo. Todas as acomodações muito bem estruturadas com muito bom gosto, além de categorias com capacidade para receber até 6 pessoas. Nossa área de lazer conta com 7 piscinas e em todas as diárias você terá a oportunidade de provar o que temos de melhor em gastronomia. 
                 </h3></br>
                 
-                <!-- Seção de destaque da localização -->
+                <!-- 
+                    Seção de destaque da localização 
+                    Enfatiza a proximidade do hotel com São Paulo como
+                    um diferencial competitivo.
+                -->
                 <h2>Seu Resort pertinho de São Paulo</h2>
                 <h3>
                     Fugir da rotina e enfrentar uma grande jornada de trânsito e horas na estrada não combina nada com descanso, o Estância Atibainha está localizado a 72 Km de São Paulo. Vai dizer que você não vem?
@@ -69,13 +97,27 @@
         </div><br><br><br><br>
     </main>
     
-    <!-- Rodapé com informações de copyright -->
+    <!-- 
+        Rodapé com informações de copyright 
+        Exibe informações legais e de direitos autorais do sistema.
+    -->
     <footer class="footerVisita">
         <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
     </footer>
 
-    <!-- Scripts JavaScript -->
+    <!-- 
+        Scripts JavaScript 
+        Carregados no final do documento para melhor performance.
+    -->
     <script src="js/script.js"></script> <!-- Script principal com funcionalidades comuns -->
     <script src="js/logout.js"></script> <!-- Script para gerenciamento de logout -->
+
+    <!-- 
+        Fluxo de funcionamento da página:
+        1. Carregamento da página com informações estáticas sobre o hotel
+        2. Verificação de autenticação do usuário (via JavaScript)
+        3. Disponibilização de navegação para outras áreas do sistema
+        4. Possibilidade de encerrar a sessão através do botão de logout
+    -->
 </body>
 </html>

@@ -1,12 +1,11 @@
 <!--
-/**
- * @file usuarios.html
- * @description Página de gerenciamento de perfil de usuário do sistema Atibainha Visits
- * @author TCC Atibainha Visits
- * @version 1.0
- * 
- * Esta página permite que usuários visualizem e editem suas informações pessoais,
- * atualizem suas credenciais e excluam sua conta se necessário.
+/*
+ * Funcionalidades principais:
+ * - Visualização dos dados do usuário logado
+ * - Edição de informações pessoais (nome, email, telefone)
+ * - Atualização de senha
+ * - Alteração de setor de trabalho
+ * - Exclusão da conta de usuário
  */
 -->
 <!DOCTYPE html>
@@ -22,27 +21,41 @@
     <title>Perfil do Usuario</title>
     
     <!-- Folhas de estilo -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/usuarios.css">
+    <link rel="stylesheet" href="css/styles.css"> <!-- Estilos globais do sistema -->
+    <link rel="stylesheet" href="css/usuarios.css"> <!-- Estilos específicos para a página de usuários -->
 </head>
 <body>
-    <!-- Cabeçalho com menu de navegação -->
+    <!-- 
+        Cabeçalho com menu de navegação 
+        Contém o logo do sistema e links para as principais áreas do aplicativo.
+    -->
     <header>
         <div class="navbar">
-            <!-- Logo do sistema -->
+            <!-- Logo do sistema - identidade visual -->
             <div class="logo">
                 <img src="img/LogoTipo.png" alt="Logo">
             </div>
             
-            <!-- Menu de navegação principal -->
+            <!-- 
+                Links de navegação principal 
+                Permite acesso às diferentes áreas do sistema:
+                - Home: Página inicial
+                - Agendamentos: Gerenciamento de visitas
+                - Usuários: Página atual (perfil do usuário)
+                - Logout: Encerra a sessão do usuário
+            -->
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="agendamentos.html">Agendamentos</a></li>
                 <li><a href="usuarios.html">Usuarios</a></li>
-                <li><a href="#" id="logout-btn">Logout</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li> <!-- Controlado pelo script logout.js -->
             </ul>
             
-            <!-- Menu hambúrguer para dispositivos móveis -->
+            <!-- 
+                Menu hambúrguer para dispositivos móveis 
+                Aparece apenas em telas pequenas e controla a exibição do menu.
+                Controlado pelo script.js.
+            -->
             <div class="menu-toggle" id="menu-toggle">
                 <div class="bar"></div>
                 <div class="bar"></div>
@@ -51,37 +64,77 @@
         </div>
     </header>
 
-    <!-- Conteúdo principal - Formulário de detalhes do usuário -->
+    <!-- 
+        Conteúdo principal - Formulário de detalhes do usuário 
+        Exibe e permite editar as informações do usuário logado.
+    -->
     <main class="user-details-container">
         <section class="user-details">
             <!-- Título da seção -->
             <h2>Detalhes do Usuário</h2>
             
-            <!-- Formulário de atualização de dados do usuário -->
+            <!-- 
+                Formulário de atualização de dados do usuário 
+                Os campos são preenchidos automaticamente com os dados atuais do usuário
+                através do script usuario.js que busca as informações da API.
+                O evento de submissão é tratado pelo mesmo script.
+            -->
             <form id="update-user-form">
-                <!-- Campo para nome -->
+                <!-- 
+                    Campo para nome 
+                    Exibe e permite editar o nome completo do usuário.
+                -->
                 <label for="user-name">Nome:</label>
                 <input type="text" id="user-name" name="user-name" placeholder="Digite o nome" value="">
                 
-                <!-- Campo para email -->
+                <!-- 
+                    Campo para email 
+                    Exibe e permite editar o endereço de email do usuário.
+                    Este campo também serve como identificador único no sistema.
+                -->
                 <label for="user-email">Email:</label>
                 <input type="email" id="user-email" name="user-email" placeholder="Digite o email" value="">
 
-                <!-- Campo para telefone -->
+                <!-- 
+                    Campo para telefone 
+                    Exibe e permite editar o número de telefone do usuário.
+                -->
                 <label for="user-telefone">Telefone:</label>
                 <input type="text" id="user-tel" name="user-telefone" placeholder="Digite o telefone" value="">
                 
-                <!-- Campo para senha -->
+                <!-- 
+                    Campo para senha 
+                    Permite definir uma nova senha para o usuário.
+                    Por segurança, a senha atual não é exibida.
+                -->
                 <label for="user-password">Senha:</label>
                 <input type="password" id="user-password" name="user-password" placeholder="Digite a senha">
                 
-                <!-- Campo para setor -->
+                <!-- 
+                    Campo para setor 
+                    Exibe e permite editar o setor de trabalho do usuário.
+                -->
                 <label for="user-sector">Setor:</label>
                 <input type="text" id="user-sector" name="user-sector" placeholder="Digite o setor" value="">
                 
-                <!-- Botões de ação -->
+                <!-- 
+                    Botões de ação 
+                    Permitem atualizar os dados ou excluir a conta do usuário.
+                -->
                 <div class="button-container">
+                    <!-- 
+                        Botão de atualização 
+                        Submete o formulário para atualizar os dados do usuário.
+                        O evento é tratado pelo script usuario.js.
+                    -->
                     <button type="submit" id="update-user">Atualizar Usuario</button>
+                    
+                    <!-- 
+                        Botão de exclusão 
+                        Inicia o processo de exclusão da conta do usuário.
+                        Exibe uma confirmação antes de prosseguir.
+                        Controlado pelo script usuario.js.
+                    -->
                     <button type="button" id="delete-user">Excluir Usuario</button>
                 </div>
             </form>
@@ -93,12 +146,23 @@
         <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
     </footer>
 
-    <!-- Scripts JavaScript comentados (não ativos) -->
-    <!-- <script src="js/autenticacao.js"></script> -->
-    <!-- <script src="js/script.js"></script>
+    <!-- Scripts JavaScript -->
+    <!-- <script src="js/autenticacao.js"></script> --> <!-- Script de autenticação (comentado/não ativo) -->
+    <!-- <script src="js/script.js"></script> --> <!-- Script global (comentado/não ativo) -->
     
     <!-- Script específico para funcionalidades de usuário -->
-    <script src="js/usuario.js" defer></script>
-     <script src="js/logout.js"></script>
+    <script src="js/usuario.js" defer></script> <!-- Carregado com atributo defer para melhor performance -->
+    <script src="js/logout.js"></script> <!-- Script para gerenciar o logout -->
+    
+    <!-- 
+        Fluxo de funcionamento da página:
+        1. Ao carregar, o usuario.js verifica se há um usuário autenticado
+        2. O script busca os dados do usuário na API usando o token JWT armazenado
+        3. Os campos do formulário são preenchidos com os dados atuais do usuário
+        4. O usuário pode editar qualquer campo e submeter o formulário para atualização
+        5. Ao clicar em "Atualizar Usuario", os dados são enviados para a API
+        6. Ao clicar em "Excluir Usuario", é exibida uma confirmação antes da exclusão
+        7. Após exclusão bem-sucedida, o usuário é redirecionado para a página de login
+    -->
 </body>
 </html>

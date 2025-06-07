@@ -1,53 +1,59 @@
 <!--
-/**
- * @file relatorio.html
- * @description Página de relatório de visita do sistema Atibainha Visits
- * @author TCC Atibainha Visits
- * @version 1.0
- * 
- * Esta página exibe um relatório detalhado de uma visita realizada,
- * incluindo informações do cliente, locais visitados e progresso da visita.
- * Permite também a geração de um PDF do relatório.
+/*
+ * Funcionalidades principais:
+ * - Exibição de dados da visita (cliente, empresa, data, hora)
+ * - Visualização de locais visitados e não visitados
+ * - Exibição de observações registradas para cada local
+ * - Indicador de progresso da visita (porcentagem de locais visitados)
+ * - Geração de relatório em PDF para download/impressão
  */
 -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <!-- Meta tags para configuração do documento -->
+    <!-- Metadados básicos da página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de Visita - Atibainha Visits</title>
     
-    <!-- Folhas de estilo -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/relatorio.css">
-    <link rel="icon" href="img/LogoTipo.png" type="image/png">
+    <!-- Arquivos CSS externos -->
+    <link rel="stylesheet" href="css/styles.css"> <!-- Estilos globais do sistema -->
+    <link rel="stylesheet" href="css/relatorio.css"> <!-- Estilos específicos para relatórios -->
+    <link rel="icon" href="img/LogoTipo.png" type="image/png"> <!-- Favicon do site -->
     
-    <!-- Font Awesome para ícones -->
+    <!-- Biblioteca de ícones Font Awesome - usada para ícones de ações -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Bibliotecas para geração de PDF -->
+    <!-- Biblioteca jsPDF para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <!-- Cabeçalho com menu de navegação -->
+    <!-- 
+        Cabeçalho com navegação 
+        Contém o logo do sistema e links para as principais áreas do aplicativo.
+    -->
     <header>
         <div class="navbar">
-            <!-- Logo do sistema -->
+            <!-- Logo do sistema - identidade visual -->
             <div class="logo">
                 <img src="img/LogoTipo.png" alt="Logo">
             </div>
             
-            <!-- Menu de navegação principal -->
+            <!-- 
+                Links de navegação principal 
+                Permite acesso às diferentes áreas do sistema.
+            -->
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="agendamentos.html">Agendamentos</a></li>
                 <li><a href="usuarios.html">Usuarios</a></li>
-                <li><a href="#" id="logout-btn">Logout</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li> <!-- Controlado pelo script logout.js -->
             </ul>
             
-            <!-- Menu hambúrguer para dispositivos móveis -->
+            <!-- 
+                Menu hambúrguer para dispositivos móveis 
+                Aparece apenas em telas pequenas e controla a exibição do menu.
+            -->
             <div class="menu-toggle" id="menu-toggle">
                 <div class="bar"></div>
                 <div class="bar"></div>
@@ -55,61 +61,97 @@
             </div>
         </div>
     </header>
-    
-    <!-- Conteúdo principal - Relatório de visita -->
+
+    <!-- 
+        Conteúdo principal da página 
+        Contém o relatório da visita com todas as informações coletadas.
+    -->
     <main>
         <div class="container">
-            <!-- Container do relatório com efeito glassmorphism -->
-            <div class="relatorio-container glassmorphism" id="relatorio-content">
+            <!-- 
+                Painel de relatório com efeito glassmorphism 
+                Contém todas as informações da visita finalizada.
+            -->
+            <div class="relatorio-container glassmorphism">
                 <!-- Título do relatório -->
                 <h1>Relatório de Visita</h1>
                 
-                <!-- Seção de informações gerais da visita -->
-                <div class="info-visita">
-                    <h2>Informações da Visita</h2>
-                    <div id="dados-visita">
-                        <!-- Dados da visita serão inseridos aqui pelo JavaScript -->
+                <!-- 
+                    Seção de dados gerais da visita 
+                    Exibe informações sobre o cliente, empresa e data/hora da visita.
+                    Preenchido dinamicamente pelo relatorio.js.
+                -->
+                <section class="secao-relatorio">
+                    <h2>Dados da Visita</h2>
+                    <div id="dados-visita" class="dados-visita">
+                        <!-- Conteúdo preenchido dinamicamente pelo JavaScript -->
                         <p>Carregando dados da visita...</p>
                     </div>
-                </div>
+                </section>
                 
-                <!-- Seção de locais visitados -->
-                <div class="locais-visitados">
-                    <h2>Locais Visitados</h2>
-                    <div id="lista-locais">
-                        <!-- Lista de locais visitados será inserida aqui pelo JavaScript -->
-                        <p>Carregando locais visitados...</p>
-                    </div>
-                </div>
-                
-                <!-- Seção de progresso da visita -->
-                <div class="progresso-container">
+                <!-- 
+                    Seção de progresso da visita 
+                    Exibe uma barra de progresso indicando a porcentagem de locais visitados.
+                -->
+                <section class="secao-relatorio">
                     <h2>Progresso da Visita</h2>
-                    <div class="wrapper-progresso">
+                    <div class="progresso-container">
                         <!-- Barra de progresso visual -->
                         <progress id="barra-progresso" value="0" max="100"></progress>
-                        <div id="texto-progresso">0%</div>
+                        <!-- Texto indicando a porcentagem de progresso -->
+                        <span id="texto-progresso">0%</span>
                     </div>
-                </div>
+                </section>
                 
-                <!-- Botões de ação -->
-                <div class="acoes">
-                    <a href="index.html" class="btn-voltar">Voltar para Home</a>
-                    <a href="agendamentos.html" class="btn-agendamentos">Ver Agendamentos</a>
-                    <button id="btn-gerar-pdf" class="btn-gerar-pdf"><i class="fas fa-file-pdf"></i> Gerar PDF</button>
+                <!-- 
+                    Seção de locais visitados 
+                    Lista todos os locais visitados e não visitados durante a visita.
+                    Preenchido dinamicamente pelo relatorio.js.
+                -->
+                <section class="secao-relatorio">
+                    <h2>Locais Visitados</h2>
+                    <div id="lista-locais" class="lista-locais">
+                        <!-- Conteúdo preenchido dinamicamente pelo JavaScript -->
+                        <p>Carregando locais visitados...</p>
+                    </div>
+                </section>
+                
+                <!-- 
+                    Botão para gerar PDF 
+                    Permite criar um arquivo PDF do relatório para download ou impressão.
+                    Controlado pelo relatorio.js.
+                -->
+                <div class="acoes-relatorio">
+                    <button id="btn-gerar-pdf" class="btn-acao">
+                        <i class="fas fa-file-pdf"></i> Gerar PDF
+                    </button>
                 </div>
             </div>
         </div>
     </main>
-    
+
     <!-- Rodapé com informações de copyright -->
     <footer>
         <label>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</label>
     </footer>
+
+    <!-- 
+        Scripts JavaScript 
+        Carregados no final do documento para melhor performance.
+    -->
+    <script src="js/script.js"></script> <!-- Script global com funções comuns -->
+    <script src="js/logout.js"></script> <!-- Script para gerenciar o logout -->
+    <script src="js/relatorio.js"></script> <!-- Script específico para relatórios -->
     
-    <!-- Scripts JavaScript -->
-    <script src="js/script.js"></script> <!-- Script principal com funcionalidades comuns -->
-    <script src="js/logout.js"></script> <!-- Script para gerenciamento de logout -->
-    <script src="js/relatorio.js"></script> <!-- Script específico para funcionalidades do relatório -->
+    <!-- 
+        Fluxo de funcionamento da página:
+        1. Ao carregar, o relatorio.js obtém o ID da visita da URL
+        2. O script busca os dados da visita finalizada na API
+        3. As informações são exibidas nas respectivas seções do relatório
+        4. A barra de progresso é atualizada com base nos locais visitados
+        5. Os locais são exibidos em duas colunas (salões e chalés)
+        6. O usuário pode gerar um PDF do relatório clicando no botão correspondente
+        7. O PDF é gerado com formatação adequada e disponibilizado para download
+    -->
 </body>
 </html>

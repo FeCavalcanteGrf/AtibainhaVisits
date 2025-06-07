@@ -1,69 +1,139 @@
+<!--
+/*
+ * Funcionalidades principais:
+ * - Visualização de todos os espaços disponíveis para visita (salões e chalés)
+ * - Marcação de locais visitados através de checkboxes
+ * - Registro de observações para cada local
+ * - Visualização de imagens dos locais em carrosséis
+ * - Indicador de progresso da visita
+ * - Finalização da visita com envio de dados para o servidor
+ */
+-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Meta tags para configuração do documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atibainha Visits</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/visita.css">
+    <title>Visita - Atibainha Visits</title>
+    
+    <!-- Folhas de estilo -->
+    <link rel="stylesheet" href="css/styles.css"> <!-- Estilos globais do sistema -->
+    <link rel="stylesheet" href="css/visita.css"> <!-- Estilos específicos para a página de visita -->
+    
+    <!-- Favicon do sistema -->
     <link rel="icon" href="img/LogoTipo.png" type="image/png">
 </head>
 <body>
-
-<header>
-    <div class="navbar">
-        <div class="logo">
-            <img src="img/LogoTipo.png" alt="Logo">
-        </div>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="agendamentos.html">Agendamentos</a></li>
-            <li><a href="usuarios.html">Usuarios</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
-        </ul>
-        <div class="menu-toggle" id="menu-toggle">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-    </div>
-</header>
-<main>
-<section class="sessao" id="sessao1">
-    <div class="glassmorphism">
-        <div class="conteudo" onclick="toggleCarrossel('carrossel1')">
-            <img src="img/Nobre01-01.jpg" alt="Nobre 01" class="imagem-capa">
-            <h2>Nobre 01</h2>
-            <input type="checkbox" class="checkbox" id="checkbox1" onchange="atualizarProgresso()">
-        </div>
-        <div id="carrossel1" class="carrossel">
-            <div class="carrossel-imagens">
-                <p class="descricao">
-                    Salão com dimensões de 13,00 x 16,20m com pé direito de 3,25m.<br>
-                    <ul class="tipos-montagem">
-                        <li><strong>Tipos de montagem</strong></li>
-                        <li>Auditório: 360 lugares.</li>
-                        <li>Espinha de Peixe / Escolar: 170 lugares.</li>
-                        <li>U: 60 lugares.</li>
-                        <li>2 U's: 80 lugares.</li>
-                        <li>Mesas Redondas: 180 lugares.</li>
-                    </ul>
-                </p>
-                <img src="img/Nobre01-01.jpg" alt="Nobre 01 - 1" class="imagem-carrossel">
-                <img src="img/Nobre01-02.jpg" alt="Nobre 01 - 2" class="imagem-carrossel">
-                <img src="img/Nobre01-03.jpg" alt="Nobre 01 - 3" class="imagem-carrossel">
-                <img src="img/Nobre01-04.jpg" alt="Nobre 01 - 4" class="imagem-carrossel">
+    <!-- 
+        Cabeçalho com menu de navegação 
+        Contém o logo do sistema e links para as principais áreas do aplicativo.
+    -->
+    <header>
+        <div class="navbar">
+            <!-- Logo do sistema - identidade visual -->
+            <div class="logo">
+                <img src="img/LogoTipo.png" alt="Logo">
             </div>
-            <button class="prev" onclick="moveCarrossel('carrossel1', -1)">&#10094;</button>
-            <button class="next" onclick="moveCarrossel('carrossel1', 1)">&#10095;</button>
+            
+            <!-- 
+                Links de navegação principal 
+                Permite acesso às diferentes áreas do sistema.
+            -->
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="agendamentos.html">Agendamentos</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li> <!-- Controlado pelo script logout.js -->
+            </ul>
+            
+            <!-- 
+                Menu hambúrguer para dispositivos móveis 
+                Aparece apenas em telas pequenas e controla a exibição do menu.
+            -->
+            <div class="menu-toggle" id="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
         </div>
-        <div class="observacao-container">
-            <textarea class="observacao-input" id="observacao-sessao1" placeholder="Digite suas observações sobre este local..."></textarea>
-        </div>
-    </div>
-</section>
+    </header>
 
-<section class="sessao" id="sessao2">
+    <!-- 
+        Conteúdo principal - Seções de visita 
+        Contém todas as áreas do hotel que podem ser visitadas,
+        organizadas em seções com imagens, checkboxes e campos para observações.
+    -->
+    <main>
+        <!-- 
+            Título da seção de salões 
+            Agrupa visualmente os espaços para eventos.
+        -->
+        <div class="glassmorphism">
+            <h1>Salões</h1>
+        </div>
+
+        <!-- 
+            Seção 1: Salão Nobre 
+            Cada seção segue o mesmo padrão:
+            1. Container com efeito glassmorphism
+            2. Conteúdo com imagem de capa, título e checkbox para marcar como visitado
+            3. Carrossel de imagens que pode ser expandido/recolhido
+            4. Campo para observações sobre o local
+        -->
+        <section class="sessao" id="sessao1">
+            <div class="glassmorphism">
+                <!-- Conteúdo principal com imagem, título e checkbox -->
+                <div class="conteudo" onclick="toggleCarrossel('carrossel1')">
+                    <img src="img/Nobre01-01.jpg" alt="Salão Nobre" class="imagem-capa">
+                    <h2>Salão Nobre</h2>
+                    <!-- Checkbox para marcar local como visitado - atualiza o progresso automaticamente -->
+                    <input type="checkbox" class="checkbox" id="checkbox1" onchange="atualizarProgresso()">
+                </div>
+                
+                <!-- 
+                    Carrossel de imagens 
+                    Exibe múltiplas fotos do local que podem ser navegadas.
+                    Inicialmente oculto, exibido ao clicar no conteúdo principal.
+                -->
+                <div id="carrossel1" class="carrossel">
+                    <div class="carrossel-imagens">
+                        <!-- Descrição do local com informações detalhadas -->
+                        <p class="descricao">
+                            Salão com dimensões de 15,00 x 25,00m com pé direito de 3,20m.<br>
+                            <ul class="tipos-montagem">
+                                <li><strong>Tipos de montagem</strong></li>
+                                <li>Auditório: 500 lugares.</li>
+                                <li>Espinha de Peixe / Escolar: 250 lugares.</li>
+                                <li>U: 80 lugares.</li>
+                                <li>2 U's: 120 lugares.</li>
+                                <li>Mesas Redondas: 300 lugares.</li>
+                            </ul>
+                        </p>
+                        <!-- Imagens do carrossel -->
+                        <img src="img/Nobre01-01.jpg" alt="Nobre - 1" class="imagem-carrossel">
+                        <img src="img/Nobre01-02.jpg" alt="Nobre - 2" class="imagem-carrossel">
+                        <img src="img/Nobre01-03.jpg" alt="Nobre - 3" class="imagem-carrossel">
+                        <img src="img/Nobre01-04.jpg" alt="Nobre - 4" class="imagem-carrossel">
+                    </div>
+                    <!-- Botões de navegação do carrossel -->
+                    <button class="prev" onclick="moveCarrossel('carrossel1', -1)">&#10094;</button>
+                    <button class="next" onclick="moveCarrossel('carrossel1', 1)">&#10095;</button>
+                </div>
+                
+                <!-- 
+                    Campo para observações 
+                    Permite registrar comentários sobre o local visitado.
+                    Estas observações serão incluídas no relatório final.
+                -->
+                <div class="observacao-container">
+                    <textarea class="observacao-input" id="observacao-sessao1" placeholder="Digite suas observações sobre este local..."></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 2: Salão Nobre 02 (estrutura similar às demais seções) -->
+        <section class="sessao" id="sessao2">
     <div class="glassmorphism">
         <div class="conteudo" onclick="toggleCarrossel('carrossel2')">
             <img src="img/Nobre02-01.jpg" alt="Nobre 02" class="imagem-capa">
@@ -363,36 +433,45 @@
     </div>
 </section>
 
-<div class="glassmorphism">
-    <h1>Chalés</h1>
-</div>
-
-<section class="sessao" id="sessao11">
-    <div class="glassmorphism">
-        <div class="conteudo" onclick="toggleCarrossel('carrossel11')">
-            <img src="img/Standart01.jpg" alt="Chalé Standart" class="imagem-capa">
-            <h2>Chalé Standart</h2>
-            <input type="checkbox" class="checkbox" id="checkbox11" onchange="atualizarProgresso()">
+        <!-- 
+            Título da seção de chalés 
+            Agrupa visualmente os diferentes tipos de acomodações.
+        -->
+        <div class="glassmorphism">
+            <h1>Chalés</h1>
         </div>
-        <div id="carrossel11" class="carrossel">
-            <div class="carrossel-imagens">
-                <p class="descricao">
-                    Chalé com acomodações padrões e preço acessível.
-                </p>
-                <img src="img/Standart01.jpg" alt="Standart - 1" class="imagem-carrossel">
-                <img src="img/Standart02.jpg" alt="Standart - 2" class="imagem-carrossel">
-                <img src="img/Standart03.jpg" alt="Standart - 3" class="imagem-carrossel">
+
+        <!-- 
+            Seção 11: Chalé Standart 
+            Primeira seção de chalés, seguindo o mesmo padrão das seções anteriores.
+        -->
+        <section class="sessao" id="sessao11">
+            <div class="glassmorphism">
+                <div class="conteudo" onclick="toggleCarrossel('carrossel11')">
+                    <img src="img/Standart01.jpg" alt="Chalé Standart" class="imagem-capa">
+                    <h2>Chalé Standart</h2>
+                    <input type="checkbox" class="checkbox" id="checkbox11" onchange="atualizarProgresso()">
+                </div>
+                <div id="carrossel11" class="carrossel">
+                    <div class="carrossel-imagens">
+                        <p class="descricao">
+                            Chalé com acomodações padrões e preço acessível.
+                        </p>
+                        <img src="img/Standart01.jpg" alt="Standart - 1" class="imagem-carrossel">
+                        <img src="img/Standart02.jpg" alt="Standart - 2" class="imagem-carrossel">
+                        <img src="img/Standart03.jpg" alt="Standart - 3" class="imagem-carrossel">
+                    </div>
+                    <button class="prev" onclick="moveCarrossel('carrossel11', -1)">&#10094;</button>
+                    <button class="next" onclick="moveCarrossel('carrossel11', 1)">&#10095;</button>
+                </div>
+                <div class="observacao-container">
+                    <textarea class="observacao-input" id="observacao-sessao11" placeholder="Digite suas observações sobre este local..."></textarea>
+                </div>
             </div>
-            <button class="prev" onclick="moveCarrossel('carrossel11', -1)">&#10094;</button>
-            <button class="next" onclick="moveCarrossel('carrossel11', 1)">&#10095;</button>
-        </div>
-        <div class="observacao-container">
-            <textarea class="observacao-input" id="observacao-sessao11" placeholder="Digite suas observações sobre este local..."></textarea>
-        </div>
-    </div>
-</section>
+        </section>
 
-<section class="sessao" id="sessao12">
+        <!-- Demais seções de chalés seguem o mesmo padrão -->
+        <section class="sessao" id="sessao12">
     <div class="glassmorphism">
         <div class="conteudo" onclick="toggleCarrossel('carrossel12')">
             <img src="img/Family1D01.jpg" alt="Chalé Family 1D" class="imagem-capa">
@@ -493,18 +572,44 @@
     </div>
 </section>
 
-<div class="barra-progresso-container">
-    <div class="barra-progresso-wrapper">
-        <progress id="barra-progresso" value="0" max="100"></progress>
-        <span id="porcentagem-progresso">0%</span>
-    </div>
-    <button id="finalizar-visita" class="btn-finalizar">Finalizar Visita</button>
-</div>
+        <!-- 
+            Barra de progresso da visita 
+            Exibe visualmente o percentual de locais visitados.
+            Atualizada automaticamente quando os checkboxes são marcados/desmarcados.
+        -->
+        <div class="barra-progresso-container">
+            <div class="barra-progresso-wrapper">
+                <!-- Barra de progresso visual -->
+                <progress id="barra-progresso" value="0" max="100"></progress>
+                <!-- Texto indicando a porcentagem de progresso -->
+                <span id="porcentagem-progresso">0%</span>
+            </div>
+            <!-- 
+                Botão para finalizar a visita 
+                Ao ser clicado, chama a função finalizarVisita() que coleta todos os dados
+                e envia para o servidor, redirecionando para a página de relatório.
+            -->
+            <button id="finalizar-visita" class="btn-finalizar">Finalizar Visita</button>
+        </div>
+    </main>
 
-</main>
-
-<script src="js/script.js"></script>
-<script src="js/logout.js"></script>
-<script src="js/visita.js"></script>
+    <!-- Scripts JavaScript -->
+    <script src="js/script.js"></script> <!-- Script global com funções comuns -->
+    <script src="js/logout.js"></script> <!-- Script para gerenciar o logout -->
+    <script src="js/visita.js"></script> <!-- Script específico para funcionalidades da visita -->
+    
+    <!-- 
+        Fluxo de funcionamento da página:
+        1. Ao carregar, o visita.js verifica se há um ID de visita na URL
+        2. Se houver, os dados da visita são carregados da API
+        3. O usuário navega pelos diferentes locais, marcando os visitados
+        4. Para cada local, o usuário pode:
+           - Ver imagens no carrossel clicando no conteúdo principal
+           - Marcar o local como visitado usando o checkbox
+           - Registrar observações no campo de texto
+        5. A barra de progresso é atualizada automaticamente
+        6. Ao finalizar, todos os dados são coletados e enviados para a API
+        7. O usuário é redirecionado para a página de relatório com o resumo da visita
+    -->
 </body>
 </html>

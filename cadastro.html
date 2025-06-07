@@ -1,12 +1,10 @@
 <!--
-/**
- * @file cadastro.html
- * @description Página de cadastro de novos usuários no sistema Atibainha Visits
- * @author TCC Atibainha Visits
- * @version 1.0
- * 
- * Esta página permite que novos usuários criem uma conta no sistema,
- * coletando informações pessoais e profissionais necessárias para o acesso.
+/*
+ * Funcionalidades principais:
+ * - Formulário de cadastro com validação de campos
+ * - Verificação de senhas correspondentes
+ * - Envio de dados para API de cadastro
+ * - Redirecionamento para login após cadastro bem-sucedido
  */
 -->
 <!DOCTYPE html>
@@ -43,11 +41,11 @@
         
         <!-- Links de navegação para autenticação -->
         <ul class="nav-links" id="nav-links">
-            <li><a href="login.html">Entrar</a></li>
-            <li><a href="cadastro.html">Cadastre-se</a></li>
+            <li><a href="login.html">Entrar</a></li> <!-- Link para página de login -->
+            <li><a href="cadastro.html">Cadastre-se</a></li> <!-- Link para página atual (cadastro) -->
         </ul>
         
-        <!-- Menu hambúrguer para dispositivos móveis -->
+        <!-- Menu hambúrguer para dispositivos móveis - controlado por JavaScript -->
         <div class="menu-toggle" id="menu-toggle">
             <div class="bar"></div>
             <div class="bar"></div>
@@ -56,51 +54,52 @@
   </header>
   
   <!-- Conteúdo principal - Formulário de cadastro -->
-  <main class="main-content" style="padding: 20px;">
-    <form class="form-cadastro" id="cadastro-form" style="max-width: 500px; margin: auto;">
+  <main class="main-content">
+    <!-- Formulário de cadastro com ID para manipulação via JavaScript -->
+    <form class="form-cadastro" id="cadastro-form">
         <!-- Título do formulário -->
         <h1>Crie Sua Conta</h1>
         
-      <!-- Campo para nome completo -->
+      <!-- Campo para nome completo - obrigatório -->
       <div class="inputs">
         <Label for="nome">Nome Completo</Label>
         <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
       </div>
 
-      <!-- Campo para e-mail -->
+      <!-- Campo para e-mail - obrigatório e com validação de formato -->
       <div class="inputs">
         <label for="email">E-mail</label>
         <input type="email" id="email" name="email" autocomplete="off" placeholder="Digite seu e-mail aqui" required>
       </div>
 
-      <!-- Campo para criação de senha -->
+      <!-- Campo para criação de senha - obrigatório -->
       <div class="inputs">
         <label for="senha">Crie uma senha</label>
         <input type="password" id="senha" name="senha" autocomplete="on" placeholder="Digite sua senha" required>
       </div>
 
-      <!-- Campo para confirmação de senha -->
+      <!-- Campo para confirmação de senha - obrigatório e verificado via JavaScript -->
       <div class="inputs">
         <label for="confirmaSenha">Confirme sua senha</label>
         <input type="password" id="confirmaSenha" placeholder="Confirme sua senha" required>
       </div>
 
-      <!-- Campo para telefone -->
+      <!-- Campo para telefone - obrigatório -->
       <div class="inputs">
         <label for="telefone">Insira seu Telefone</label>
         <input type="tel" id="telefone" name="telefone" placeholder="Digite seu telefone" required>
       </div>
 
-      <!-- Campo para setor de trabalho -->
+      <!-- Campo para setor de trabalho - obrigatório -->
       <div class="inputs">
          <label for="setor">Setor de Trabalho</label>
          <input type="text" id="setor" name="setor" placeholder="Digite seu setor de trabalho" required>
       </div>
 
-      <!-- Botão de submissão do formulário -->
+      <!-- Botão de submissão do formulário - aciona evento de envio tratado pelo JavaScript -->
       <button type="submit" class="btn-criarconta">Criar conta</button>
       
-      <!-- Link para página de login -->
+      <!-- Link para página de login caso o usuário já tenha conta -->
       <p class="link-de-login">Já tem uma conta? <a href="login.html">Faça login</a></p>
     </form>
 </main>
@@ -109,5 +108,14 @@
 <footer class="footerVisita">
   <p>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</p>
 </footer>
+
+<!-- 
+  Fluxo de funcionamento:
+  1. Usuário preenche todos os campos do formulário
+  2. JavaScript valida os dados (correspondência de senhas, formato de e-mail, etc.)
+  3. Dados são enviados para a API via requisição AJAX/Fetch
+  4. Em caso de sucesso, usuário é redirecionado para a página de login
+  5. Em caso de erro, mensagens apropriadas são exibidas ao usuário
+-->
 </body>
 </html>

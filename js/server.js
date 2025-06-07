@@ -1,10 +1,11 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise'); // Usando mysql2 com promises para melhorar o controle assíncrono
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-const bcryptjs = require('bcryptjs'); // Usando bcryptjs em vez de bcrypt
+const bcryptjs = require('bcryptjs'); // Usando bcryptjs para hash de senhas
 const jwt = require('jsonwebtoken');
+const ratelimit = require('express-rate-limit'); // Importando express-rate-limit para limitar requisições
+const helmet = require('helmet'); // Importando helmet para segurança adicional
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -12,27 +13,50 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-// Configuração do banco de dados
-const connection = mysql.createConnection({
+// Pool de conexões MySQL para melhor gerenciamento de conexões e performance
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10, // Para limitar o número de conexões simultâneas a 10 
+  queueLimit: 0, // Para não haver limite de fila de conexões
+  connectTimeout: 60000 // Tempo máximo de espera pela conexão (60 segundos)
 });
 
 // Conectar ao banco de dados
-connection.connect(err => {
-  if (err) {
-    console.error('Erro ao conectar ao banco de dados:', err);
-    return;
+const verificarConexaoBanco = async () => {
+  try {
+    const connection = await pool.getConnection();
+    console.log('Conexão com o banco de dados foi estabelecida com sucesso!');
+    connection.release();
+  } catch (error) {
+    console.log('Erro na conexão com o banco de dados:', error);
+    process.exit(1); // Encerrar o processo se não conseguir conectar
   }
-  console.log('Conectado ao banco de dados MySQL');
+};
+
+// Configurando o rate limiting para a prevenção de de ataques de força bruta e etc...
+const limiteGeral = ratelimit({
+  windowMs: 15 * 60 * 1000, // janela de tempo na qual as requisições são contadas (15 minutos)
+  max: 100, // Define o numero máximo de requisições que um IP dentro da janela de tempo determinada (15 Minutos)
+  message: {message:'Foram feita muitas requisições, tente novamente após 15 minutos.'}
 });
 
+const limiteLogin = ratelimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 5, // Limitação de 5 tentativas por IP por janela de tempo 
+  message: {message:'Foram feita muitas tentativas de login, tente novamente após 15 minutos.'}
+})
+
+
 // Middleware
+app.use(helmet()); // Proteção contra vulnerabilidades comuns
+app.use(limiteGeral); // Aplicar o rate limiting geral
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' })); // Limitar o tamanho do corpo da requisição para 10MB
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Limitar o tamanho do corpo da requisição para 10MB
 
 // Middleware para tratamento de erros
 app.use((err, _req, res, _next) => {
@@ -75,20 +99,18 @@ app.get('/verificar-token', verificarToken, (req, res) => {
 });
 
 // Rota para login
-app.post('/login', (req, res) => {
-  const { email, senha } = req.body;
-  
-  if (!email || !senha) {
-    return res.status(400).json({ message: 'Email e senha são obrigatórios' });
-  }
-  
-  const query = 'SELECT * FROM tb_usuarios WHERE tb_email = ?';
-  
-  connection.query(query, [email], async (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar usuário:', err);
-      return res.status(500).json({ message: 'Erro ao fazer login' });
+app.post('/login', limiteLogin, async (req, res) => {
+  try {
+    const { email, senha } = req.body;
+    
+    if (!email || !senha) {
+      return res.status(400).json({ message: 'Email e senha são obrigatórios' });
     }
+    
+    const query = 'SELECT * FROM tb_usuarios WHERE tb_email = ?';
+    
+    // Usando o pool de conexões com promises
+    const [results] = await pool.query(query, [email]);
     
     if (results.length === 0) {
       return res.status(401).json({ message: 'Email ou senha incorretos' });
@@ -96,33 +118,31 @@ app.post('/login', (req, res) => {
     
     const usuario = results[0];
     
-    try {
-      // Verificar senha
-      const senhaCorreta = await bcryptjs.compare(senha, usuario.tb_senha);
-      
-      if (!senhaCorreta) {
-        return res.status(401).json({ message: 'Email ou senha incorretos' });
-      }
-      
-      // Gerar token JWT com userId (não id)
-      const token = jwt.sign(
-        { userId: usuario.tb_id, email: usuario.tb_email },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
-      
-      res.status(200).json({
-        message: 'Login realizado com sucesso',
-        token,
-        userId: usuario.tb_id,
-        nome: usuario.tb_nome,
-        email: usuario.tb_email
-      });
-    } catch (error) {
-      console.error('Erro ao verificar senha:', error);
-      res.status(500).json({ message: 'Erro ao fazer login' });
+    // Verificar senha
+    const senhaCorreta = await bcryptjs.compare(senha, usuario.tb_senha);
+    
+    if (!senhaCorreta) {
+      return res.status(401).json({ message: 'Email ou senha incorretos' });
     }
-  });
+    
+    // Gerar token JWT
+    const token = jwt.sign(
+      { userId: usuario.tb_id, email: usuario.tb_email },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    
+    res.status(200).json({
+      message: 'Login realizado com sucesso',
+      token,
+      userId: usuario.tb_id,
+      nome: usuario.tb_nome,
+      email: usuario.tb_email
+    });
+  } catch (error) {
+    console.error('Erro ao fazer login:', error);
+    res.status(500).json({ message: 'Erro ao fazer login' });
+  }
 });
 
 // Rota para cadastrar usuário
@@ -138,43 +158,27 @@ app.post('/cadastrar-usuario', async (req, res) => {
     
     // Verificar se o email já está em uso
     const queryVerificar = 'SELECT tb_id FROM tb_usuarios WHERE tb_email = ?';
+    const [results] = await pool.query(queryVerificar, [email]);
     
-    connection.query(queryVerificar, [email], async (err, results) => {
-      if (err) {
-        console.error('Erro ao verificar email:', err);
-        return res.status(500).json({ message: 'Erro ao cadastrar usuário' });
-      }
-      
-      if (results.length > 0) {
-        console.log('Email já está em uso:', email);
-        return res.status(400).json({ message: 'Este email já está em uso' });
-      }
-      
-      try {
-        // Hash da senha
-        const salt = await bcryptjs.genSalt(10);
-        const senhaHash = await bcryptjs.hash(senha, salt);
-        
-        // Inserir novo usuário
-        const queryCadastrar = 'INSERT INTO tb_usuarios (tb_nome, tb_email, tb_senha, tb_telefone, tb_setor) VALUES (?, ?, ?, ?, ?)';
-        
-        connection.query(queryCadastrar, [nome, email, senhaHash, telefone || null, setor || null], (err, results) => {
-          if (err) {
-            console.error('Erro ao cadastrar usuário:', err);
-            return res.status(500).json({ message: 'Erro ao cadastrar usuário' });
-          }
-          
-          console.log('Usuário cadastrado com sucesso:', { id: results.insertId, nome, email });
-          res.status(201).json({
-            message: 'Usuário cadastrado com sucesso',
-            userId: results.insertId
-          });
-        });
-      } catch (error) {
-        console.error('Erro ao gerar hash da senha:', error);
-        res.status(500).json({ message: 'Erro ao processar senha' });
-      }
+    if (results.length > 0) {
+      console.log('Email já está em uso:', email);
+      return res.status(400).json({ message: 'Este email já está em uso' });
+    }
+    
+    // Hash da senha
+    const salt = await bcryptjs.genSalt(10);
+    const senhaHash = await bcryptjs.hash(senha, salt);
+    
+    // Inserir novo usuário
+    const queryCadastrar = 'INSERT INTO tb_usuarios (tb_nome, tb_email, tb_senha, tb_telefone, tb_setor) VALUES (?, ?, ?, ?, ?)';
+    const [result] = await pool.query(queryCadastrar, [nome, email, senhaHash, telefone || null, setor || null]);
+    
+    console.log('Usuário cadastrado com sucesso:', { id: result.insertId, nome, email });
+    res.status(201).json({
+      message: 'Usuário cadastrado com sucesso',
+      userId: result.insertId
     });
+    
   } catch (error) {
     console.error('Erro ao processar cadastro:', error);
     res.status(500).json({ message: 'Erro ao cadastrar usuário' });
@@ -182,50 +186,41 @@ app.post('/cadastrar-usuario', async (req, res) => {
 });
 
 // Rota para listar todos os usuários
-app.get('/usuarios', verificarToken, (_req, res) => {
-  const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios';
-  
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar usuários:', err);
-      return res.status(500).json({ message: 'Erro ao buscar usuários' });
-    }
-    
+app.get('/usuarios', verificarToken, async (_req, res) => {
+  try {
+    const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios';
+    const [results] = await pool.query(query);
     res.status(200).json(results);
-  });
+  } catch (err) {
+    console.error('Erro ao buscar usuários:', err);
+    res.status(500).json({ message: 'Erro ao buscar usuários' });
+  }
 });
 
 // Rota para obter um usuário específico
-app.get('/usuario/:id', verificarToken, (req, res) => {
-  const userId = req.params.id;
-  
-  const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios WHERE tb_id = ?';
-  
-  connection.query(query, [userId], (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar usuário:', err);
-      return res.status(500).json({ message: 'Erro ao buscar usuário' });
-    }
+app.get('/usuario/:id', verificarToken, async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios WHERE tb_id = ?';
+    const [results] = await pool.query(query, [userId]);
     
     if (results.length === 0) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
     
     res.status(200).json(results[0]);
-  });
+  } catch (err) {
+    console.error('Erro ao buscar usuário:', err);
+    res.status(500).json({ message: 'Erro ao buscar usuário' });
+  }
 });
 
 // Rota para obter informações do usuário logado
-app.get('/user-info', verificarToken, (req, res) => {
-  const userId = req.query.userId || req.userId;
-  
-  const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios WHERE tb_id = ?';
-  
-  connection.query(query, [userId], (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar informações do usuário:', err);
-      return res.status(500).json({ message: 'Erro ao buscar informações do usuário' });
-    }
+app.get('/user-info', verificarToken, async (req, res) => {
+  try {
+    const userId = req.query.userId || req.userId;
+    const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios WHERE tb_id = ?';
+    const [results] = await pool.query(query, [userId]);
     
     if (results.length === 0) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
@@ -239,21 +234,20 @@ app.get('/user-info', verificarToken, (req, res) => {
       tel: usuario.tb_telefone,
       setor: usuario.tb_setor
     });
-  });
+  } catch (err) {
+    console.error('Erro ao buscar informações do usuário:', err);
+    return res.status(500).json({ message: 'Erro ao buscar informações do usuário' });
+  }
 });
 
 // Rota para atualizar um usuário
 app.post('/update-user', verificarToken, async (req, res) => {
-  const { userId, nome, email, senha, tel, setor } = req.body;
-  
-  // Verificar se o usuário existe
-  const queryVerificar = 'SELECT * FROM tb_usuarios WHERE tb_id = ?';
-  
-  connection.query(queryVerificar, [userId], async (err, results) => {
-    if (err) {
-      console.error('Erro ao verificar usuário:', err);
-      return res.status(500).json({ message: 'Erro ao atualizar usuário' });
-    }
+  try {
+    const { userId, nome, email, senha, tel, setor } = req.body;
+    
+    // Verificar se o usuário existe
+    const queryVerificar = 'SELECT * FROM tb_usuarios WHERE tb_id = ?';
+    const [results] = await pool.query(queryVerificar, [userId]);
     
     if (results.length === 0) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
@@ -269,13 +263,8 @@ app.post('/update-user', verificarToken, async (req, res) => {
     
     // Se a senha foi fornecida, fazer hash
     if (senha) {
-      try {
-        const salt = await bcryptjs.genSalt(10);
-        dadosAtualizacao.tb_senha = await bcryptjs.hash(senha, salt);
-      } catch (error) {
-        console.error('Erro ao gerar hash da senha:', error);
-        return res.status(500).json({ message: 'Erro ao processar senha' });
-      }
+      const salt = await bcryptjs.genSalt(10);
+      dadosAtualizacao.tb_senha = await bcryptjs.hash(senha, salt);
     }
     
     // Se não houver dados para atualizar
@@ -289,30 +278,23 @@ app.post('/update-user', verificarToken, async (req, res) => {
     valores.push(userId); // Adicionar o ID ao final para a cláusula WHERE
     
     const queryAtualizar = `UPDATE tb_usuarios SET ${campos} WHERE tb_id = ?`;
+    await pool.query(queryAtualizar, valores);
     
-    connection.query(queryAtualizar, valores, (err, _results) => {
-      if (err) {
-        console.error('Erro ao atualizar usuário:', err);
-        return res.status(500).json({ message: 'Erro ao atualizar usuário' });
-      }
-      
-      res.status(200).json({ message: 'Usuário atualizado com sucesso' });
-    });
-  });
+    res.status(200).json({ message: 'Usuário atualizado com sucesso' });
+  } catch (error) {
+    console.error('Erro ao atualizar usuário:', error);
+    res.status(500).json({ message: 'Erro ao atualizar usuário' });
+  }
 });
 
 // Rota para excluir um usuário
-app.post('/delete-user', verificarToken, (req, res) => {
-  const { email } = req.body;
-  
-  // Verificar se o usuário existe
-  const queryVerificar = 'SELECT tb_id FROM tb_usuarios WHERE tb_email = ?';
-  
-  connection.query(queryVerificar, [email], (err, results) => {
-    if (err) {
-      console.error('Erro ao verificar usuário:', err);
-      return res.status(500).json({ message: 'Erro ao excluir usuário' });
-    }
+app.post('/delete-user', verificarToken, async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Verificar se o usuário existe
+    const queryVerificar = 'SELECT tb_id FROM tb_usuarios WHERE tb_email = ?';
+    const [results] = await pool.query(queryVerificar, [email]);
     
     if (results.length === 0) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
@@ -320,16 +302,13 @@ app.post('/delete-user', verificarToken, (req, res) => {
     
     // Excluir o usuário
     const queryExcluir = 'DELETE FROM tb_usuarios WHERE tb_email = ?';
+    await pool.query(queryExcluir, [email]);
     
-    connection.query(queryExcluir, [email], (err, _results) => {
-      if (err) {
-        console.error('Erro ao excluir usuário:', err);
-        return res.status(500).json({ message: 'Erro ao excluir usuário' });
-      }
-      
-      res.status(200).json({ message: 'Usuário excluído com sucesso' });
-    });
-  });
+    res.status(200).json({ message: 'Usuário excluído com sucesso' });
+  } catch (error) {
+    console.error('Erro ao excluir usuário:', error);
+    res.status(500).json({ message: 'Erro ao excluir usuário' });
+  }
 });
 
 // Rota para obter todas as visitas
@@ -554,7 +533,20 @@ app.get('/api/verificar-visita-finalizada/:id', (req, res) => {
   });
 });
 
-// Iniciar o servidor
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
+// Inicialização do servidor
+const inicializarServidor = async () => {
+  {
+    try {
+      await verificarConexaoBanco();
+      
+      app.listen(port, () => {
+        console.log(`🚀 Servidor rodando na porta ${port}`);
+      });
+    } catch (error) {
+      console.error('❌ Falha ao iniciar servidor:', error);
+      process.exit(1);
+    }
+  }
+}
+// Chamar a função para inicializar o servidor
+inicializarServidor();

@@ -15,31 +15,40 @@ document.getElementById('login-form').addEventListener('submit', async function(
   }
   
   try {
-  const response = await fetch('http://localhost:3000/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email, senha })
-  });
+    const response = await fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, senha })
+    });
 
-  if (!response.ok) {
-   const errorText = await response.text();
-   throw new Error(errorText);
-  } 
-   const data = await response.json();
+    const data = await response.json();
+    
+    if (!response.ok) {
+      // Se o limitador de login foi acionado, o servidor retornará um status de erro
+      // com uma mensagem específica que podemos mostrar ao usuário
+      throw new Error(data.message || 'Erro ao fazer login');
+    }
 
-   localStorage.setItem('token', data.token);
-   localStorage.setItem('userId', data.userId);
-   localStorage.setItem('userName', data.nome);
-   
-   console.log('Login feito com sucesso:', {userId: data.userId, nome: data.nome});
-   alert('Login realizado com sucesso!');
-   window.location.href = './index.html';
+    // Armazenar dados do usuário no localStorage
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('userId', data.userId);
+    localStorage.setItem('userName', data.nome);
+    
+    console.log('Login feito com sucesso:', {userId: data.userId, nome: data.nome});
+    alert('Login realizado com sucesso!');
+    window.location.href = './index.html';
   } 
   catch (error) {
     console.error('Erro ao fazer login:', error);
-    alert('Ocorreu um erro ao fazer login.' + ' Verifique suas credenciais e tente novamente.');
+    
+    // Mensagem personalizada para limite de tentativas excedido
+    if (error.message.includes('muitas tentativas')) {
+      alert('Limite de tentativas excedido. Por favor, aguarde 15 minutos antes de tentar novamente.');
+    } else {
+      alert('Ocorreu um erro ao fazer login. Verifique suas credenciais e tente novamente.');
+    }
   }
 });
 

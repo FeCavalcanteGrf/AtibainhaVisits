@@ -99,30 +99,17 @@ document.addEventListener('DOMContentLoaded', function() {
       try {
         console.log('🔄 Iniciando requisição para atualizar usuário');
         
-        // Decodificar o token para obter as informações do usuário
-        const decodedToken = JSON.parse(atob(token.split('.')[1]));
-        console.log('🔑 Dados do token decodificado:', decodedToken);
-        
-        // Verificar se o token contém userId (nova versão) ou id (versão antiga)
-        const tokenUserId = decodedToken.userId || decodedToken.id;
-        console.log('🔑 ID do usuário no token:', tokenUserId);
-        console.log('🔑 ID do usuário no localStorage:', userId);
-        
-        // Remover a verificação rigorosa de ID para evitar problemas
-        // Usar o ID do localStorage para a atualização
-        
         const response = await fetch('http://localhost:3000/update-user', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({ userId, nome, email, setor, senha, tel }) // Usa o ID do localStorage
+          body: JSON.stringify({ userId, nome, email, setor, senha, tel })
         });
         
         console.log('📊 Status da resposta de atualização:', response.status);
         
-        // Primeiro verifica se a resposta está ok antes de tentar converter para JSON
         if (!response.ok) {
           console.error('❌ Resposta de atualização não ok:', response.status, response.statusText);
           const errorData = await response.json().catch(() => {

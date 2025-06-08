@@ -1,145 +1,101 @@
-<!--
-/*
- * Funcionalidades principais:
- * - Formulário de login com validação de campos
- * - Autenticação via API com JWT
- * - Armazenamento de token de autenticação em localStorage
- * - Redirecionamento para página principal após login bem-sucedido
- * - Link para cadastro de novos usuários
- */
--->
+
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <!-- Metadados básicos da página -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Atibainha Visits</title>
+<html lang="en">
+  <head>
+    <!-- Meta tags para configuração do documento -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     
+    <!-- Script de validação do formulário -->
+    <script src="js/login.js" defer></script>
     
     <!-- Favicon do sistema -->
-    <link rel="icon" href="img/LogoTipo.png" type="image/png">
-    
-    <!-- Folha de estilos específica para login -->
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="icon" href="img/LogoTipo.png" type="image/png" />
     
     <!-- Importação de fontes do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">
-</head>
-<body>
-    <!-- 
-        Cabeçalho com navegação simplificada 
-        Contém apenas o logo e links para login/cadastro.
-    -->
-    <header>
-        <div class="navbar">
-            <!-- Logo do sistema - identidade visual -->
-            <div class="logo">
-                <img src="img/LogoTipo.png" alt="Logo">
-            </div>
-            
-            <!-- 
-                Links de navegação para autenticação 
-                Permite alternar entre login e cadastro.
-            -->
-            <ul class="nav-links" id="nav-links">
-                <li><a href="login.html">Entrar</a></li> <!-- Link para página atual (login) -->
-                <li><a href="cadastro.html">Cadastre-se</a></li> <!-- Link para página de cadastro -->
-            </ul>
-            
-            <!-- 
-                Menu hambúrguer para dispositivos móveis 
-                Aparece apenas em telas pequenas e controla a exibição do menu.
-            -->
-            <div class="menu-toggle" id="menu-toggle">
-                <div class="bar"></div>
-                <div class="bar"></div>
-            </div>
-        </div>
-    </header>
     
-    <!-- 
-        Conteúdo principal - Formulário de login 
-        Contém o formulário para autenticação no sistema.
-    -->
-    <main class="main-content">
-        <!-- 
-            Formulário de login 
-            Captura as credenciais do usuário e envia para autenticação.
-            Controlado pelo script login.js.
-        -->
-        <form class="form-login" id="login-form">
-            <!-- Título do formulário -->
-            <h1>Login</h1>
-            
-            <!-- 
-                Campo para e-mail 
-                Identificador do usuário no sistema.
-                Validado pelo navegador (type="email") e pelo JavaScript.
-            -->
-            <div class="inputs">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" autocomplete="off" placeholder="Digite seu e-mail aqui" required>
+    <!-- Folha de estilos específica para login -->
+    <link rel="stylesheet" href="css/login.css" />
+    
+    <title>Login Atibainha</title>
+  </head>
+  <body>
+    <!-- Container principal da página -->
+    <div id="page" class="flex">
+      <div>
+        <!-- Conteúdo principal - Formulário de login -->
+        <main>
+            <!-- Cabeçalho do formulário -->
+            <div class="headline">
+            <img src="img/LogoTipo.png" alt="LogoTipo">
+            <h1>Acesso Restrito</h1>
+
+            <p>
+              Faça login para continuar ou registre-se para começar a usar nossa
+              plataforma.
+            </p>
+          </div>
+          
+          <!-- Formulário de autenticação -->
+          <form method="post" action="index.html" id="login-form">
+            <!-- Campo para e-mail -->
+            <div class="input-wrapper">
+              <label for="email">E-mail</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                placeholder="Digite seu e-mail"
+              />
             </div>
-            
-            <!-- 
-                Campo para senha 
-                Credencial secreta do usuário.
-                Inclui botão para mostrar/ocultar a senha.
-            -->
-            <div class="inputs">
-                <label for="senha">Senha</label>
-                <div class="senha-container">
-                    <!-- Campo de senha com visibilidade controlada pelo JavaScript -->
-                    <input type="password" id="senha" name="senha" autocomplete="on" placeholder="Digite sua senha" required>
-                    
-                    <!-- 
-                        Botão para alternar visibilidade da senha 
-                        Controlado pelo script login.js.
-                        Alterna entre mostrar e ocultar o texto da senha.
-                    -->
-                    <button type="button" id="toggle-senha" class="toggle-senha">
-                        <img src="img/eye.svg" alt="Mostrar senha" id="eye-icon">
-                    </button>
+
+            <!-- Campo para senha com funcionalidade de mostrar/ocultar -->
+            <div class="input-wrapper">
+                <div class="label-wrapper flex">
+                    <label for="senha">Senha</label>
+                    <!-- <a href="#">Esqueceu a senha? </a> -->
                 </div>
+                
+                <input 
+                type="password"
+                id="senha"
+                required
+                placeholder="Digite sua senha"
+                />
+                
+                <!-- Ícones para alternar visibilidade da senha -->
+                <img 
+                onclick="togglePassword()"
+                class="eye"
+                src="img/eye-off.svg"
+                alt="ocultador de senha">
+                
+                <img 
+                onclick="togglePassword()"
+                class="eye hide"
+                src="img/eye.svg"
+                alt="ocultador de senha">
             </div>
-            
-            <!-- 
-                Botão de submissão do formulário 
-                Envia as credenciais para autenticação.
-                O evento de submissão é tratado pelo login.js.
-            -->
-            <button type="submit" class="btn-entrar">Entrar</button>
-            
-            <!-- 
-                Link para cadastro 
-                Direciona usuários novos para a página de cadastro.
-            -->
-            <p class="link-de-cadastro">Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
-        </form>
-    </main>
-    
-    <!-- Rodapé com informações de copyright -->
-    <footer class="footerVisita">
-        <p>© 2025 Copyright Todos os direitos reservados a Hotel Estancia Atibainha</p>
-    </footer>
-    
-    <!-- 
-        Scripts JavaScript 
-        Carregados no final do documento para melhor performance.
-    -->
-    <script src="js/script.js"></script> <!-- Script global com funções comuns -->
-    <script src="js/login.js"></script> <!-- Script específico para autenticação -->
-    
-    <!-- 
-        Fluxo de funcionamento:
-        1. Usuário preenche os campos de e-mail e senha
-        2. Ao submeter o formulário, o login.js captura o evento e previne o comportamento padrão
-        3. Os dados são enviados para a API via requisição AJAX/Fetch
-        4. Se a autenticação for bem-sucedida, o token JWT é armazenado no localStorage
-        5. O usuário é redirecionado para a página principal (index.html)
-        6. Se houver erro, uma mensagem é exibida ao usuário
-    -->
-</body>
+
+            <!-- Botão de submissão do formulário -->
+            <button type="submit">Fazer Login</button>
+
+            <!-- Link para página de cadastro -->
+            <div class="registro flex">
+                <p> Ainda não tem uma conta? </p>
+                <a href="cadastro.html">Criar conta</a>
+            </div>
+
+          </form>
+        </main>
+      </div>
+      
+      <!-- Imagem de fundo decorativa -->
+      <img src="img/bg-fundo.jpg" alt="Imagem de Fundo">
+    </div>
+  </body>
 </html>

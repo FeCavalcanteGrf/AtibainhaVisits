@@ -276,7 +276,7 @@ async function carregarVisitas() {
             return visitas;
         }
         
-        const response = await fetch('http://localhost:3000/api/visitas', {
+        const response = await fetch('http://localhost:3000/visitas', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -454,7 +454,7 @@ async function verificarVisitaFinalizada(visitaId) {
             return null;
         }
         
-        const response = await fetch(`http://localhost:3000/api/verificar-visita-finalizada/${visitaId}`, {
+        const response = await fetch(`http://localhost:3000/verificar-visita-finalizada/${visitaId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -514,7 +514,7 @@ function cadastrarVisita(event) {
     }
     
     // Enviar dados para o servidor
-    fetch('http://localhost:3000/api/cadastrar-visita', {
+    fetch('http://localhost:3000/cadastrar-visita', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -96,7 +96,7 @@ async function carregarDadosVisita(visitaId) {
             throw new Error('Autenticação necessária');
         }
         
-        const response = await fetch(`http://localhost:3000/api/relatorio-visita/${visitaId}`, {
+        const response = await fetch(`http://localhost:3000/relatorio-visita/${visitaId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

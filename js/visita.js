@@ -41,7 +41,7 @@ async function carregarDadosVisita(visitaId) {
             return;
         }
         
-        const response = await fetch(`http://localhost:3000/api/visita/${visitaId}`, {
+        const response = await fetch(`http://localhost:3000/visita/${visitaId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -153,7 +153,7 @@ async function finalizarVisita() {
     
     try {
         // Salvar dados no banco
-        const response = await fetch('http://localhost:3000/api/finalizar-visita', {
+        const response = await fetch('http://localhost:3000/finalizar-visita', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -312,7 +312,7 @@ app.post('/delete-user', verificarToken, async (req, res) => {
 });
 
 // Rota para obter todas as visitas
-app.get('/api/visitas', verificarToken, async (req, res) => {
+app.get('/visitas', verificarToken, async (req, res) => {
   try {
     const query = `
       SELECT 
@@ -339,7 +339,7 @@ app.get('/api/visitas', verificarToken, async (req, res) => {
 });
 
 // Rota para cadastrar uma nova visita
-app.post('/api/cadastrar-visita', verificarToken, async (req, res) => {
+app.post('/cadastrar-visita', verificarToken, async (req, res) => {
   try {
     const { nome, empresa, data, hora, locais } = req.body;
     const userId = req.userId; // Obtém o ID do usuário do token JWT
@@ -363,7 +363,7 @@ app.post('/api/cadastrar-visita', verificarToken, async (req, res) => {
 });
 
 // Rota para obter dados de uma visita específica
-app.get('/api/visita/:id', verificarToken, async (req, res) => {
+app.get('/visita/:id', verificarToken, async (req, res) => {
   try {
     const visitaId = req.params.id;
     
@@ -400,7 +400,7 @@ app.get('/api/visita/:id', verificarToken, async (req, res) => {
 });
 
 // Rota para finalizar uma visita
-app.post('/api/finalizar-visita', verificarToken, async (req, res) => {
+app.post('/finalizar-visita', verificarToken, async (req, res) => {
   try {
     const { visitaId, dataVisita, locaisVisitados, observacoes } = req.body;
     const userId = req.userId; // Obtém o ID do usuário do token JWT
@@ -476,7 +476,7 @@ async function salvarDadosVisitaFinalizada(visitaId, dataVisita, locaisVisitados
 }
 
 // Rota para obter relatório de uma visita
-app.get('/api/relatorio-visita/:id', verificarToken, async (req, res) => {
+app.get('/relatorio-visita/:id', verificarToken, async (req, res) => {
   try {
     const visitaFinalizadaId = req.params.id;
     
@@ -538,7 +538,7 @@ app.get('/api/relatorio-visita/:id', verificarToken, async (req, res) => {
 });
 
 // Rota para verificar se uma visita já foi finalizada
-app.get('/api/verificar-visita-finalizada/:id', verificarToken, async (req, res) => {
+app.get('/verificar-visita-finalizada/:id', verificarToken, async (req, res) => {
   try {
     const visitaId = req.params.id;
     

@@ -336,7 +336,7 @@ async function verificarVisitaFinalizada(visitaId) {
     console.log(`🔄 Verificando se a visita ${visitaId} já foi finalizada`);
     
     try {
-        const response = await fetch(`http://localhost:3000/api/verificar-visita-finalizada/${visitaId}`);
+        const response = await fetch(`http://localhost:3000/verificar-visita-finalizada/${visitaId}`);
         
         if (!response.ok) {
             if (response.status === 404) {
@@ -396,7 +396,7 @@ async function carregarVisitas() {
     alert("Carregando visitas do banco...");
     try {
         console.log('🔄 Iniciando requisição para obter visitas');
-        const response = await fetch('http://localhost:3000/api/visitas'); // Substitua pela URL correta da API
+        const response = await fetch('http://localhost:3000/visitas'); // Substitua pela URL correta da API
         console.log('📊 Status da resposta:', response.status);
         
         if (!response.ok) {

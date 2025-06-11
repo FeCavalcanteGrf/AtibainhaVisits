@@ -61,8 +61,8 @@ document.getElementById('login-form').addEventListener('submit', async function(
  * @returns {boolean} - Retorna true se o e-mail for válido, caso contrário, false.
  */
 function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 }
 
 /**

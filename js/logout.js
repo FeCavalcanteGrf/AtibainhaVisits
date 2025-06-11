@@ -1,29 +1,33 @@
+// Este script aguarda o carregamento completo da página antes de executar qualquer ação.
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔄 Logout script loaded');
+    console.log('🔄 script de logout carregado'); /* O evento 'DOMcontentLoaded' garante que todo HTML foi carregado antes de
+                                                   tentar manipular os elementos da página.
+                                                   */
     
-    // Find the logout button
+    // Faz a procura pelo id do botão de logout 
     const logoutBtn = document.getElementById('logout-btn');
     
+    // Faz a verificação se o botão de logout foi encontrado antes de adicionar o evento de clique
     if (logoutBtn) {
-        console.log('✅ Logout button found');
+        console.log('✅ Botão de Logout encontrado');
         
-        // Add click event listener to the logout button
+        // Adiciona um evento de clique ao botão de logout
         logoutBtn.addEventListener('click', function(event) {
             event.preventDefault();
             console.log('🖱️ Logout button clicked');
             
-            // Clear any session data (localStorage, sessionStorage, etc.)
+            // Remove todos os dados armazenados no localStorage 
             localStorage.clear();
-            // sessionStorage.clear();
             
-            console.log('🗑️ Session data cleared');
+            console.log('🗑️ Removido dados armazenados no local storage');
             
-            // Redirect to login page
-            console.log('🔄 Redirecting to login page');
+            // Redireciona o usuário para a página de login
+            console.log('🔄 Redirecionando para a página de login');
             window.location.href = 'login.html';
         });
     } else {
-        console.error('❌ Logout button not found');
+        console.error('❌ Botão de Logout não encontrado');
+        // Exibe uma mensagem de erro se o botão não for encontrado
     }
 });

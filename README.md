@@ -36,7 +36,6 @@ AtibainhaVisits/
 |   `-- Mer do Projeto    # Mer do projeto do atibainha visits
 |-- img/                  # Imagens e recursos visuais
 |-- js/                   # Scripts JavaScript
-|   |-- autenticacao.js   # Lógica de autenticação
 |   |-- cadastro.js       # Lógica de cadastro
 |   |-- calendar.js       # Lógica do calendário
 |   |-- logout.js         # Lógica de logout

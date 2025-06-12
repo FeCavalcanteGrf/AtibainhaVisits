@@ -153,16 +153,5 @@
     <!-- Script específico para funcionalidades de usuário -->
     <script src="js/usuario.js" defer></script> <!-- Carregado com atributo defer para melhor performance -->
     <script src="js/logout.js"></script> <!-- Script para gerenciar o logout -->
-    
-    <!-- 
-        Fluxo de funcionamento da página:
-        1. Ao carregar, o usuario.js verifica se há um usuário autenticado
-        2. O script busca os dados do usuário na API usando o token JWT armazenado
-        3. Os campos do formulário são preenchidos com os dados atuais do usuário
-        4. O usuário pode editar qualquer campo e submeter o formulário para atualização
-        5. Ao clicar em "Atualizar Usuario", os dados são enviados para a API
-        6. Ao clicar em "Excluir Usuario", é exibida uma confirmação antes da exclusão
-        7. Após exclusão bem-sucedida, o usuário é redirecionado para a página de login
-    -->
 </body>
 </html>

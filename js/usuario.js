@@ -180,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
       try {
         console.log('🔄 Iniciando requisição para excluir usuário');
         
-        // Remover a verificação rigorosa de email para evitar problemas
         // Usar o email do formulário para a exclusão
         
         const response = await fetch('http://localhost:3000/delete-user', {

@@ -235,7 +235,7 @@ Gerencia a geração e exibição de relatórios de visitas.
 ```javascript
 async function carregarDadosVisita(visitaId) {
   try {
-    const response = await fetch(`http://localhost:3000/api/relatorio-visita/${visitaId}`);
+    const response = await fetch(`http://localhost:3000/relatorio-visita/${visitaId}`);
     
     if (!response.ok) {
       throw new Error(`Erro na requisição: ${response.status}`);
@@ -579,7 +579,7 @@ async function finalizarVisita() {
   });
   
   // Enviar dados para o servidor
-  const response = await fetch('http://localhost:3000/api/finalizar-visita', {
+  const response = await fetch('http://localhost:3000/finalizar-visita', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

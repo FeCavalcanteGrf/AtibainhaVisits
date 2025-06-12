@@ -1,28 +1,55 @@
+/**
+ * script.js - Funções gerais utilizadas em várias páginas do sistema
+ * 
+ * Este arquivo contém funções para:
+ * - Controle de elementos de interface (toggle de menus, carrosséis)
+ * - Manipulação de popups
+ * - Funções auxiliares para o calendário
+ * - Verificação de status de visitas
+ */
 
 console.log('🔍 Script.js carregado');
 
+/**
+ * Alterna a visibilidade da seção de salões
+ * Adiciona ou remove a classe 'minimized' para expandir ou colapsar a seção
+ */
 function toggleSaloes() {
     console.log('🔄 Função toggleSaloes chamada');
+    // Localiza o container de salões
     const saloesContainer = document.querySelector('.saloes');
     console.log('📦 Container de salões encontrado:', saloesContainer ? 'Sim' : 'Não');
+    
+    // Alterna a classe 'minimized' para expandir/colapsar
     saloesContainer.classList.toggle('minimized');
     console.log('✅ Classe minimized alternada');
 }
 
+/**
+ * Alterna a visibilidade de um carrossel de imagens
+ * 
+ * @param {string} carrosselId - ID do elemento carrossel a ser alternado
+ */
 function toggleCarrossel(carrosselId) {
     console.log(`🔄 Função toggleCarrossel chamada para: ${carrosselId}`);
+    
+    // Localiza o elemento que contém o conteúdo clicável
     const conteudo = document.querySelector(`[onclick="toggleCarrossel('${carrosselId}')"]`);
     console.log('📦 Elemento conteúdo encontrado:', conteudo ? 'Sim' : 'Não');
+    
+    // Localiza o elemento do carrossel pelo ID
     const carrossel = document.getElementById(carrosselId);
     console.log('📦 Elemento carrossel encontrado:', carrossel ? 'Sim' : 'Não');
 
     // Alterna a visibilidade do carrossel
     if (carrossel.style.display === "none" || !carrossel.style.display) {
+        // Se estiver oculto, exibe o carrossel
         console.log('📊 Exibindo carrossel');
         carrossel.style.display = "block";
-        conteudo.classList.add("expandido"); // Adiciona a classe expandido
+        conteudo.classList.add("expandido"); // Adiciona a classe expandido para estilização
         console.log('✅ Classe expandido adicionada');
     } else {
+        // Se estiver visível, oculta o carrossel
         console.log('📊 Ocultando carrossel');
         carrossel.style.display = "none";
         conteudo.classList.remove("expandido"); // Remove a classe expandido
@@ -30,46 +57,68 @@ function toggleCarrossel(carrosselId) {
     }
 }
 
+/**
+ * Move o carrossel de imagens na direção especificada
+ * Gerencia a navegação entre as imagens e aplica classes CSS apropriadas
+ * 
+ * @param {string} id - ID do elemento carrossel
+ * @param {number} direction - Direção do movimento: 1 para avançar, -1 para retroceder
+ */
 function moveCarrossel(id, direction) {
     console.log(`🔄 Função moveCarrossel chamada para: ${id}, direção: ${direction}`);
+    
+    // Localiza o elemento do carrossel pelo ID
     const carrossel = document.getElementById(id);
     console.log('📦 Elemento carrossel encontrado:', carrossel ? 'Sim' : 'Não');
     
+    // Verifica se o carrossel existe
     if (!carrossel) {
         console.error(`❌ Carrossel com ID ${id} não encontrado`);
         return;
     }
     
+    // Localiza o container de imagens dentro do carrossel
     const imagens = carrossel.querySelector('.carrossel-imagens');
     console.log('📦 Container de imagens encontrado:', imagens ? 'Sim' : 'Não');
     
+    // Verifica se o container de imagens existe
     if (!imagens) {
         console.error(`❌ Container de imagens não encontrado no carrossel ${id}`);
         return;
     }
     
+    // Obtém todas as imagens do carrossel
     const imgs = imagens.querySelectorAll('img');
     console.log(`📊 Total de imagens encontradas: ${imgs.length}`);
     const totalImages = imgs.length;
 
+    // Obtém o índice atual da imagem exibida
     let currentIndex = parseInt(imagens.getAttribute('data-index')) || 0;
     console.log(`📊 Índice atual: ${currentIndex}`);
 
+    // Calcula o novo índice com base na direção
     currentIndex += direction;
     console.log(`📊 Novo índice (antes da verificação): ${currentIndex}`);
 
+    // Ajusta o índice para criar um loop circular
     if (currentIndex >= totalImages) {
+        // Se passar do final, volta para o início
         currentIndex = 0;
         console.log('🔄 Índice ajustado para o início');
     } else if (currentIndex < 0) {
+        // Se passar do início, vai para o final
         currentIndex = totalImages - 1;
         console.log('🔄 Índice ajustado para o final');
     }
 
+    // Atualiza o índice no atributo data-index
     console.log(`📊 Índice final: ${currentIndex}`);
     imagens.setAttribute('data-index', currentIndex);
 
+    // Remove a classe 'active' de todas as imagens
     imgs.forEach(img => img.classList.remove('active'));
+    
+    // Adiciona a classe 'active' apenas à imagem atual
     imgs[currentIndex].classList.add('active');
     console.log(`✅ Imagem ${currentIndex} ativada`);
 }

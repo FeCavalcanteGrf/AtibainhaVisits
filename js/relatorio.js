@@ -1,32 +1,48 @@
-// Variáveis globais
-let dadosVisitaGlobal = null;
-let modoDemo = false;
+/**
+ * relatorio.js - Gerencia a geração e exibição de relatórios de visitas
+ * 
+ * Este arquivo contém as funções para:
+ * - Carregar dados de visitas finalizadas
+ * - Exibir informações detalhadas sobre a visita
+ * - Listar locais visitados e não visitados
+ * - Exibir observações registradas durante a visita
+ * - Gerar relatórios em PDF para download
+ * - Fornecer modo de demonstração para testes
+ */
 
-// Inicialização quando o DOM estiver carregado
+// Variáveis globais
+let dadosVisitaGlobal = null;  // Armazena os dados da visita para uso em várias funções
+let modoDemo = false;          // Indica se estamos em modo de demonstração
+
+/**
+ * Inicialização quando o DOM estiver completamente carregado
+ * Configura a página de relatório com base nos parâmetros da URL
+ */
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Inicializando página de relatório');
     
-    // Obter ID da visita da URL
+    // Obter parâmetros da URL (ID da visita e modo de demonstração)
     const urlParams = new URLSearchParams(window.location.search);
     const visitaId = urlParams.get('id');
     modoDemo = urlParams.get('demo') === 'true';
     
+    // Verificar se o ID da visita foi fornecido
     if (!visitaId) {
         console.warn('⚠️ ID da visita não fornecido na URL');
         document.getElementById('dados-visita').innerHTML = '<p class="erro">ID da visita não fornecido. Por favor, acesse esta página a partir da lista de agendamentos.</p>';
         return;
     }
     
-    // Verificar se estamos em modo de demonstração
+    // Decidir entre modo de demonstração ou carregamento real de dados
     if (modoDemo) {
         console.log('🔄 Modo de demonstração ativado');
-        carregarDadosDemostracao();
+        carregarDadosDemostracao(); // Carrega dados fictícios para demonstração
     } else {
-        // Carregar dados da visita
+        // Carregar dados reais da visita do servidor
         carregarDadosVisita(visitaId);
     }
     
-    // Configurar o botão de gerar PDF
+    // Configurar o botão de gerar PDF com o evento de clique
     const btnGerarPDF = document.getElementById('btn-gerar-pdf');
     if (btnGerarPDF) {
         btnGerarPDF.addEventListener('click', gerarPDF);

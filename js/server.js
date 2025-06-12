@@ -185,36 +185,6 @@ app.post('/cadastrar-usuario', async (req, res) => {
   }
 });
 
-// Rota para listar todos os usuários
-app.get('/usuarios', verificarToken, async (_req, res) => {
-  try {
-    const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios';
-    const [results] = await pool.query(query);
-    res.status(200).json(results);
-  } catch (err) {
-    console.error('Erro ao buscar usuários:', err);
-    res.status(500).json({ message: 'Erro ao buscar usuários' });
-  }
-});
-
-// Rota para obter um usuário específico
-app.get('/usuario/:id', verificarToken, async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const query = 'SELECT tb_id, tb_nome, tb_email, tb_telefone, tb_setor FROM tb_usuarios WHERE tb_id = ?';
-    const [results] = await pool.query(query, [userId]);
-    
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'Usuário não encontrado' });
-    }
-    
-    res.status(200).json(results[0]);
-  } catch (err) {
-    console.error('Erro ao buscar usuário:', err);
-    res.status(500).json({ message: 'Erro ao buscar usuário' });
-  }
-});
-
 // Rota para obter informações do usuário logado
 app.get('/user-info', verificarToken, async (req, res) => {
   try {

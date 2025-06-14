@@ -1,0 +1,10 @@
+// Esse arquivo foi criado para corrigir o problema de importação de arquivos com nomes que diferem apenas em maiúsculas e minúsculas.
+// Isso é necessário porque o Windows não diferencia maiúsculas de minúsculas em nomes de arquivos, enquanto o TypeScript usado pelo VSCODE sim.
+// Isso pode causar problemas ao importar arquivos que têm nomes semelhantes, mas com diferenças apenas em maiúsculas e minúsculas.
+// A opção "forceConsistentCasingInFileNames" é definida como false para permitir que o TypeScript usado pelo VSCODE em segundo plano ignore essas diferenças de maiúsculas e minúsculas.
+
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": false
+  }
+}

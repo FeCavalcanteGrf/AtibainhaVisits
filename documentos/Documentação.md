@@ -61,6 +61,8 @@ Esta entidade crítica registra visitas efetivamente realizadas, com dados estru
 
 - `tb_visita_id` (INT, FOREIGN KEY): Referência opcional à visita planejada. O ON DELETE SET NULL permite manter o histórico de visitas finalizadas mesmo se o registro de planejamento for removido.
 
+- `tb_usuario_id` (INT, FOREIGN KEY): Estabelece a relação com o usuário responsável pela visita. A chave estrangeira garante integridade referencial e permite rastreamento de responsabilidade.
+
 - `tb_data_visita` (DATETIME NOT NULL): Timestamp exato da realização da visita. O tipo DATETIME capture tanto data quanto horário preciso, fundamental para auditoria e relatórios temporais detalhados.
 
 - `tb_locais_visitados` (JSON NOT NULL): Estrutura moderna que armazena dados complexos sobre locais visitados. O JSON permite flexibilidade para diferentes tipos de informação (nome do local, tempo de permanência, observações específicas) sem necessidade de criar tabelas adicionais.
